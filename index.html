@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Job Success AI</title>
+
+<style>
+:root{
+  --bg:#05050b;
+  --card:#10101b;
+  --card2:#17172a;
+  --text:#ffffff;
+  --muted:#b7b7c9;
+  --accent:#8b35ff;
+  --accent2:#ffbf4d;
+  --green:#16c784;
+  --danger:#ff4d5e;
+  --border:rgba(255,255,255,.12);
+  --shadow:0 20px 60px rgba(0,0,0,.45);
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  font-family:Inter,Arial,sans-serif;
+  background:
+    radial-gradient(circle at 20% 0%, rgba(139,53,255,.35), transparent 30%),
+    radial-gradient(circle at 90% 10%, rgba(255,191,77,.18), transparent 26%),
+    var(--bg);
+  color:var(--text);
+}
+
+body.light{
+  --bg:#fff8ec;
+  --card:#fff;
+  --card2:#fff6e4;
+  --text:#1b1308;
+  --muted:#705f48;
+  --accent:#b07a20;
+  --accent2:#e6a93c;
+  --border:rgba(90,60,20,.15);
+}
+
+body.purple{
+  --bg:#16051e;
+  --card:#24102f;
+  --card2:#331a45;
+  --text:#fff;
+  --muted:#d6b7e9;
+  --accent:#ff4fd8;
+  --accent2:#8b35ff;
+}
+
+.app{
+  max-width:430px;
+  margin:0 auto;
+  min-height:100vh;
+  padding:18px 18px 95px;
+}
+
+.screen{display:none}
+.screen.active{display:block}
+
+.top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin:6px 0 22px;
+}
+
+.icon-btn{
+  width:42px;
+  height:42px;
+  border-radius:16px;
+  border:1px solid var(--border);
+  background:rgba(255,255,255,.06);
+  color:var(--text);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:20px;
+  cursor:pointer;
+}
+
+.logo-box{
+  text-align:center;
+  padding:28px 14px 18px;
+}
+
+.trident{
+  width:96px;
+  height:96px;
+  margin:0 auto 18px;
+  border-radius:28px;
+  background:
+    radial-gradient(circle at 50% 20%, #fff4b7, transparent 12%),
+    linear-gradient(135deg,#ff7b00,#ffd36b,#8b35ff);
+  box-shadow:0 0 40px rgba(255,150,0,.65);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:58px;
+  font-weight:900;
+  color:#08080d;
+}
+
+h1{
+  font-size:34px;
+  line-height:1.05;
+  margin:0 0 10px;
+}
+
+h2{font-size:24px;margin:0 0 8px}
+p{color:var(--muted);line-height:1.45}
+
+.brand-word{
+  background:linear-gradient(90deg,var(--accent2),var(--accent));
+  -webkit-background-clip:text;
+  color:transparent;
+}
+
+.btn{
+  width:100%;
+  border:0;
+  border-radius:18px;
+  padding:16px;
+  font-size:16px;
+  font-weight:800;
+  color:#fff;
+  background:linear-gradient(135deg,var(--accent),#4b17d6);
+  cursor:pointer;
+  box-shadow:0 12px 35px rgba(139,53,255,.35);
+}
+
+.btn.gold{
+  background:linear-gradient(135deg,#d6942f,#ffcf75);
+  color:#151008;
+}
+
+.btn.secondary{
+  background:rgba(255,255,255,.08);
+  box-shadow:none;
+  border:1px solid var(--border);
+}
+
+.card{
+  background:linear-gradient(145deg,rgba(255,255,255,.08),rgba(255,255,255,.03));
+  border:1px solid var(--border);
+  border-radius:24px;
+  padding:18px;
+  margin:14px 0;
+  box-shadow:var(--shadow);
+}
+
+.action-card{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  cursor:pointer;
+}
+
+.action-card .square{
+  width:58px;
+  height:58px;
+  border-radius:18px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:26px;
+  background:linear-gradient(135deg,var(--accent),#4b17d6);
+}
+
+.action-card.green .square{background:linear-gradient(135deg,#009b7a,#37e39a)}
+.action-card.gold .square{background:linear-gradient(135deg,#c47a1e,#ffd36b);color:#111}
+
+.action-card strong{font-size:18px}
+.action-card span{display:block;color:var(--muted);font-size:13px;margin-top:4px}
+
+.chev{margin-left:auto;color:var(--accent2);font-size:24px}
+
+.input, textarea, select{
+  width:100%;
+  background:rgba(255,255,255,.06);
+  border:1px solid var(--border);
+  color:var(--text);
+  border-radius:14px;
+  padding:14px;
+  font-size:15px;
+  margin:8px 0 14px;
+}
+
+textarea{min-height:120px;resize:vertical}
+
+label{
+  display:block;
+  font-size:13px;
+  color:var(--muted);
+  margin-top:8px;
+}
+
+.grid2{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+
+.lang-row,.profile-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:14px;
+  border:1px solid var(--border);
+  border-radius:16px;
+  margin:9px 0;
+  background:rgba(255,255,255,.04);
+  cursor:pointer;
+}
+
+.avatar{
+  width:110px;
+  height:110px;
+  border-radius:50%;
+  background:linear-gradient(135deg,var(--accent2),var(--accent));
+  margin:0 auto 12px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:46px;
+  position:relative;
+}
+
+.avatar small{
+  position:absolute;
+  right:2px;
+  bottom:4px;
+  background:var(--accent);
+  border-radius:50%;
+  padding:8px;
+  font-size:14px;
+}
+
+.template{
+  min-height:250px;
+  background:#f5f0e8;
+  color:#161616;
+  border-radius:18px;
+  padding:18px;
+  box-shadow:0 15px 40px rgba(0,0,0,.35);
+}
+
+.template.dark{
+  background:#111;
+  color:#fff;
+  border:1px solid #c9933b;
+}
+
+.template h3{margin:0;font-size:22px}
+.template .line{height:8px;background:rgba(0,0,0,.12);border-radius:8px;margin:10px 0}
+.template.dark .line{background:rgba(255,255,255,.16)}
+
+.tabs{
+  display:flex;
+  gap:8px;
+  overflow:auto;
+  margin:14px 0;
+}
+
+.tab{
+  border:1px solid var(--border);
+  padding:9px 12px;
+  border-radius:999px;
+  color:var(--muted);
+  white-space:nowrap;
+  cursor:pointer;
+}
+
+.tab.active{
+  background:var(--accent);
+  color:white;
+}
+
+.interviewer{
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:10px;
+  text-align:center;
+  cursor:pointer;
+}
+
+.interviewer.active{
+  border-color:var(--accent2);
+  box-shadow:0 0 0 2px rgba(255,191,77,.18);
+}
+
+.face{
+  height:120px;
+  border-radius:16px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:56px;
+  background:linear-gradient(145deg,#f4d1b0,#7147ff);
+  margin-bottom:8px;
+}
+
+.voice-box{
+  height:160px;
+  border-radius:22px;
+  background:
+    linear-gradient(rgba(0,0,0,.15),rgba(0,0,0,.4)),
+    radial-gradient(circle at 50% 20%,rgba(255,255,255,.35),transparent 18%),
+    linear-gradient(135deg,#30233a,#9f7846);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:72px;
+}
+
+.score{
+  width:150px;
+  height:150px;
+  border-radius:50%;
+  border:12px solid var(--accent);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  margin:20px auto;
+  box-shadow:0 0 35px rgba(139,53,255,.35);
+}
+
+.score b{font-size:42px}
+.score span{color:var(--muted)}
+
+.bottom-nav{
+  position:fixed;
+  bottom:0;
+  left:50%;
+  transform:translateX(-50%);
+  max-width:430px;
+  width:100%;
+  background:rgba(8,8,15,.92);
+  backdrop-filter:blur(18px);
+  border-top:1px solid var(--border);
+  padding:10px 8px 16px;
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:4px;
+  z-index:50;
+}
+
+.nav-item{
+  color:var(--muted);
+  text-align:center;
+  font-size:11px;
+  cursor:pointer;
+}
+
+.nav-item div{font-size:20px;margin-bottom:2px}
+.nav-item.active{color:var(--accent2)}
+
+.premium{
+  background:linear-gradient(135deg,rgba(255,191,77,.18),rgba(139,53,255,.22));
+  border-color:rgba(255,191,77,.4);
+}
+
+.theme-dots{
+  display:flex;
+  gap:10px;
+  margin-top:10px;
+}
+
+.dot{
+  width:34px;
+  height:34px;
+  border-radius:50%;
+  border:2px solid rgba(255,255,255,.5);
+  cursor:pointer;
+}
+
+.dot.black{background:#05050b}
+.dot.light{background:#fff1d4}
+.dot.purple{background:#421057}
+
+.small{font-size:12px;color:var(--muted)}
+.result-box{
+  background:rgba(0,0,0,.25);
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:14px;
+  margin-top:12px;
+  color:var(--text);
+  white-space:pre-wrap;
+}
+</style>
+</head>
+
+<body>
+<div class="app">
+
+<section id="language" class="screen active">
+  <div class="logo-box">
+    <div class="trident">♆</div>
+    <h1>Job Success <span class="brand-word">AI</span></h1>
+    <p>Your AI Career Success Partner</p>
+  </div>
+
+  <h2>Choose Your Language</h2>
+  <p>Select your preferred language. You can change it later.</p>
+
+  <div id="languageList"></div>
+  <button class="btn" onclick="go('home')">Continue</button>
+</section>
+
+<section id="home" class="screen">
+  <div class="top">
+    <button class="icon-btn" onclick="go('settings')">☰</button>
+    <button class="icon-btn" onclick="go('premium')">♕</button>
+  </div>
+
+  <h1>Your AI Career Success <span class="brand-word">Partner</span></h1>
+  <p>Everything you need to get hired faster and look professional.</p>
+
+  <div class="card action-card" onclick="go('cv')">
+    <div class="square">📄</div>
+    <div><strong>CV Builder</strong><span>Create a professional CV that gets noticed.</span></div>
+    <div class="chev">›</div>
+  </div>
+
+  <div class="card action-card green" onclick="go('cover')">
+    <div class="square">✉️</div>
+    <div><strong>Cover Letter</strong><span>Generate a strong cover letter for any vacancy.</span></div>
+    <div class="chev">›</div>
+  </div>
+
+  <div class="card action-card gold" onclick="go('interview')">
+    <div class="square">🎙️</div>
+    <div><strong>AI Interview Coach</strong><span>Practise interviews with your AI recruiter.</span></div>
+    <div class="chev">›</div>
+  </div>
+
+  <div class="card premium">
+    <strong>Profile Strength</strong>
+    <p>Complete your profile to get better AI suggestions.</p>
+    <div style="height:10px;background:rgba(255,255,255,.12);border-radius:20px">
+      <div style="height:10px;width:72%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:20px"></div>
+    </div>
+  </div>
+</section>
+
+<section id="profile" class="screen">
+  <div class="top"><button class="icon-btn" onclick="go('home')">‹</button><h2>My Profile</h2><button class="icon-btn" onclick="saveProfile()">✓</button></div>
+
+  <div class="avatar" onclick="photoInput.click()">👩‍💼<small>📷</small></div>
+  <input id="photoInput" type="file" accept="image/*" capture="environment" style="display:none">
+
+  <label>Full Name</label><input id="name" class="input" value="Yulia Shevchenko">
+  <label>Target Position</label><input id="target" class="input" value="Marketing Manager">
+  <label>Email</label><input id="email" class="input" value="your@email.com">
+  <label>Phone</label><input id="phone" class="input" value="+44 0000 000000">
+  <label>Location</label><input id="location" class="input" value="London, UK">
+
+  <div class="profile-row" onclick="alert('Add new work experience')"><span>Work Experience</span><b>+ Add</b></div>
+  <textarea id="experience">Marketing Assistant — Company Name
+Managed client communication, supported campaigns and prepared reports.</textarea>
+
+  <div class="profile-row" onclick="alert('Add education')"><span>Education</span><b>+ Add</b></div>
+  <textarea id="education">University Degree / Courses / Certificates</textarea>
+
+  <label>Skills</label>
+  <textarea id="skills">Communication, teamwork, organisation, customer service, problem solving</textarea>
+
+  <button class="btn" onclick="saveProfile()">Save Profile</button>
+</section>
+
+<section id="cv" class="screen">
+  <div class="top"><button class="icon-btn" onclick="go('home')">‹</button><h2>CV Builder</h2><button class="icon-btn" onclick="go('profile')">👤</button></div>
+
+  <div class="tabs">
+    <div class="tab active">Modern</div>
+    <div class="tab">Professional</div>
+    <div class="tab">Executive</div>
+    <div class="tab">Creative</div>
+    <div class="tab">LinkedIn</div>
+  </div>
+
+  <div class="card">
+    <h2>Choose Your CV Template</h2>
+    <p>Swipe-style preview. Select the design that fits your career.</p>
+
+    <div class="template" id="templateBox">
+      <h3 id="cvName">YULIA SHEVCHENKO</h3>
+      <p id="cvTarget">MARKETING MANAGER</p>
+      <div class="line"></div><div class="line"></div><div class="line"></div>
+      <h4>EXPERIENCE</h4>
+      <div class="line"></div><div class="line"></div>
+      <h4>SKILLS</h4>
+      <div class="line"></div>
+    </div>
+
+    <div class="grid2" style="margin-top:14px">
+      <button class="btn secondary" onclick="toggleCVPhoto()">With / Without Photo</button>
+      <button class="btn secondary" onclick="changeTemplate()">Change Style</button>
+    </div>
+    <br>
+    <button class="btn" onclick="go('preview')">Use This Template</button>
+  </div>
+</section>
+
+<section id="preview" class="screen">
+  <div class="top"><button class="icon-btn" onclick="go('cv')">‹</button><h2>CV Preview</h2><button class="icon-btn" onclick="window.print()">⬇</button></div>
+
+  <div class="card">
+    <div class="template dark" id="cvPreview">
+      <h3 id="previewName">YULIA SHEVCHENKO</h3>
+      <p id="previewTarget">MARKETING MANAGER</p>
+      <hr>
+      <h4>Professional Summary</h4>
+      <p>Motivated professional with strong communication, organisation and customer-focused skills.</p>
+      <h4>Experience</h4>
+      <p id="previewExp"></p>
+      <h4>Education</h4>
+      <p id="previewEdu"></p>
+      <h4>Skills</h4>
+      <p id="previewSkills"></p>
+    </div>
+
+    <br>
+    <button class="btn" onclick="window.print()">Download PDF</button>
+    <br><br>
+    <button class="btn secondary" onclick="go('profile')">Edit Information</button>
+  </div>
+</section>
+
+<section id="cover" class="screen">
+  <div class="top"><button class="icon-btn" onclick="go('home')">‹</button><h2>Cover Letter</h2><button class="icon-btn" onclick="go('premium')">♕</button></div>
+
+  <label>Job Title</label><input id="coverJob" class="input" value="Marketing Manager">
+  <label>Company Name</label><input id="coverCompany" class="input" value="Apple">
+  <label>Vacancy Description</label><textarea id="coverText">We are looking for a creative and data-driven Marketing Manager to join our team.</textarea>
+
+  <button class="btn" onclick="generateCover()">Generate Cover Letter</button>
+  <div id="coverResult" class="result-box hidden"></div>
+</section>
+
+<section id="interview" class="screen">
+  <div class="top"><button class="icon-btn" onclick="go('home')">‹</button><h2>AI Interview Coach</h2><button class="icon-btn" onclick="go('premium')">♕</button></div>
+
+  <div class="card">
+    <div class="voice-box">🤖</div>
+    <h2>Practise Makes Perfect</h2>
+    <p>Choose your AI recruiter, enter your target job and practise a realistic interview.</p>
+    <button class="btn" onclick="go('interviewer')">Get Started</button>
+  </div>
+</section>
+
+<section id="interviewer" class="screen">
+  <div class="top"><button class="icon-btn" onclick="go('interview')">‹</button><h2>Choose Interviewer</h2><span></span></div>
+
+  <div class="grid2">
+    <div class="interviewer active" onclick="selectInterviewer(this,'Emma')"><div class="face">👩🏼</div>White Female</div>
+    <div class="interviewer" onclick="selectInterviewer(this,'Naomi')"><div class="face">👩🏾</div>Black Female</div>
+    <div class="interviewer" onclick="selectInterviewer(this,'James')"><div class="face">👨🏻</div>White Male</div>
+    <div class="interviewer" onclick="selectInterviewer(this,'Michael')"><div class="face">👨🏾</div>Black Male</div>
+  </div>
+  <br>
+  <button class="btn" onclick="go('setup')">Confirm Selection</button>
+</section>
+
+<section id="setup" class="screen">
+  <div class="top"><button class="icon-btn" onclick="go('interviewer')">‹</button><h2>Interview Setup</h2><span></span></div>
+
+  <label>What position are you applying for?</label>
+  <input id="jobPosition" class="input" value="Head Chef">
+
+  <label>Company / Country</label>
+  <input id="jobCompany" class="input" value="The Ritz London">
+
+  <label>Job Description</label>
+  <textarea id="jobDescription">We are looking for an experienced Head Chef to lead our kitchen team and deliver exceptional culinary experiences.</textarea>
+
+  <label>Interview Type</label>
+  <select id="interviewType">
+    <option>General Interview</option>
+    <option>HR Interview</option>
+    <option>Behavioural Interview</option>
+    <option>English Interview Practice</option>
+  </select>
+
+  <button class="btn" onclick="startInterview()">Start Interview</button>
+</section>
+
+<section id="live" class="screen">
+  <div class="top"><button class="icon-btn" onclick="go('setup')">‹</button><h2>AI Interview</h2><button class="icon-btn" onclick="finishInterview()">End</button></div>
+
+  <div class="card">
+    <div class="voice-box" id="liveFace">👩🏼</div>
+    <div class="result-box" id="questionBox"></div>
+
+    <label>Your Answer</label>
+    <textarea id="userAnswer" placeholder="Speak or type your answer here..."></textarea>
+
+    <div class="grid2">
+      <button class="btn secondary" onclick="voiceDemo()">🎙 Speak</button>
+      <button class="btn" onclick="nextQuestion()">Next Question</button>
+    </div>
+  </div>
+</section>
+
+<section id="feedback" class="screen">
+  <div class="top"><button class="icon-btn" onclick="go('home')">‹</button><h2>Interview Feedback</h2><span></span></div>
+
+  <div class="score"><b>7.8</b><span>/10</span></div>
+
+  <div class="card">
+    <h2>Good job. Keep practising.</h2>
+    <p><b>Confidence:</b> ★★★★☆</p>
+    <p><b>Communication:</b> ★★★★☆</p>
+    <p><b>Professional vocabulary:</b> ★★★☆☆</p>
+  </div>
+
+  <div class="card">
+    <h2>Weak Areas</h2>
+    <p>Your answers were sometimes too short. Add more examples, achievements and professional details.</p>
+  </div>
+
+  <div class="card">
+    <h2>Better Answer Example</h2>
+    <p><b>Your answer:</b> I like cooking and I have experience in many kitchens.</p>
+    <p><b>Stronger answer:</b> I am passionate about creating excellent dishes and leading kitchen teams to deliver consistent results. In my previous role, I supported daily service and helped maintain high standards under pressure.</p>
+  </div>
+
+  <button class="btn" onclick="go('setup')">Practice Again</button>
+</section>
+
+<section id="premium" class="screen">
+  <div class="top"><button class="icon-btn" onclick="go('home')">‹</button><h2>Premium</h2><span></span></div>
+
+  <div class="card premium">
+    <h1>Upgrade to Premium</h1>
+    <p>Unlock full career tools and premium interview practice.</p>
+    <ul>
+      <li>Unlimited CV generation</li>
+      <li>Premium templates</li>
+      <li>Professional cover letters</li>
+      <li>AI Interview Coach</li>
+      <li>Detailed feedback reports</li>
+    </ul>
+    <button class="btn gold" onclick="alert('Premium purchase will be connected later.')">Go Premium</button>
+    <br><br>
+    <button class="btn secondary" onclick="alert('Restore purchases will be connected later.')">Restore Purchase</button>
+  </div>
+</section>
+
+<section id="settings" class="screen">
+  <div class="top"><button class="icon-btn" onclick="go('home')">‹</button><h2>Settings</h2><span></span></div>
+
+  <div class="card">
+    <h2>Theme</h2>
+    <p>Choose premium colour style.</p>
+    <div class="theme-dots">
+      <div class="dot black" onclick="setTheme('dark')"></div>
+      <div class="dot light" onclick="setTheme('light')"></div>
+      <div class="dot purple" onclick="setTheme('purple')"></div>
+    </div>
+  </div>
+
+  <div class="profile-row" onclick="go('language')"><span>Change Language</span><b>›</b></div>
+  <div class="profile-row" onclick="go('premium')"><span>Subscription & Billing</span><b>›</b></div>
+  <div class="profile-row" onclick="alert('Privacy Policy screen will be added before Google Play release.')"><span>Privacy Policy</span><b>›</b></div>
+  <div class="profile-row" onclick="alert('Terms of Use screen will be added before Google Play release.')"><span>Terms of Use</span><b>›</b></div>
+  <div class="profile-row" onclick="alert('Contact support: your email will be added here.')"><span>Contact Support</span><b>›</b></div>
+</section>
+
+</div>
+
+<nav class="bottom-nav" id="bottomNav">
+  <div class="nav-item active" onclick="go('home')"><div>⌂</div>Home</div>
+  <div class="nav-item" onclick="go('cv')"><div>▣</div>CV</div>
+  <div class="nav-item" onclick="go('interview')"><div>🎙</div>Coach</div>
+  <div class="nav-item" onclick="go('profile')"><div>◉</div>Profile</div>
+  <div class="nav-item" onclick="go('settings')"><div>☰</div>More</div>
+</nav>
+
+<script>
+const languages = [
+  "English","Українська","Polski","Deutsch","Français","Español","Italiano",
+  "Português","Nederlands","Türkçe","Română","Čeština","Slovenčina","العربية",
+  "中文","日本語","한국어","हिन्दी","עברית","Svenska","Norsk","Dansk",
+  "Suomi","Ελληνικά","Bahasa Indonesia","Tiếng Việt","ไทย"
+];
+
+const screens = document.querySelectorAll('.screen');
+let currentInterviewer = 'Emma';
+let qIndex = 0;
+let questions = [];
+
+function buildLanguages(){
+  const box = document.getElementById('languageList');
+  box.innerHTML = languages.map((l,i)=>`
+    <div class="lang-row" onclick="selectLang(this)">
+      <span>${l}</span><b>${i===0?'✓':'○'}</b>
+    </div>
+  `).join('');
+}
+
+function selectLang(el){
+  document.querySelectorAll('.lang-row b').forEach(b=>b.textContent='○');
+  el.querySelector('b').textContent='✓';
+}
+
+function go(id){
+  screens.forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  updateNav(id);
+  if(id==='preview') fillPreview();
+  window.scrollTo(0,0);
+}
+
+function updateNav(id){
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  const map={home:0,cv:1,preview:1,interview:2,interviewer:2,setup:2,live:2,feedback:2,profile:3,settings:4,premium:4};
+  const idx=map[id] ?? 0;
+  document.querySelectorAll('.nav-item')[idx]?.classList.add('active');
+}
+
+function saveProfile(){
+  alert('Profile saved.');
+}
+
+function fillPreview(){
+  document.getElementById('previewName').textContent = (document.getElementById('name').value || 'YOUR NAME').toUpperCase();
+  document.getElementById('previewTarget').textContent = (document.getElementById('target').value || 'TARGET POSITION').toUpperCase();
+  document.getElementById('previewExp').textContent = document.getElementById('experience').value;
+  document.getElementById('previewEdu').textContent = document.getElementById('education').value;
+  document.getElementById('previewSkills').textContent = document.getElementById('skills').value;
+}
+
+function toggleCVPhoto(){
+  alert('Photo option switched. For UK CV, photo is usually not recommended.');
+}
+
+let darkTemplate=false;
+function changeTemplate(){
+  darkTemplate=!darkTemplate;
+  document.getElementById('templateBox').classList.toggle('dark',darkTemplate);
+}
+
+function generateCover(){
+  const job=document.getElementById('coverJob').value;
+  const company=document.getElementById('coverCompany').value;
+  const name=document.getElementById('name').value || 'Candidate';
+  const result =
+`Dear Hiring Manager,
+
+I am writing to express my interest in the ${job} position at ${company}. I believe my background, communication skills and professional attitude would allow me to make a positive contribution to your team.
+
+I am motivated, reliable and focused on delivering strong results. I would welcome the opportunity to discuss how my experience and skills match your requirements.
+
+Kind regards,
+${name}`;
+  const box=document.getElementById('coverResult');
+  box.textContent=result;
+  box.classList.remove('hidden');
+}
+
+function selectInterviewer(el,name){
+  document.querySelectorAll('.interviewer').forEach(i=>i.classList.remove('active'));
+  el.classList.add('active');
+  currentInterviewer=name;
+}
+
+function startInterview(){
+  const position=document.getElementById('jobPosition').value || 'this role';
+  const company=document.getElementById('jobCompany').value || 'the company';
+  questions=[
+    `Hello, nice to meet you. Today we are preparing for your ${position} interview at ${company}. Are you ready?`,
+    `Can you tell me about your experience as a ${position}?`,
+    `Why should we hire you for this role?`,
+    `What are your strongest skills for this position?`,
+    `Tell me about a difficult situation at work and how you handled it.`,
+    `Why do you want to work at ${company}?`
+  ];
+  qIndex=0;
+  document.getElementById('liveFace').textContent = currentInterviewer==='Emma'?'👩🏼':currentInterviewer==='Naomi'?'👩🏾':currentInterviewer==='James'?'👨🏻':'👨🏾';
+  document.getElementById('questionBox').textContent=questions[qIndex];
+  go('live');
+}
+
+function nextQuestion(){
+  qIndex++;
+  document.getElementById('userAnswer').value='';
+  if(qIndex>=questions.length){ finishInterview(); return; }
+  document.getElementById('questionBox').textContent=questions[qIndex];
+}
+
+function finishInterview(){
+  go('feedback');
+}
+
+function voiceDemo(){
+  const text=document.getElementById('questionBox').textContent;
+  if('speechSynthesis' in window){
+    speechSynthesis.cancel();
+    const u=new SpeechSynthesisUtterance(text);
+    u.lang='en-GB';
+    speechSynthesis.speak(u);
+  }else{
+    alert('Voice is not supported on this device.');
+  }
+}
+
+function setTheme(t){
+  document.body.classList.remove('light','purple');
+  if(t==='light') document.body.classList.add('light');
+  if(t==='purple') document.body.classList.add('purple');
+}
+
+buildLanguages();
+</script>
+
+</body>
+</html>
