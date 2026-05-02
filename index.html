@@ -7,75 +7,1083 @@
 
 <style>
 :root{
-  --bg:#1a0625;--bg2:#31134b;--card:rgba(255,255,255,.10);--text:#fff;
-  --muted:#d8c7e8;--accent:#9b5cff;--gold:#f2c36b;--line:rgba(255,255,255,.15);
-  --shadow:0 20px 60px rgba(0,0,0,.38);
+  --bg:#1a0625;
+  --bg2:#31134b;
+  --bg3:#4b1d72;
+  --card:rgba(255,255,255,.105);
+  --card2:rgba(255,255,255,.16);
+  --text:#ffffff;
+  --muted:#d8c7e8;
+  --soft:#f6edff;
+  --accent:#9b5cff;
+  --accent2:#6f32e6;
+  --gold:#f2c36b;
+  --gold2:#ffe6a3;
+  --line:rgba(255,255,255,.16);
+  --line2:rgba(255,255,255,.24);
+  --danger:#e55757;
+  --ok:#4fd18b;
+  --ink:#17100a;
+  --paper:#ffffff;
+  --shadow:0 20px 60px rgba(0,0,0,.36);
+  --shadow2:0 12px 32px rgba(0,0,0,.22);
 }
+
 body.beige{
-  --bg:#f7efe2;--bg2:#fff8ed;--card:rgba(255,255,255,.88);--text:#21160b;
-  --muted:#715f48;--accent:#9d6b1f;--gold:#d9a540;--line:rgba(80,50,10,.15);
+  --bg:#f5ead8;
+  --bg2:#fff7e9;
+  --bg3:#f4dfbe;
+  --card:rgba(255,255,255,.86);
+  --card2:rgba(255,255,255,.96);
+  --text:#22170d;
+  --muted:#715f48;
+  --soft:#fff8ec;
+  --accent:#9d6b1f;
+  --accent2:#74460f;
+  --gold:#d9a540;
+  --gold2:#ffe0a1;
+  --line:rgba(80,50,10,.16);
+  --line2:rgba(80,50,10,.25);
+  --ink:#17100a;
+  --paper:#ffffff;
   --shadow:0 18px 45px rgba(90,60,20,.16);
+  --shadow2:0 12px 28px rgba(90,60,20,.13);
 }
-*{box-sizing:border-box}
+
+*{
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
 body{
-  margin:0;font-family:Arial,sans-serif;color:var(--text);
-  background:radial-gradient(circle at 10% 0%,rgba(242,195,107,.25),transparent 28%),
-  radial-gradient(circle at 90% 8%,rgba(155,92,255,.35),transparent 32%),
-  linear-gradient(180deg,var(--bg),var(--bg2));min-height:100vh;
+  margin:0;
+  min-height:100vh;
+  font-family:Arial, Helvetica, sans-serif;
+  color:var(--text);
+  background:
+    radial-gradient(circle at 12% 0%,rgba(242,195,107,.26),transparent 28%),
+    radial-gradient(circle at 92% 8%,rgba(155,92,255,.36),transparent 34%),
+    linear-gradient(180deg,var(--bg),var(--bg2));
 }
-.app{max-width:430px;margin:auto;min-height:100vh;padding:18px 18px 96px}
-.screen{display:none}.screen.active{display:block}
-.top{display:flex;justify-content:space-between;align-items:center;margin:4px 0 18px}
-.icon{width:42px;height:42px;border-radius:16px;background:var(--card);border:1px solid var(--line);color:var(--text);display:flex;align-items:center;justify-content:center;cursor:pointer}
-.logo-img{width:94px;height:94px;border-radius:24px;object-fit:cover;display:block;margin:24px auto 16px;box-shadow:0 0 38px rgba(242,195,107,.45)}
-h1{font-size:34px;line-height:1.05;margin:0 0 10px}h2{font-size:24px;margin:0 0 8px}h3{margin:0 0 6px}
-p{color:var(--muted);line-height:1.45}.small{font-size:12px;color:var(--muted)}
-.gold{background:linear-gradient(90deg,var(--gold),var(--accent));-webkit-background-clip:text;color:transparent}
-.card{background:var(--card);border:1px solid var(--line);border-radius:24px;padding:18px;margin:14px 0;box-shadow:var(--shadow);backdrop-filter:blur(18px)}
-.btn{width:100%;border:0;border-radius:18px;padding:15px;font-size:15px;font-weight:800;cursor:pointer;color:#1b1107;background:linear-gradient(135deg,var(--gold),#fff0b8)}
-.btn.purple{color:white;background:linear-gradient(135deg,var(--accent),#5d22d6)}
-.btn.secondary{background:var(--card);color:var(--text);border:1px solid var(--line);box-shadow:none}
-input,textarea,select{width:100%;padding:14px;border-radius:16px;border:1px solid var(--line);background:rgba(255,255,255,.08);color:var(--text);margin:8px 0 14px;font-size:15px}
-body.beige input,body.beige textarea,body.beige select{background:#fff;color:#21160b}
-textarea{min-height:95px;resize:vertical}label{font-size:13px;color:var(--muted)}
-.row{display:flex;align-items:center;justify-content:space-between;gap:12px}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.action{display:flex;gap:14px;align-items:center;cursor:pointer}.square{width:58px;height:58px;border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:24px;background:linear-gradient(135deg,var(--accent),#5d22d6);overflow:hidden}
-.square img{width:100%;height:100%;object-fit:cover}
-.chev{font-size:25px;color:var(--gold)}
-.lang,.list-btn{padding:14px;border-radius:16px;border:1px solid var(--line);margin:9px 0;background:var(--card);display:flex;justify-content:space-between;cursor:pointer}
-.avatar-wrap{position:relative;width:122px;margin:0 auto 10px}
-.avatar{width:116px;height:116px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--accent));display:flex;align-items:center;justify-content:center;overflow:hidden;cursor:pointer}
-.avatar img{width:100%;height:100%;object-fit:cover}
-.remove-photo{position:absolute;right:0;top:0;width:30px;height:30px;border-radius:50%;border:0;background:#e53935;color:white;font-weight:900;cursor:pointer}
-.tabs{display:flex;gap:8px;overflow:auto;margin:12px 0}.tab{padding:9px 13px;border-radius:999px;border:1px solid var(--line);color:var(--muted);white-space:nowrap;cursor:pointer}.tab.active{background:var(--accent);color:white}
-.template-picker{display:grid;grid-template-columns:repeat(5,145px);gap:12px;overflow-x:auto;padding-bottom:12px}
-.tpl-card{border:1px solid var(--line);border-radius:18px;padding:10px;background:var(--card);cursor:pointer}
-.tpl-card.active{border-color:var(--gold);box-shadow:0 0 0 2px rgba(242,195,107,.22)}
-.tpl-mini{height:120px;border-radius:12px;background:#fff;color:#111;padding:8px;font-size:8px;position:relative;overflow:hidden}
-.tpl-mini .bar{height:5px;background:#ddd;border-radius:8px;margin:6px 0}.tpl-mini .photo{width:25px;height:25px;border-radius:6px;background:#aaa;position:absolute;right:8px;top:8px}
-.cv-document{min-height:520px;border-radius:20px;background:#fff;color:#17100a;padding:18px;box-shadow:0 16px 45px rgba(0,0,0,.25);position:relative;overflow:hidden}
-.cv-document h2{font-size:22px;color:#111;margin:0 0 4px}.cv-document p{color:#333;font-size:12px;line-height:1.35}
-.cv-section{margin-top:12px}.cv-title{font-size:12px;font-weight:900;border-bottom:2px solid currentColor;padding-bottom:4px;margin-bottom:6px}
-.cv-photo{width:76px;height:76px;background:#c7c7c7;object-fit:cover;display:none}
-.with-photo .cv-photo{display:block}.round-photo .cv-photo{border-radius:50%}.square-photo .cv-photo{border-radius:8px}
-.cv-top-photo{position:absolute;right:18px;top:18px}.photo-left .cv-top-photo{left:18px;right:auto}.photo-left .cv-head{margin-left:92px}.photo-right .cv-head{margin-right:92px}
-.cv-bluebar{border-top:34px solid #123a5a}.cv-sidebar{display:grid;grid-template-columns:34% 66%;padding:0}.cv-sidebar .side{background:#315d86;color:#fff;padding:18px}.cv-sidebar .main{padding:18px}
-.cv-sidebar-dark{display:grid;grid-template-columns:34% 66%;padding:0}.cv-sidebar-dark .side{background:#222;color:#fff;padding:18px}.cv-sidebar-dark .main{padding:18px}
-.cv-soft{background:#fffaf0}.cv-soft .cv-title{color:#b36b3c}.cv-minimal{background:#fff;border-left:18px solid #111}
-.cv-student{background:#fbfbfb}.cv-student .skill-pill{display:block;background:#f6dfb9;margin:5px 0;padding:6px;font-weight:700}
-.cv-linkedin{border-top:24px solid #0a66c2}.cv-executive{border-top:12px solid #111}.cv-creative{border-left:20px solid #9b5cff;background:linear-gradient(135deg,#fff,#f0e6ff)}
-.cv-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.interviewer{border:1px solid var(--line);border-radius:20px;padding:12px;text-align:center;cursor:pointer;background:var(--card)}
-.interviewer.active{border-color:var(--gold);box-shadow:0 0 0 2px rgba(246,197,107,.22)}
-.face{height:150px;border-radius:18px;background:linear-gradient(135deg,#20152c,#b68a53);display:flex;align-items:center;justify-content:center;margin-bottom:8px;overflow:hidden}
-.face img{width:100%;height:100%;object-fit:cover}
-.dialog{max-height:280px;overflow:auto;padding:8px}.bubble{padding:12px 14px;border-radius:18px;margin:10px 0;max-width:88%;white-space:pre-wrap}.ai{background:rgba(246,197,107,.18);border:1px solid rgba(246,197,107,.32)}.me{margin-left:auto;background:rgba(155,92,255,.22);border:1px solid rgba(155,92,255,.35)}
-.score{width:145px;height:145px;border-radius:50%;border:12px solid var(--gold);display:flex;flex-direction:column;align-items:center;justify-content:center;margin:20px auto}.score b{font-size:40px}
-.bottom{position:fixed;left:50%;transform:translateX(-50%);bottom:0;max-width:430px;width:100%;display:grid;grid-template-columns:repeat(5,1fr);background:rgba(15,8,24,.92);backdrop-filter:blur(18px);border-top:1px solid var(--line);padding:9px 6px 15px;z-index:10}
-body.beige .bottom{background:rgba(255,248,238,.92)}.nav{text-align:center;font-size:11px;color:var(--muted);cursor:pointer}.nav div{font-size:20px}.nav.active{color:var(--gold)}
-.theme{width:38px;height:38px;border-radius:50%;border:2px solid var(--line);cursor:pointer}.theme.beige{background:#f7efe2}.theme.purple{background:#35104d}.hidden{display:none}
-.audio-controls{display:none;margin-top:10px}.audio-controls.active{display:grid}
-@media print{body{background:#fff}.bottom,.top,.btn,.tabs,.template-picker{display:none!important}.app{padding:0}.card{box-shadow:none;border:0}.cv-document{box-shadow:none;border-radius:0;width:100%;min-height:auto}}
+
+button,input,textarea,select{
+  font-family:inherit;
+}
+
+button{
+  touch-action:manipulation;
+}
+
+.app{
+  max-width:430px;
+  margin:0 auto;
+  min-height:100vh;
+  padding:18px 18px 104px;
+}
+
+.screen{
+  display:none;
+  animation:fadeIn .22s ease both;
+}
+
+.screen.active{
+  display:block;
+}
+
+@keyframes fadeIn{
+  from{opacity:0;transform:translateY(8px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+.top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  margin:4px 0 18px;
+}
+
+.top h2{
+  margin:0;
+  text-align:center;
+  flex:1;
+}
+
+.icon{
+  width:43px;
+  height:43px;
+  border-radius:16px;
+  background:var(--card);
+  border:1px solid var(--line);
+  color:var(--text);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  font-size:19px;
+  box-shadow:var(--shadow2);
+}
+
+.logo-img{
+  width:96px;
+  height:96px;
+  border-radius:26px;
+  object-fit:cover;
+  display:block;
+  margin:24px auto 16px;
+  box-shadow:0 0 38px rgba(242,195,107,.42);
+}
+
+.home-logo{
+  width:74px;
+  height:74px;
+  margin-top:4px;
+  margin-bottom:14px;
+  border-radius:22px;
+}
+
+h1{
+  font-size:34px;
+  line-height:1.05;
+  margin:0 0 10px;
+  letter-spacing:-.7px;
+}
+
+h2{
+  font-size:24px;
+  line-height:1.15;
+  margin:0 0 8px;
+  letter-spacing:-.35px;
+}
+
+h3{
+  margin:0 0 6px;
+  font-size:17px;
+}
+
+p{
+  color:var(--muted);
+  line-height:1.45;
+  margin:8px 0 12px;
+}
+
+.small{
+  font-size:12px;
+  color:var(--muted);
+  line-height:1.35;
+}
+
+.gold{
+  background:linear-gradient(90deg,var(--gold),var(--accent));
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+}
+
+.card{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:24px;
+  padding:18px;
+  margin:14px 0;
+  box-shadow:var(--shadow);
+  backdrop-filter:blur(18px);
+}
+
+.card.tight{
+  padding:14px;
+}
+
+.btn{
+  width:100%;
+  border:0;
+  border-radius:18px;
+  padding:15px 16px;
+  font-size:15px;
+  font-weight:800;
+  cursor:pointer;
+  color:#1b1107;
+  background:linear-gradient(135deg,var(--gold),#fff0b8);
+  box-shadow:var(--shadow2);
+}
+
+.btn:active{
+  transform:scale(.99);
+}
+
+.btn.purple{
+  color:white;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+}
+
+.btn.secondary{
+  background:var(--card);
+  color:var(--text);
+  border:1px solid var(--line);
+  box-shadow:none;
+}
+
+.btn.danger{
+  color:white;
+  background:linear-gradient(135deg,#e55757,#a72020);
+}
+
+.btn.small-btn{
+  padding:10px 12px;
+  border-radius:14px;
+  font-size:13px;
+}
+
+input,textarea,select{
+  width:100%;
+  padding:14px;
+  border-radius:16px;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.085);
+  color:var(--text);
+  margin:8px 0 14px;
+  font-size:15px;
+  outline:none;
+}
+
+select option{
+  color:#111;
+}
+
+body.beige input,
+body.beige textarea,
+body.beige select{
+  background:#fff;
+  color:#21160b;
+}
+
+textarea{
+  min-height:96px;
+  resize:vertical;
+}
+
+label{
+  display:block;
+  font-size:13px;
+  color:var(--muted);
+  margin-top:6px;
+}
+
+.row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+}
+
+.row.start{
+  justify-content:flex-start;
+}
+
+.grid2{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+
+.grid3{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+}
+
+.action{
+  display:flex;
+  gap:14px;
+  align-items:center;
+  cursor:pointer;
+}
+
+.action-content{
+  flex:1;
+  min-width:0;
+}
+
+.square{
+  width:58px;
+  height:58px;
+  border-radius:18px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:24px;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  color:white;
+  overflow:hidden;
+  flex:0 0 auto;
+}
+
+.square img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.chev{
+  font-size:25px;
+  color:var(--gold);
+}
+
+.lang,
+.list-btn{
+  padding:14px;
+  border-radius:16px;
+  border:1px solid var(--line);
+  margin:9px 0;
+  background:var(--card);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  cursor:pointer;
+}
+
+.lang.active,
+.list-btn.active{
+  border-color:var(--gold);
+  background:linear-gradient(135deg,rgba(242,195,107,.22),rgba(155,92,255,.12));
+}
+
+.badge{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:7px 10px;
+  border-radius:999px;
+  border:1px solid var(--line);
+  background:var(--card);
+  color:var(--muted);
+  font-size:12px;
+  margin:3px 4px 3px 0;
+}
+
+.hero-card{
+  padding:20px;
+  border-radius:28px;
+  background:
+    linear-gradient(135deg,rgba(255,255,255,.16),rgba(255,255,255,.07)),
+    radial-gradient(circle at 0 0,rgba(242,195,107,.24),transparent 40%);
+  border:1px solid var(--line2);
+  box-shadow:var(--shadow);
+}
+
+.hero-buttons{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+  margin-top:16px;
+}
+
+.avatar-wrap{
+  position:relative;
+  width:126px;
+  margin:0 auto 16px;
+}
+
+.avatar{
+  width:122px;
+  height:122px;
+  border-radius:50%;
+  background:var(--card2);
+  border:1px solid var(--line);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+  cursor:pointer;
+  box-shadow:var(--shadow2);
+}
+
+.avatar img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.default-avatar{
+  width:122px;
+  height:122px;
+  position:relative;
+  overflow:hidden;
+  border-radius:50%;
+  background:
+    radial-gradient(circle at 50% 28%,#ffd4b2 0 18%,transparent 19%),
+    radial-gradient(circle at 50% 72%,#ffffff 0 27%,transparent 28%),
+    linear-gradient(135deg,#1b2438,#7651d9);
+}
+
+.default-avatar.female:before{
+  content:"";
+  position:absolute;
+  left:28px;
+  top:17px;
+  width:66px;
+  height:72px;
+  border-radius:42px 42px 34px 34px;
+  background:#4a271e;
+}
+
+.default-avatar.female:after{
+  content:"";
+  position:absolute;
+  left:34px;
+  top:28px;
+  width:54px;
+  height:54px;
+  border-radius:50%;
+  background:
+    radial-gradient(circle at 35% 42%,#2a160f 0 2px,transparent 3px),
+    radial-gradient(circle at 65% 42%,#2a160f 0 2px,transparent 3px),
+    radial-gradient(circle at 50% 65%,#c77963 0 8px,transparent 9px),
+    #ffd4b2;
+}
+
+.default-avatar.male:before{
+  content:"";
+  position:absolute;
+  left:31px;
+  top:20px;
+  width:60px;
+  height:45px;
+  border-radius:28px 28px 18px 18px;
+  background:#3a2418;
+  z-index:1;
+}
+
+.default-avatar.male:after{
+  content:"";
+  position:absolute;
+  left:34px;
+  top:30px;
+  width:54px;
+  height:54px;
+  border-radius:50%;
+  z-index:2;
+  background:
+    radial-gradient(circle at 35% 42%,#2a160f 0 2px,transparent 3px),
+    radial-gradient(circle at 65% 42%,#2a160f 0 2px,transparent 3px),
+    radial-gradient(circle at 50% 66%,#c77963 0 7px,transparent 8px),
+    #ffd4b2;
+}
+
+.remove-photo{
+  position:absolute;
+  right:0;
+  top:0;
+  width:32px;
+  height:32px;
+  border-radius:50%;
+  border:0;
+  background:var(--danger);
+  color:white;
+  font-weight:900;
+  cursor:pointer;
+  box-shadow:var(--shadow2);
+}
+
+.tabs{
+  display:flex;
+  gap:8px;
+  overflow:auto;
+  margin:12px 0;
+  padding-bottom:4px;
+}
+
+.tab{
+  padding:9px 13px;
+  border-radius:999px;
+  border:1px solid var(--line);
+  color:var(--muted);
+  white-space:nowrap;
+  cursor:pointer;
+  background:var(--card);
+  font-size:13px;
+  font-weight:700;
+}
+
+.tab.active{
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  color:white;
+  border-color:transparent;
+}
+
+.template-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+  margin:14px 0 16px;
+}
+
+.tpl-card{
+  border:1px solid var(--line);
+  border-radius:20px;
+  padding:10px;
+  background:var(--card);
+  cursor:pointer;
+  box-shadow:var(--shadow2);
+}
+
+.tpl-card.active{
+  border-color:var(--gold);
+  box-shadow:0 0 0 2px rgba(242,195,107,.25),var(--shadow2);
+}
+
+.tpl-img{
+  width:100%;
+  height:142px;
+  object-fit:cover;
+  object-position:top;
+  border-radius:14px;
+  background:#fff;
+  display:block;
+}
+
+.tpl-name{
+  font-size:13px;
+  font-weight:800;
+  margin:9px 2px 2px;
+}
+
+.big-preview-wrap{
+  border-radius:24px;
+  overflow:hidden;
+  background:#fff;
+  box-shadow:var(--shadow2);
+  margin:10px 0 14px;
+}
+
+.big-preview-img{
+  width:100%;
+  max-height:300px;
+  object-fit:cover;
+  object-position:top;
+  display:block;
+  background:#fff;
+}
+
+.cv-document{
+  width:100%;
+  min-height:560px;
+  border-radius:20px;
+  background:#fff;
+  color:#17100a;
+  padding:0;
+  box-shadow:0 16px 45px rgba(0,0,0,.25);
+  position:relative;
+  overflow:hidden;
+}
+
+.cv-document *{
+  box-sizing:border-box;
+}
+
+.cv-document p{
+  color:#333;
+  font-size:12px;
+  line-height:1.38;
+  margin:5px 0;
+}
+
+.cv-document h2{
+  font-size:24px;
+  color:#111;
+  margin:0 0 4px;
+  letter-spacing:.2px;
+}
+
+.cv-document h3{
+  color:#111;
+  font-size:14px;
+  margin:0;
+}
+
+.cv-section{
+  margin-top:13px;
+}
+
+.cv-title{
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:.9px;
+  text-transform:uppercase;
+  border-bottom:2px solid currentColor;
+  padding-bottom:4px;
+  margin-bottom:7px;
+}
+
+.cv-photo{
+  width:82px;
+  height:82px;
+  background:#d5d5d5;
+  object-fit:cover;
+  display:none;
+  border:3px solid #fff;
+  box-shadow:0 8px 22px rgba(0,0,0,.18);
+}
+
+.with-photo .cv-photo{
+  display:block;
+}
+
+.round-photo .cv-photo{
+  border-radius:50%;
+}
+
+.square-photo .cv-photo{
+  border-radius:10px;
+}
+
+.rectangle-photo .cv-photo{
+  width:96px;
+  height:72px;
+  border-radius:10px;
+}
+
+.cv-top-photo{
+  position:absolute;
+  right:18px;
+  top:18px;
+  z-index:4;
+}
+
+.photo-left .cv-top-photo{
+  left:18px;
+  right:auto;
+}
+
+.photo-right .cv-head{
+  padding-right:96px;
+}
+
+.photo-left .cv-head{
+  padding-left:96px;
+}
+
+.photo-top .cv-top-photo{
+  position:relative;
+  left:auto;
+  right:auto;
+  top:auto;
+  margin:0 auto 12px;
+}
+
+.photo-top .cv-head{
+  padding:0;
+  text-align:center;
+}
+
+.cv-page{
+  padding:18px;
+}
+
+.cv-header-blue{
+  background:#173a59;
+  color:white;
+  padding:20px 18px;
+  position:relative;
+}
+
+.cv-header-blue h2,
+.cv-header-blue p{
+  color:white;
+}
+
+.cv-body{
+  padding:18px;
+}
+
+.cv-modern{
+  border-top:34px solid #173a59;
+}
+
+.cv-modern .cv-page{
+  padding-top:22px;
+}
+
+.cv-elegant .cv-header{
+  padding:22px 18px 16px;
+  background:#f7efe2;
+  border-bottom:5px solid #d9a540;
+}
+
+.cv-elegant .cv-title{
+  color:#9d6b1f;
+}
+
+.cv-sidebar{
+  display:grid;
+  grid-template-columns:35% 65%;
+  min-height:560px;
+}
+
+.cv-sidebar .side{
+  background:#26354f;
+  color:#fff;
+  padding:18px 14px;
+}
+
+.cv-sidebar .side h2,
+.cv-sidebar .side p{
+  color:#fff;
+}
+
+.cv-sidebar .main{
+  padding:18px;
+}
+
+.cv-sidebar .cv-title{
+  color:#26354f;
+}
+
+.cv-creative{
+  background:linear-gradient(135deg,#fff,#f5edff);
+  border-left:24px solid #9b5cff;
+}
+
+.cv-creative .cv-title{
+  color:#7f43e8;
+}
+
+.cv-creative .cv-head{
+  background:#f4e9ff;
+  border-radius:16px;
+  padding:16px;
+  margin-bottom:12px;
+}
+
+.cv-ats{
+  background:#fff;
+  border-radius:0;
+}
+
+.cv-ats .cv-page{
+  padding:22px;
+}
+
+.cv-ats .cv-title{
+  color:#111;
+  border-bottom:1px solid #111;
+}
+
+.cv-actions{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
+.file-list{
+  margin:8px 0 0;
+}
+
+.file-item{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding:12px;
+  border-radius:16px;
+  border:1px solid var(--line);
+  background:var(--card);
+  margin:8px 0;
+}
+
+.file-item span{
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  font-size:13px;
+}
+
+.file-actions{
+  display:flex;
+  gap:6px;
+  flex:0 0 auto;
+}
+
+.mini-icon{
+  border:1px solid var(--line);
+  background:var(--card);
+  color:var(--text);
+  border-radius:12px;
+  padding:7px 9px;
+  cursor:pointer;
+  font-weight:800;
+}
+
+.interviewer-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+
+.interviewer{
+  border:1px solid var(--line);
+  border-radius:22px;
+  padding:12px;
+  text-align:center;
+  cursor:pointer;
+  background:var(--card);
+  box-shadow:var(--shadow2);
+}
+
+.interviewer.active{
+  border-color:var(--gold);
+  box-shadow:0 0 0 2px rgba(246,197,107,.25),var(--shadow2);
+}
+
+.face{
+  height:160px;
+  border-radius:18px;
+  background:linear-gradient(135deg,#20152c,#b68a53);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin-bottom:9px;
+  overflow:hidden;
+}
+
+.face img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.live-face{
+  width:76px;
+  height:76px;
+  border-radius:22px;
+  overflow:hidden;
+  background:var(--card);
+  flex:0 0 auto;
+  box-shadow:var(--shadow2);
+}
+
+.live-face img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.live-face.speaking{
+  animation:speakPulse .55s ease-in-out infinite alternate;
+}
+
+@keyframes speakPulse{
+  from{transform:scale(1);filter:brightness(1)}
+  to{transform:scale(1.035) translateY(-2px);filter:brightness(1.08)}
+}
+
+.dialog{
+  max-height:310px;
+  overflow:auto;
+  padding:8px 2px;
+  scroll-behavior:smooth;
+}
+
+.bubble{
+  padding:12px 14px;
+  border-radius:18px;
+  margin:10px 0;
+  max-width:90%;
+  white-space:pre-wrap;
+  font-size:14px;
+  line-height:1.38;
+}
+
+.ai{
+  background:rgba(246,197,107,.18);
+  border:1px solid rgba(246,197,107,.32);
+}
+
+.me{
+  margin-left:auto;
+  background:rgba(155,92,255,.22);
+  border:1px solid rgba(155,92,255,.35);
+}
+
+.score{
+  width:145px;
+  height:145px;
+  border-radius:50%;
+  border:12px solid var(--gold);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  margin:20px auto;
+  background:var(--card);
+}
+
+.score b{
+  font-size:40px;
+}
+
+.bottom{
+  position:fixed;
+  left:50%;
+  transform:translateX(-50%);
+  bottom:0;
+  max-width:430px;
+  width:100%;
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  background:rgba(15,8,24,.92);
+  backdrop-filter:blur(18px);
+  border-top:1px solid var(--line);
+  padding:9px 6px 15px;
+  z-index:10;
+}
+
+body.beige .bottom{
+  background:rgba(255,248,238,.92);
+}
+
+.nav{
+  text-align:center;
+  font-size:11px;
+  color:var(--muted);
+  cursor:pointer;
+  font-weight:700;
+}
+
+.nav div{
+  font-size:20px;
+  line-height:1.1;
+}
+
+.nav.active{
+  color:var(--gold);
+}
+
+.theme{
+  width:42px;
+  height:42px;
+  border-radius:50%;
+  border:2px solid var(--line);
+  cursor:pointer;
+  box-shadow:var(--shadow2);
+}
+
+.theme.beige{
+  background:linear-gradient(135deg,#f7efe2,#d9a540);
+}
+
+.theme.purple{
+  background:linear-gradient(135deg,#35104d,#9b5cff);
+}
+
+.hidden{
+  display:none!important;
+}
+
+.audio-controls{
+  display:none;
+  margin-top:10px;
+}
+
+.audio-controls.active{
+  display:grid;
+}
+
+.cover-output{
+  white-space:pre-wrap;
+  font-size:14px;
+  line-height:1.5;
+  color:var(--text);
+}
+
+.empty{
+  padding:12px;
+  border-radius:16px;
+  border:1px dashed var(--line);
+  color:var(--muted);
+  font-size:13px;
+  margin:8px 0;
+}
+
+.status{
+  padding:10px 12px;
+  border-radius:14px;
+  background:rgba(79,209,139,.12);
+  border:1px solid rgba(79,209,139,.28);
+  color:var(--muted);
+  font-size:13px;
+  margin:10px 0;
+}
+
+@media(max-width:360px){
+  .app{
+    padding-left:14px;
+    padding-right:14px;
+  }
+
+  h1{
+    font-size:30px;
+  }
+
+  .template-grid,
+  .grid2,
+  .interviewer-grid{
+    gap:9px;
+  }
+
+  .face{
+    height:136px;
+  }
+
+  .tpl-img{
+    height:122px;
+  }
+}
+
+@media print{
+  @page{
+    size:A4;
+    margin:12mm;
+  }
+
+  html,body{
+    background:#fff!important;
+    margin:0!important;
+    padding:0!important;
+  }
+
+  body *{
+    visibility:hidden!important;
+  }
+
+  #printArea,
+  #printArea *{
+    visibility:visible!important;
+  }
+
+  #printArea{
+    position:absolute!important;
+    left:0!important;
+    top:0!important;
+    width:100%!important;
+    margin:0!important;
+    padding:0!important;
+    background:#fff!important;
+  }
+
+  #printArea .cv-document{
+    box-shadow:none!important;
+    border-radius:0!important;
+    width:100%!important;
+    min-height:auto!important;
+    page-break-inside:avoid;
+  }
+}
 </style>
 </head>
 
@@ -83,171 +1091,436 @@ body.beige .bottom{background:rgba(255,248,238,.92)}.nav{text-align:center;font-
 <div class="app">
 
 <section id="language" class="screen active">
-  <img src="logo.jpg" class="logo-img" onerror="this.style.display='none'">
+  <img src="logo.jpg" class="logo-img" alt="Job Success AI logo" onerror="this.style.display='none'">
   <h1>Job Success <span class="gold">AI</span></h1>
   <p data-i="subtitle">Premium AI tools to build your profile, CV, cover letter and interview confidence.</p>
-  <h2 data-i="chooseLang">Choose language</h2>
-  <div id="langs"></div>
-  <button class="btn purple" onclick="go('home')" data-i="continue">Continue</button>
+
+  <div class="card">
+    <h2 data-i="chooseAppLang">Choose app language</h2>
+    <p class="small" data-i="languageNote">You can change this later in Settings.</p>
+    <div id="langs"></div>
+    <button class="btn purple" onclick="go('home')" data-i="continue">Continue</button>
+  </div>
 </section>
 
 <section id="home" class="screen">
-  <div class="top"><button class="icon" onclick="go('settings')">☰</button><button class="icon" onclick="go('premium')">♕</button></div>
-  <img src="logo.jpg" class="logo-img" onerror="this.style.display='none'" style="width:74px;height:74px;margin-top:4px">
-  <h1 data-i="homeTitle">Get hired <span class="gold">faster</span></h1>
-  <p data-i="homeSub">CV, cover letter, LinkedIn profile and AI interview practice in one premium app.</p>
-  <div class="card action" onclick="go('profile')"><div class="square">👤</div><div><h3 data-i="profileTitle">My Professional Profile</h3><p data-i="profileSub">Fill once. Use everywhere.</p></div><div class="chev">›</div></div>
-  <div class="card action" onclick="go('cv')"><div class="square">📄</div><div><h3 data-i="cvBuilder">CV Builder</h3><p data-i="cvSub">Professional CV layouts.</p></div><div class="chev">›</div></div>
-  <div class="card action" onclick="go('cover')"><div class="square">✉️</div><div><h3 data-i="coverLetter">Cover Letter</h3><p data-i="coverSub">Generate job-specific letters.</p></div><div class="chev">›</div></div>
-  <div class="card action" onclick="go('interview')"><div class="square">🎙</div><div><h3 data-i="coach">AI Interview Coach</h3><p data-i="coachSub">Practise with a virtual recruiter.</p></div><div class="chev">›</div></div>
+  <div class="top">
+    <button class="icon" onclick="go('settings')">☰</button>
+    <button class="icon" onclick="go('premium')">♕</button>
+  </div>
+
+  <img src="logo.jpg" class="logo-img home-logo" alt="Job Success AI logo" onerror="this.style.display='none'">
+
+  <div class="hero-card">
+    <h1 data-i="homeTitle">Get hired <span class="gold">faster</span></h1>
+    <p data-i="homeSub">CV, cover letter, LinkedIn profile and AI interview practice in one premium app.</p>
+    <div>
+      <span class="badge" data-i="badgeCV">CV Builder</span>
+      <span class="badge" data-i="badgeCover">Cover Letter</span>
+      <span class="badge" data-i="badgeCoach">Interview Coach</span>
+    </div>
+    <div class="hero-buttons">
+      <button class="btn purple" onclick="go('cv')" data-i="startCV">Start CV</button>
+      <button class="btn secondary" onclick="go('interview')" data-i="practice">Practise</button>
+    </div>
+  </div>
+
+  <div class="card action" onclick="go('profile')">
+    <div class="square">P</div>
+    <div class="action-content">
+      <h3 data-i="profileTitle">My Professional Profile</h3>
+      <p data-i="profileSub">Fill once. Use everywhere.</p>
+    </div>
+    <div class="chev">›</div>
+  </div>
+
+  <div class="card action" onclick="go('cv')">
+    <div class="square">CV</div>
+    <div class="action-content">
+      <h3 data-i="cvBuilder">CV Builder</h3>
+      <p data-i="cvSub">Professional CV layouts with photo options.</p>
+    </div>
+    <div class="chev">›</div>
+  </div>
+
+  <div class="card action" onclick="go('cover')">
+    <div class="square">CL</div>
+    <div class="action-content">
+      <h3 data-i="coverLetter">Cover Letter</h3>
+      <p data-i="coverSub">Generate job-specific letters in different tones.</p>
+    </div>
+    <div class="chev">›</div>
+  </div>
+
+  <div class="card action" onclick="go('interview')">
+    <div class="square">AI</div>
+    <div class="action-content">
+      <h3 data-i="coach">AI Interview Coach</h3>
+      <p data-i="coachSub">Practise with a virtual recruiter.</p>
+    </div>
+    <div class="chev">›</div>
+  </div>
 </section>
 
 <section id="profile" class="screen">
-  <div class="top"><button class="icon" onclick="go('home')">‹</button><h2 data-i="profile">Profile</h2><button class="icon" onclick="saveProfile()">✓</button></div>
-  <div class="avatar-wrap">
-    <div class="avatar" onclick="photoInput.click()" id="profileAvatar"></div>
-    <button class="remove-photo" onclick="removePhoto()">×</button>
+  <div class="top">
+    <button class="icon" onclick="go('home')">‹</button>
+    <h2 data-i="profile">Profile</h2>
+    <button class="icon" onclick="saveProfile(true)">✓</button>
   </div>
-  <input id="photoInput" type="file" accept="image/*" style="display:none" onchange="loadPhoto(event)">
-  <label data-i="gender">Gender</label><select id="gender" onchange="updateDefaultAvatar()"><option value="female">Female</option><option value="male">Male</option></select>
-  <label data-i="fullName">Full name</label><input id="name" value="Yulia Shevchenko">
-  <label>Email</label><input id="email" value="your@email.com">
-  <label data-i="phone">Phone</label><input id="phone" value="+44 0000 000000">
-  <label data-i="location">Location</label><input id="location" value="London, UK">
-  <label data-i="targetJob">Target job</label><input id="target" value="Marketing Manager">
-  <label data-i="languages">Languages</label><input id="profileLanguages" value="English B1, Ukrainian native">
-  <label data-i="workExp">Work experience</label><div id="experienceCards"></div>
-  <button class="btn secondary" onclick="addExperienceCard()" data-i="addExperience">+ Add New Experience</button>
-  <label data-i="volunteer">Volunteering</label><div id="volunteerCards"></div>
-  <button class="btn secondary" onclick="addVolunteerCard()" data-i="addVolunteer">+ Add Volunteering</button>
-  <label data-i="education">Education</label><textarea id="education">University degree / college / school</textarea>
-  <label data-i="courses">Courses & Diplomas</label>
-  <div id="coursesBox"></div>
-  <input id="diplomaFile" type="file" accept=".pdf,image/*" style="display:none" onchange="addDiplomaFile(event)">
-  <button class="btn secondary" onclick="diplomaFile.click()" data-i="addDiploma">+ Add Course / Diploma File</button>
-  <label data-i="skills">Skills</label><textarea id="skills">Communication, teamwork, organisation, customer service, problem solving</textarea>
-  <br><button class="btn purple" onclick="saveProfile()" data-i="saveProfile">Save Profile</button>
+
+  <div class="card">
+    <div class="avatar-wrap">
+      <div class="avatar" onclick="photoInput.click()" id="profileAvatar"></div>
+      <button class="remove-photo" onclick="removePhoto(event)">×</button>
+    </div>
+
+    <input id="photoInput" type="file" accept="image/*" style="display:none" onchange="loadPhoto(event)">
+
+    <label data-i="gender">Gender</label>
+    <select id="gender" onchange="updateDefaultAvatar(); saveProfile(false);">
+      <option value="female" data-i="female">Female</option>
+      <option value="male" data-i="male">Male</option>
+    </select>
+
+    <label data-i="fullName">Full name</label>
+    <input id="name" value="Yulia Shevchenko" oninput="saveProfile(false); renderCV();">
+
+    <label>Email</label>
+    <input id="email" value="your@email.com" oninput="saveProfile(false); renderCV();">
+
+    <label data-i="phone">Phone</label>
+    <input id="phone" value="+44 0000 000000" oninput="saveProfile(false); renderCV();">
+
+    <label data-i="location">Location</label>
+    <input id="location" value="London, UK" oninput="saveProfile(false); renderCV();">
+
+    <label data-i="targetJob">Target job</label>
+    <input id="target" value="Marketing Manager" oninput="saveProfile(false); renderCV();">
+
+    <label data-i="languagesField">Languages</label>
+    <input id="profileLanguages" value="English B1, Ukrainian native" oninput="saveProfile(false); renderCV();">
+  </div>
+
+  <div class="card">
+    <h2 data-i="workExp">Work Experience</h2>
+    <div id="experienceCards"></div>
+    <button class="btn secondary" onclick="addExperienceCard()" data-i="addExperience">+ Add New Experience</button>
+  </div>
+
+  <div class="card">
+    <h2 data-i="volunteer">Volunteering</h2>
+    <div id="volunteerCards"></div>
+    <button class="btn secondary" onclick="addVolunteerCard()" data-i="addVolunteer">+ Add Volunteering</button>
+  </div>
+
+  <div class="card">
+    <h2 data-i="education">Education</h2>
+    <textarea id="education" oninput="saveProfile(false); renderCV();">University degree / college / school</textarea>
+
+    <h2 data-i="courses">Courses & Diplomas</h2>
+    <div id="coursesBox"></div>
+    <input id="diplomaFile" type="file" accept=".pdf,image/*,.doc,.docx,.txt" style="display:none" onchange="addDiplomaFile(event)">
+    <button class="btn secondary" onclick="diplomaFile.click()" data-i="addDiploma">+ Add Course / Diploma File</button>
+
+    <h2 data-i="skills">Skills</h2>
+    <textarea id="skills" oninput="saveProfile(false); renderCV();">Communication, teamwork, organisation, customer service, problem solving</textarea>
+
+    <br>
+    <button class="btn purple" onclick="saveProfile(true)" data-i="saveProfile">Save Profile</button>
+  </div>
 </section>
 
 <section id="cv" class="screen">
-  <div class="top"><button class="icon" onclick="go('home')">‹</button><h2 data-i="cvBuilder">CV Builder</h2><button class="icon" onclick="go('profile')">👤</button></div>
-  <div class="tabs">
-    <div class="tab active" onclick="setCVCategory(this,'Professional')">Professional</div>
-    <div class="tab" onclick="setCVCategory(this,'Executive')">Executive</div>
-    <div class="tab" onclick="setCVCategory(this,'Creative')">Creative</div>
-    <div class="tab" onclick="setCVCategory(this,'LinkedIn')">LinkedIn</div>
+  <div class="top">
+    <button class="icon" onclick="go('home')">‹</button>
+    <h2 data-i="cvBuilder">CV Builder</h2>
+    <button class="icon" onclick="go('profile')">P</button>
   </div>
+
   <div class="card">
-    <h2 id="cvCat">Professional Templates</h2>
-    <p id="templateNote">Choose a CV layout.</p>
-    <div id="templatePicker" class="template-picker"></div>
+    <label data-i="contentLanguage">Content language</label>
+    <select id="cvContentLang" onchange="savePreferences(); renderCV();">
+      <option>English</option>
+      <option>Українська</option>
+      <option>Polski</option>
+      <option>Deutsch</option>
+      <option>Français</option>
+      <option>Español</option>
+      <option>ქართული</option>
+    </select>
+  </div>
+
+  <div class="card">
+    <h2 data-i="chooseTemplate">Choose CV template</h2>
+    <p class="small" data-i="templateNote">Select a preview. Your CV below will use the same style.</p>
+
+    <div id="templateGrid" class="template-grid"></div>
+
+    <h3 data-i="selectedPreview">Selected preview</h3>
+    <div class="big-preview-wrap">
+      <img id="bigTemplatePreview" class="big-preview-img" src="cv1.jpg" alt="Selected CV template preview" onerror="this.style.display='none'">
+    </div>
+
+    <h3 data-i="liveCVPreview">Live CV preview</h3>
     <div id="cvDoc" class="cv-document"></div>
+
     <br>
     <div class="cv-actions">
       <button class="btn secondary" onclick="togglePhoto()" data-i="photoOnOff">Photo On/Off</button>
-      <button class="btn secondary" onclick="cyclePhotoShape()" data-i="photoShape">Photo Shape</button>
-      <button class="btn secondary" onclick="movePhoto()" data-i="photoPosition">Photo Position</button>
+      <button class="btn secondary" onclick="cyclePhotoShape()" id="photoShapeBtn">Photo Shape: round</button>
+      <button class="btn secondary" onclick="movePhoto()" id="photoPositionBtn">Photo Position: right</button>
       <button class="btn secondary" onclick="uploadCV.click()" data-i="uploadOldCV">Upload Old CV</button>
     </div>
-    <input id="uploadCV" type="file" accept=".pdf,.doc,.docx,.txt" style="display:none" onchange="uploadOldCV(event)">
-    <br><button class="btn purple" onclick="go('preview')" data-i="useTemplate">Use This Template</button>
+
+    <input id="uploadCV" type="file" accept=".pdf,.doc,.docx,.txt" style="display:none" onchange="uploadOldCVFile(event)">
+    <div id="oldCVBox" class="file-list"></div>
+
+    <br>
+    <button class="btn purple" onclick="go('preview')" data-i="useTemplate">Use This Template</button>
   </div>
 </section>
 
 <section id="preview" class="screen">
-  <div class="top"><button class="icon" onclick="go('cv')">‹</button><h2>CV Preview</h2><button class="icon" onclick="window.print()">⬇</button></div>
+  <div class="top">
+    <button class="icon" onclick="go('cv')">‹</button>
+    <h2 data-i="cvPreview">CV Preview</h2>
+    <button class="icon" onclick="savePDF()">⬇</button>
+  </div>
+
   <div class="card">
-    <div id="cvPreview" class="cv-document"></div>
+    <div id="printArea">
+      <div id="cvPreview" class="cv-document"></div>
+    </div>
     <br>
     <div class="grid2">
-      <button class="btn purple" onclick="window.print()">Download PDF</button>
-      <button class="btn secondary" onclick="downloadText()">Download TXT</button>
-      <button class="btn secondary" onclick="copyCV()">Copy Text</button>
-      <button class="btn secondary" onclick="shareCV()">Share CV</button>
+      <button class="btn purple" onclick="savePDF()" data-i="savePDF">Save as PDF</button>
+      <button class="btn secondary" onclick="downloadText()" data-i="downloadTXT">Download TXT</button>
+      <button class="btn secondary" onclick="copyCV()" data-i="copyText">Copy Text</button>
+      <button class="btn secondary" onclick="shareCV()" data-i="share">Share</button>
     </div>
   </div>
 </section>
 
 <section id="cover" class="screen">
-  <div class="top"><button class="icon" onclick="go('home')">‹</button><h2 data-i="coverLetter">Cover Letter</h2><button class="icon" onclick="go('premium')">♕</button></div>
-  <label data-i="contentLang">Content language</label><select id="coverLang"></select>
-  <label data-i="jobTitle">Job title</label><input id="coverJob" value="Chef">
-  <label data-i="company">Company</label><input id="coverCompany" value="The Ritz London">
-  <label data-i="pasteJob">Paste Job Description</label>
-  <textarea id="coverText">Paste the job advert here, or write what kind of job you are applying for.</textarea>
-  <p class="small" data-i="jobExample">Example: responsibilities, requirements, company description, skills needed.</p>
-  <div class="tabs">
-    <div class="tab active" onclick="setTone(this,'formal')">Formal</div>
-    <div class="tab" onclick="setTone(this,'confident')">Confident</div>
-    <div class="tab" onclick="setTone(this,'short')">Short</div>
-    <div class="tab" onclick="setTone(this,'uk')">UK Style</div>
+  <div class="top">
+    <button class="icon" onclick="go('home')">‹</button>
+    <h2 data-i="coverLetter">Cover Letter</h2>
+    <button class="icon" onclick="go('premium')">♕</button>
   </div>
-  <button class="btn purple" onclick="generateCover()" data-i="generateCover">Generate Cover Letter</button>
-  <div id="coverResult" class="card hidden"></div>
+
+  <div class="card">
+    <label data-i="contentLanguage">Content language</label>
+    <select id="coverLang"></select>
+
+    <label data-i="jobTitle">Job title</label>
+    <input id="coverJob" value="Chef">
+
+    <label data-i="company">Company</label>
+    <input id="coverCompany" value="The Ritz London">
+
+    <label data-i="pasteJob">Paste Job Description</label>
+    <textarea id="coverText">Paste the job advert here, or write what kind of job you are applying for.</textarea>
+    <p class="small" data-i="jobExample">Example: responsibilities, requirements, company description, skills needed.</p>
+
+    <div class="tabs">
+      <div class="tab active" onclick="setTone(this,'formal')" data-i="formal">Formal</div>
+      <div class="tab" onclick="setTone(this,'confident')" data-i="confident">Confident</div>
+      <div class="tab" onclick="setTone(this,'short')" data-i="shortTone">Short</div>
+      <div class="tab" onclick="setTone(this,'uk')" data-i="ukStyle">UK Style</div>
+    </div>
+
+    <button class="btn purple" onclick="generateCover()" data-i="generateCover">Generate Cover Letter</button>
+  </div>
+
+  <div id="coverResult" class="card hidden">
+    <h2 data-i="result">Result</h2>
+    <div id="coverOutput" class="cover-output"></div>
+    <br>
+    <div class="grid2">
+      <button class="btn secondary" onclick="copyCover()" data-i="copyText">Copy Text</button>
+      <button class="btn secondary" onclick="downloadCover()" data-i="downloadTXT">Download TXT</button>
+    </div>
+  </div>
 </section>
 
 <section id="interview" class="screen">
-  <div class="top"><button class="icon" onclick="go('home')">‹</button><h2 data-i="coach">AI Interview Coach</h2><button class="icon" onclick="go('premium')">♕</button></div>
-  <div class="card"><h2 data-i="chooseRecruiter">Choose your AI recruiter</h2><p data-i="coachDesc">Professional interview practice with voice, transcript and feedback.</p><button class="btn purple" onclick="go('interviewer')" data-i="startSetup">Start Setup</button></div>
+  <div class="top">
+    <button class="icon" onclick="go('home')">‹</button>
+    <h2 data-i="coach">AI Interview Coach</h2>
+    <button class="icon" onclick="go('premium')">♕</button>
+  </div>
+
+  <div class="card">
+    <h2 data-i="chooseRecruiter">Choose your AI recruiter</h2>
+    <p data-i="coachDesc">Professional interview practice with voice, transcript and feedback.</p>
+    <button class="btn purple" onclick="go('interviewer')" data-i="startSetup">Start Setup</button>
+  </div>
 </section>
 
 <section id="interviewer" class="screen">
-  <div class="top"><button class="icon" onclick="go('interview')">‹</button><h2>Recruiter</h2><span></span></div>
-  <div class="grid2">
-    <div class="interviewer active" onclick="selectInterviewer(this,'Emma','emma-closed.png','emma-open.png')"><div class="face"><img src="emma-closed.png" onerror="this.style.display='none'"></div>Emma<br><span class="small">HR Recruiter</span></div>
-    <div class="interviewer" onclick="selectInterviewer(this,'Naomi','naomi-closed.png','naomi-open.png')"><div class="face"><img src="naomi-closed.png" onerror="this.style.display='none'"></div>Naomi<br><span class="small">Talent Acquisition</span></div>
-    <div class="interviewer" onclick="selectInterviewer(this,'James','james-closed.png','james-open.png')"><div class="face"><img src="james-closed.png" onerror="this.style.display='none'"></div>James<br><span class="small">Hiring Manager</span></div>
-    <div class="interviewer" onclick="selectInterviewer(this,'Michael','michael-closed.png','michael-open.png')"><div class="face"><img src="michael-closed.png" onerror="this.style.display='none'"></div>Michael<br><span class="small">Technical Recruiter</span></div>
+  <div class="top">
+    <button class="icon" onclick="go('interview')">‹</button>
+    <h2 data-i="recruiter">Recruiter</h2>
+    <span></span>
   </div>
-  <br><button class="btn purple" onclick="go('setup')" data-i="confirmSelection">Confirm Selection</button>
+
+  <div id="interviewerGrid" class="interviewer-grid"></div>
+
+  <br>
+  <button class="btn purple" onclick="go('setup')" data-i="confirmSelection">Confirm Selection</button>
 </section>
 
 <section id="setup" class="screen">
-  <div class="top"><button class="icon" onclick="go('interviewer')">‹</button><h2>Interview Setup</h2><span></span></div>
-  <label data-i="interviewLang">Interview language</label><select id="interviewLang"></select>
-  <label data-i="position">Position</label><input id="jobPosition" value="Head Chef">
-  <label data-i="companyCountry">Company / Country</label><input id="jobCompany" value="The Ritz London">
-  <label data-i="vacancyDesc">Vacancy description</label><textarea id="jobDescription">Paste job description here.</textarea>
-  <label data-i="interviewType">Interview type</label><select id="interviewType"><option>English Interview Practice</option><option>HR Interview</option><option>Behavioural Interview</option><option>Profession-specific Interview</option></select>
-  <button class="btn purple" onclick="startInterview()" data-i="startInterview">Start Interview</button>
+  <div class="top">
+    <button class="icon" onclick="go('interviewer')">‹</button>
+    <h2 data-i="interviewSetup">Interview Setup</h2>
+    <span></span>
+  </div>
+
+  <div class="card">
+    <label data-i="interviewLang">Interview language</label>
+    <select id="interviewLang"></select>
+
+    <label data-i="position">Position</label>
+    <input id="jobPosition" value="Head Chef">
+
+    <label data-i="companyCountry">Company / Country</label>
+    <input id="jobCompany" value="The Ritz London">
+
+    <label data-i="vacancyDesc">Vacancy description</label>
+    <textarea id="jobDescription">Paste job description here.</textarea>
+
+    <label data-i="interviewType">Interview type</label>
+    <select id="interviewType">
+      <option>English Interview Practice</option>
+      <option>HR Interview</option>
+      <option>Behavioural Interview</option>
+      <option>Profession-specific Interview</option>
+    </select>
+
+    <button class="btn purple" onclick="startInterview()" data-i="startInterview">Start Interview</button>
+  </div>
 </section>
 
 <section id="live" class="screen">
-  <div class="top"><button class="icon" onclick="go('setup')">‹</button><h2>Live Interview</h2><button class="icon" onclick="finishInterview()">End</button></div>
+  <div class="top">
+    <button class="icon" onclick="go('setup')">‹</button>
+    <h2 data-i="liveInterview">Live Interview</h2>
+    <button class="icon" onclick="finishInterview()" data-i="endSmall">End</button>
+  </div>
+
   <div class="card">
-    <div class="row"><div class="square" id="liveAvatar"></div><div><h3 id="recruiterName">Emma</h3><p class="small">AI Recruiter</p></div></div>
+    <div class="row start">
+      <div class="live-face" id="liveAvatar"></div>
+      <div>
+        <h3 id="recruiterName">Emma</h3>
+        <p class="small" data-i="aiRecruiter">AI Recruiter</p>
+      </div>
+    </div>
+
     <div id="dialog" class="dialog"></div>
-    <label data-i="yourAnswer">Your answer</label><textarea id="userAnswer" placeholder="Speak or type your answer here..."></textarea>
+
+    <label data-i="yourAnswer">Your answer</label>
+    <textarea id="userAnswer" data-placeholder-i="answerPlaceholder" placeholder="Speak or type your answer here..."></textarea>
+
     <div class="grid2">
-      <button id="recordBtn" class="btn secondary" onclick="toggleRecording()">Start Recording</button>
-      <button class="btn purple" onclick="sendAnswer()">Send Answer</button>
+      <button id="recordBtn" class="btn secondary" onclick="toggleRecording()" data-i="startRecording">Start Recording</button>
+      <button class="btn purple" onclick="sendAnswer()" data-i="sendAnswer">Send Answer</button>
     </div>
+
     <div id="audioControls" class="audio-controls grid2">
-      <button class="btn secondary" onclick="playMyAnswer()">▶ Play My Answer</button>
-      <button class="btn secondary" onclick="clearMyAnswer()">Re-record</button>
+      <button class="btn secondary" onclick="playMyAnswer()" data-i="playMyAnswer">Play My Answer</button>
+      <button class="btn secondary" onclick="clearMyAnswer()" data-i="rerecord">Re-record</button>
     </div>
-    <br><button class="btn secondary" onclick="speakLastAI()">Repeat AI Question</button>
+
+    <br>
+    <div class="grid2">
+      <button class="btn secondary" onclick="speakLastAI()" data-i="repeatQuestion">Repeat AI Question</button>
+      <button class="btn danger" onclick="finishInterview()" data-i="end">End</button>
+    </div>
+
+    <div id="recordStatus" class="status hidden"></div>
   </div>
 </section>
 
 <section id="feedback" class="screen">
-  <div class="top"><button class="icon" onclick="go('home')">‹</button><h2>Feedback</h2><span></span></div>
-  <div class="score"><b id="scoreNum">7.8</b><span>/10</span></div>
-  <div class="card"><h2 id="feedbackTitle">Interview Feedback</h2><div id="feedbackText"></div></div>
-  <button class="btn purple" onclick="go('setup')">Practise Again</button>
+  <div class="top">
+    <button class="icon" onclick="go('home')">‹</button>
+    <h2 data-i="feedback">Feedback</h2>
+    <span></span>
+  </div>
+
+  <div class="score">
+    <b id="scoreNum">7.8</b>
+    <span>/10</span>
+  </div>
+
+  <div class="card">
+    <h2 id="feedbackTitle">Interview Feedback</h2>
+    <div id="feedbackText"></div>
+  </div>
+
+  <button class="btn purple" onclick="go('setup')" data-i="practiseAgain">Practise Again</button>
 </section>
 
 <section id="premium" class="screen">
-  <div class="top"><button class="icon" onclick="go('home')">‹</button><h2>Premium</h2><span></span></div>
-  <div class="card"><h1>Premium Career Tools</h1><p>Payment will be connected later.</p><button class="btn">Go Premium</button><br><br><button class="btn secondary">Restore Purchase</button></div>
+  <div class="top">
+    <button class="icon" onclick="go('home')">‹</button>
+    <h2>Premium</h2>
+    <span></span>
+  </div>
+
+  <div class="card">
+    <h1 data-i="premiumTitle">Premium Career Tools</h1>
+    <p data-i="premiumSub">Subscriptions and Google Play Billing will be connected later. This screen is ready for the future paid version.</p>
+
+    <div class="list-btn"><span data-i="premium1">Unlimited CV templates</span><b>✓</b></div>
+    <div class="list-btn"><span data-i="premium2">AI cover letters for every vacancy</span><b>✓</b></div>
+    <div class="list-btn"><span data-i="premium3">Voice interview practice</span><b>✓</b></div>
+    <div class="list-btn"><span data-i="premium4">Detailed feedback and better answers</span><b>✓</b></div>
+
+    <button class="btn" onclick="alert(t('billingSoon'))" data-i="goPremium">Go Premium</button>
+    <br><br>
+    <button class="btn secondary" onclick="alert(t('restoreSoon'))" data-i="restorePurchase">Restore Purchase</button>
+  </div>
 </section>
 
 <section id="settings" class="screen">
-  <div class="top"><button class="icon" onclick="go('home')">‹</button><h2>Settings</h2><span></span></div>
-  <div class="card"><h2>Theme</h2><p>Choose premium colour style.</p><div class="row" style="justify-content:flex-start"><div class="theme beige" onclick="setTheme('beige')"></div><div class="theme purple" onclick="setTheme('purple')"></div></div></div>
-  <div class="list-btn" onclick="go('language')"><span>Change Language</span><b>›</b></div>
-  <div class="list-btn" onclick="go('premium')"><span>Subscription & Billing</span><b>›</b></div>
-  <div class="list-btn" onclick="alert('Support email will be added here.')"><span>Contact Support</span><b>›</b></div>
+  <div class="top">
+    <button class="icon" onclick="go('home')">‹</button>
+    <h2 data-i="settings">Settings</h2>
+    <span></span>
+  </div>
+
+  <div class="card">
+    <h2 data-i="theme">Theme</h2>
+    <p data-i="themeSub">Choose premium colour style.</p>
+    <div class="row start">
+      <div class="theme beige" onclick="setTheme('beige')" title="Beige"></div>
+      <div class="theme purple" onclick="setTheme('purple')" title="Purple"></div>
+    </div>
+  </div>
+
+  <div class="list-btn" onclick="go('language')">
+    <span data-i="changeLanguage">Change Language</span>
+    <b>›</b>
+  </div>
+
+  <div class="list-btn" onclick="go('premium')">
+    <span data-i="subscriptionBilling">Subscription & Billing</span>
+    <b>›</b>
+  </div>
+
+  <div class="list-btn" onclick="alert(t('supportSoon'))">
+    <span data-i="contactSupport">Contact Support</span>
+    <b>›</b>
+  </div>
+
+  <div class="list-btn" onclick="alert(t('comingSoon'))">
+    <span data-i="privacyTerms">Privacy Policy / Terms</span>
+    <b data-i="comingSoonShort">Soon</b>
+  </div>
 </section>
 
 </div>
@@ -261,98 +1534,1887 @@ body.beige .bottom{background:rgba(255,248,238,.92)}.nav{text-align:center;font-
 </nav>
 
 <script>
-const languages=["English","Українська","Polski","Deutsch","Français","Español","Italiano","Português","Nederlands","Türkçe","Română","Čeština","Slovenčina","ქართული","العربية","中文","日本語","한국어","हिन्दी","עברית","Svenska","Norsk","Dansk","Suomi","Ελληνικά","Bahasa Indonesia","Tiếng Việt","ไทย"];
-const langCodes={"English":"en-GB","Українська":"uk-UA","Polski":"pl-PL","Deutsch":"de-DE","Français":"fr-FR","Español":"es-ES","Italiano":"it-IT","Português":"pt-PT","Nederlands":"nl-NL","Türkçe":"tr-TR","Română":"ro-RO","Čeština":"cs-CZ","Slovenčina":"sk-SK","ქართული":"ka-GE","العربية":"ar-SA","中文":"zh-CN","日本語":"ja-JP","한국어":"ko-KR","हिन्दी":"hi-IN"};
-const tr={
-en:{subtitle:"Premium AI tools to build your profile, CV, cover letter and interview confidence.",chooseLang:"Choose language",continue:"Continue",homeTitle:"Get hired <span class='gold'>faster</span>",homeSub:"CV, cover letter, LinkedIn profile and AI interview practice in one premium app.",profileTitle:"My Professional Profile",profileSub:"Fill once. Use everywhere.",cvBuilder:"CV Builder",cvSub:"Professional CV layouts.",coverLetter:"Cover Letter",coverSub:"Generate job-specific letters.",coach:"AI Interview Coach",coachSub:"Practise with a virtual recruiter.",profile:"Profile",gender:"Gender",fullName:"Full name",phone:"Phone",location:"Location",targetJob:"Target job",languages:"Languages",workExp:"Work experience",addExperience:"+ Add New Experience",volunteer:"Volunteering",addVolunteer:"+ Add Volunteering",education:"Education",courses:"Courses & Diplomas",addDiploma:"+ Add Course / Diploma File",skills:"Skills",saveProfile:"Save Profile",photoOnOff:"Photo On/Off",photoShape:"Photo Shape",photoPosition:"Photo Position",uploadOldCV:"Upload Old CV",useTemplate:"Use This Template",contentLang:"Content language",jobTitle:"Job title",company:"Company",pasteJob:"Paste Job Description",jobExample:"Example: responsibilities, requirements, company description, skills needed.",generateCover:"Generate Cover Letter",chooseRecruiter:"Choose your AI recruiter",coachDesc:"Professional interview practice with voice, transcript and feedback.",startSetup:"Start Setup",confirmSelection:"Confirm Selection",interviewLang:"Interview language",position:"Position",companyCountry:"Company / Country",vacancyDesc:"Vacancy description",interviewType:"Interview type",startInterview:"Start Interview",yourAnswer:"Your answer",navHome:"Home",navCoach:"Coach",navProfile:"Profile",navMore:"More"},
-uk:{subtitle:"Преміум AI-інструменти для профілю, CV, супровідного листа та підготовки до співбесіди.",chooseLang:"Оберіть мову",continue:"Продовжити",homeTitle:"Отримай роботу <span class='gold'>швидше</span>",homeSub:"CV, супровідний лист, LinkedIn-профіль та підготовка до співбесіди в одному застосунку.",profileTitle:"Мій професійний профіль",profileSub:"Заповни один раз. Використовуй всюди.",cvBuilder:"Конструктор CV",cvSub:"Професійні макети резюме.",coverLetter:"Супровідний лист",coverSub:"Створи лист під конкретну вакансію.",coach:"AI-коуч співбесіди",coachSub:"Тренуйся з віртуальним рекрутером.",profile:"Профіль",gender:"Стать",fullName:"Повне ім’я",phone:"Телефон",location:"Локація",targetJob:"Бажана посада",languages:"Мови",workExp:"Досвід роботи",addExperience:"+ Додати досвід",volunteer:"Волонтерство",addVolunteer:"+ Додати волонтерство",education:"Освіта",courses:"Курси та дипломи",addDiploma:"+ Додати диплом / сертифікат",skills:"Навички",saveProfile:"Зберегти профіль",photoOnOff:"Фото увімк/вимк",photoShape:"Форма фото",photoPosition:"Позиція фото",uploadOldCV:"Завантажити старе CV",useTemplate:"Використати шаблон",contentLang:"Мова тексту",jobTitle:"Назва посади",company:"Компанія",pasteJob:"Вставте опис вакансії",jobExample:"Приклад: обов’язки, вимоги, опис компанії, потрібні навички.",generateCover:"Створити супровідний лист",chooseRecruiter:"Оберіть AI-рекрутера",coachDesc:"Практика співбесіди з голосом, діалогом і фідбеком.",startSetup:"Почати налаштування",confirmSelection:"Підтвердити вибір",interviewLang:"Мова співбесіди",position:"Посада",companyCountry:"Компанія / країна",vacancyDesc:"Опис вакансії",interviewType:"Тип співбесіди",startInterview:"Почати співбесіду",yourAnswer:"Ваша відповідь",navHome:"Головна",navCoach:"Коуч",navProfile:"Профіль",navMore:"Ще"}
-};
-let appLang="en",currentRecruiter="Emma",closedAvatar="emma-closed.png",openAvatar="emma-open.png",lastAI="",qIndex=0,questions=[],tone="formal",currentCat="Professional",currentTpl=0,photoMode=true,photoShape="round",photoSide="right",answers=[],mediaRecorder=null,audioChunks=[],myAudioUrl=null,isRecording=false,recognition=null;
-const exp=[{company:"Company Name",position:"Marketing Assistant",desc:"Managed client communication, supported campaigns and prepared reports.",saved:true}];
-const vols=[{org:"Volunteer Organisation",role:"Volunteer",desc:"Supported community activities and helped people in need.",saved:true}];
-const diplomas=[];
-const cvTemplates={Professional:["Blue Header","Medical Clean","Minimal UX","Classic Sidebar","Soft Student"],Executive:["Senior Executive","Gold Classic","Board Level","Dark Sidebar","Strict Manager"],Creative:["Pastel Student","Modern Photo Top","Creative Blocks","Warm Header","Designer Clean"],LinkedIn:["LinkedIn Summary","Easy Apply Sidebar","Compact Profile","Achievements Focus","ATS LinkedIn"]};
+const appLanguages=[
+  {name:"English",code:"en"},
+  {name:"Українська",code:"uk"},
+  {name:"Polski",code:"pl"},
+  {name:"Deutsch",code:"de"},
+  {name:"Français",code:"fr"},
+  {name:"Español",code:"es"},
+  {name:"Italiano",code:"en"},
+  {name:"Português",code:"en"},
+  {name:"Nederlands",code:"en"},
+  {name:"Türkçe",code:"en"},
+  {name:"Română",code:"en"},
+  {name:"Čeština",code:"en"},
+  {name:"Slovenčina",code:"en"},
+  {name:"ქართული",code:"en"},
+  {name:"العربية",code:"en"},
+  {name:"中文",code:"en"},
+  {name:"日本語",code:"en"},
+  {name:"한국어",code:"en"},
+  {name:"हिन्दी",code:"en"},
+  {name:"עברית",code:"en"},
+  {name:"Svenska",code:"en"},
+  {name:"Norsk",code:"en"},
+  {name:"Dansk",code:"en"},
+  {name:"Suomi",code:"en"},
+  {name:"Ελληνικά",code:"en"},
+  {name:"Bahasa Indonesia",code:"en"},
+  {name:"Tiếng Việt",code:"en"},
+  {name:"ไทย",code:"en"}
+];
 
-function t(k){return (tr[appLang]&&tr[appLang][k])||tr.en[k]||k}
-function applyTranslations(){document.querySelectorAll("[data-i]").forEach(el=>el.innerHTML=t(el.dataset.i))}
+const contentLanguages=["English","Українська","Polski","Deutsch","Français","Español","ქართული"];
+
+const speechCodes={
+  "English":"en-GB",
+  "Українська":"uk-UA",
+  "Polski":"pl-PL",
+  "Deutsch":"de-DE",
+  "Français":"fr-FR",
+  "Español":"es-ES",
+  "ქართული":"ka-GE"
+};
+
+const tr={
+  en:{
+    subtitle:"Premium AI tools to build your profile, CV, cover letter and interview confidence.",
+    chooseAppLang:"Choose app language",
+    languageNote:"You can change this later in Settings.",
+    continue:"Continue",
+    homeTitle:"Get hired <span class='gold'>faster</span>",
+    homeSub:"CV, cover letter, LinkedIn profile and AI interview practice in one premium app.",
+    badgeCV:"CV Builder",
+    badgeCover:"Cover Letter",
+    badgeCoach:"Interview Coach",
+    startCV:"Start CV",
+    practice:"Practise",
+    profileTitle:"My Professional Profile",
+    profileSub:"Fill once. Use everywhere.",
+    cvBuilder:"CV Builder",
+    cvSub:"Professional CV layouts with photo options.",
+    coverLetter:"Cover Letter",
+    coverSub:"Generate job-specific letters in different tones.",
+    coach:"AI Interview Coach",
+    coachSub:"Practise with a virtual recruiter.",
+    profile:"Profile",
+    gender:"Gender",
+    female:"Female",
+    male:"Male",
+    fullName:"Full name",
+    phone:"Phone",
+    location:"Location",
+    targetJob:"Target job",
+    languagesField:"Languages",
+    workExp:"Work Experience",
+    addExperience:"+ Add New Experience",
+    volunteer:"Volunteering",
+    addVolunteer:"+ Add Volunteering",
+    education:"Education",
+    courses:"Courses & Diplomas",
+    addDiploma:"+ Add Course / Diploma File",
+    skills:"Skills",
+    saveProfile:"Save Profile",
+    contentLanguage:"Content language",
+    chooseTemplate:"Choose CV template",
+    templateNote:"Select a preview. Your CV below will use the same style.",
+    selectedPreview:"Selected preview",
+    liveCVPreview:"Live CV preview",
+    photoOnOff:"Photo On/Off",
+    uploadOldCV:"Upload Old CV",
+    useTemplate:"Use This Template",
+    cvPreview:"CV Preview",
+    savePDF:"Save as PDF",
+    downloadTXT:"Download TXT",
+    copyText:"Copy Text",
+    share:"Share",
+    jobTitle:"Job title",
+    company:"Company",
+    pasteJob:"Paste Job Description",
+    jobExample:"Example: responsibilities, requirements, company description, skills needed.",
+    formal:"Formal",
+    confident:"Confident",
+    shortTone:"Short",
+    ukStyle:"UK Style",
+    generateCover:"Generate Cover Letter",
+    result:"Result",
+    chooseRecruiter:"Choose your AI recruiter",
+    coachDesc:"Professional interview practice with voice, transcript and feedback.",
+    startSetup:"Start Setup",
+    recruiter:"Recruiter",
+    confirmSelection:"Confirm Selection",
+    interviewSetup:"Interview Setup",
+    interviewLang:"Interview language",
+    position:"Position",
+    companyCountry:"Company / Country",
+    vacancyDesc:"Vacancy description",
+    interviewType:"Interview type",
+    startInterview:"Start Interview",
+    liveInterview:"Live Interview",
+    endSmall:"End",
+    aiRecruiter:"AI Recruiter",
+    yourAnswer:"Your answer",
+    answerPlaceholder:"Speak or type your answer here...",
+    startRecording:"Start Recording",
+    stopRecording:"Stop Recording",
+    sendAnswer:"Send Answer",
+    playMyAnswer:"Play My Answer",
+    rerecord:"Re-record",
+    repeatQuestion:"Repeat AI Question",
+    end:"End",
+    feedback:"Feedback",
+    practiseAgain:"Practise Again",
+    premiumTitle:"Premium Career Tools",
+    premiumSub:"Subscriptions and Google Play Billing will be connected later. This screen is ready for the future paid version.",
+    premium1:"Unlimited CV templates",
+    premium2:"AI cover letters for every vacancy",
+    premium3:"Voice interview practice",
+    premium4:"Detailed feedback and better answers",
+    goPremium:"Go Premium",
+    restorePurchase:"Restore Purchase",
+    billingSoon:"Google Play Billing will be connected later.",
+    restoreSoon:"Restore Purchase will work after billing connection.",
+    settings:"Settings",
+    theme:"Theme",
+    themeSub:"Choose premium colour style.",
+    changeLanguage:"Change Language",
+    subscriptionBilling:"Subscription & Billing",
+    contactSupport:"Contact Support",
+    supportSoon:"Support email will be added later.",
+    privacyTerms:"Privacy Policy / Terms",
+    comingSoon:"Coming soon.",
+    comingSoonShort:"Soon",
+    navHome:"Home",
+    navCoach:"Coach",
+    navProfile:"Profile",
+    navMore:"More"
+  },
+
+  uk:{
+    subtitle:"Преміум AI-інструменти для профілю, CV, супровідного листа та підготовки до співбесіди.",
+    chooseAppLang:"Оберіть мову застосунку",
+    languageNote:"Пізніше це можна змінити в Налаштуваннях.",
+    continue:"Продовжити",
+    homeTitle:"Отримай роботу <span class='gold'>швидше</span>",
+    homeSub:"CV, супровідний лист, LinkedIn-профіль та підготовка до співбесіди в одному застосунку.",
+    badgeCV:"Конструктор CV",
+    badgeCover:"Супровідний лист",
+    badgeCoach:"Коуч співбесіди",
+    startCV:"Почати CV",
+    practice:"Тренуватися",
+    profileTitle:"Мій професійний профіль",
+    profileSub:"Заповни один раз. Використовуй всюди.",
+    cvBuilder:"Конструктор CV",
+    cvSub:"Професійні макети резюме з налаштуванням фото.",
+    coverLetter:"Супровідний лист",
+    coverSub:"Створення листів під вакансію в різних тонах.",
+    coach:"AI-коуч співбесіди",
+    coachSub:"Тренуйся з віртуальним рекрутером.",
+    profile:"Профіль",
+    gender:"Стать",
+    female:"Жінка",
+    male:"Чоловік",
+    fullName:"Повне ім’я",
+    phone:"Телефон",
+    location:"Локація",
+    targetJob:"Бажана посада",
+    languagesField:"Мови",
+    workExp:"Досвід роботи",
+    addExperience:"+ Додати досвід",
+    volunteer:"Волонтерство",
+    addVolunteer:"+ Додати волонтерство",
+    education:"Освіта",
+    courses:"Курси та дипломи",
+    addDiploma:"+ Додати диплом / сертифікат",
+    skills:"Навички",
+    saveProfile:"Зберегти профіль",
+    contentLanguage:"Мова контенту",
+    chooseTemplate:"Оберіть шаблон CV",
+    templateNote:"Оберіть прев’ю. CV нижче буде в цьому стилі.",
+    selectedPreview:"Обране прев’ю",
+    liveCVPreview:"Живий перегляд CV",
+    photoOnOff:"Фото увімк/вимк",
+    uploadOldCV:"Завантажити старе CV",
+    useTemplate:"Використати шаблон",
+    cvPreview:"Перегляд CV",
+    savePDF:"Зберегти як PDF",
+    downloadTXT:"Завантажити TXT",
+    copyText:"Копіювати текст",
+    share:"Поділитися",
+    jobTitle:"Назва посади",
+    company:"Компанія",
+    pasteJob:"Вставте опис вакансії",
+    jobExample:"Приклад: обов’язки, вимоги, опис компанії, потрібні навички.",
+    formal:"Формально",
+    confident:"Впевнено",
+    shortTone:"Коротко",
+    ukStyle:"Британський стиль",
+    generateCover:"Створити супровідний лист",
+    result:"Результат",
+    chooseRecruiter:"Оберіть AI-рекрутера",
+    coachDesc:"Практика співбесіди з голосом, діалогом і фідбеком.",
+    startSetup:"Почати налаштування",
+    recruiter:"Рекрутер",
+    confirmSelection:"Підтвердити вибір",
+    interviewSetup:"Налаштування співбесіди",
+    interviewLang:"Мова співбесіди",
+    position:"Посада",
+    companyCountry:"Компанія / країна",
+    vacancyDesc:"Опис вакансії",
+    interviewType:"Тип співбесіди",
+    startInterview:"Почати співбесіду",
+    liveInterview:"Жива співбесіда",
+    endSmall:"Кінець",
+    aiRecruiter:"AI-рекрутер",
+    yourAnswer:"Ваша відповідь",
+    answerPlaceholder:"Говоріть або напишіть відповідь тут...",
+    startRecording:"Почати запис",
+    stopRecording:"Зупинити запис",
+    sendAnswer:"Надіслати відповідь",
+    playMyAnswer:"Прослухати відповідь",
+    rerecord:"Перезаписати",
+    repeatQuestion:"Повторити питання",
+    end:"Завершити",
+    feedback:"Фідбек",
+    practiseAgain:"Тренуватися знову",
+    premiumTitle:"Преміум кар’єрні інструменти",
+    premiumSub:"Підписки та Google Play Billing будуть підключені пізніше. Екран готовий для майбутньої платної версії.",
+    premium1:"Необмежені шаблони CV",
+    premium2:"AI-супровідні листи під кожну вакансію",
+    premium3:"Голосова практика співбесіди",
+    premium4:"Детальний фідбек і кращі відповіді",
+    goPremium:"Перейти на Premium",
+    restorePurchase:"Відновити покупку",
+    billingSoon:"Google Play Billing буде підключено пізніше.",
+    restoreSoon:"Відновлення покупки запрацює після підключення billing.",
+    settings:"Налаштування",
+    theme:"Тема",
+    themeSub:"Оберіть преміальний стиль кольорів.",
+    changeLanguage:"Змінити мову",
+    subscriptionBilling:"Підписка та оплата",
+    contactSupport:"Підтримка",
+    supportSoon:"Email підтримки буде додано пізніше.",
+    privacyTerms:"Privacy Policy / Terms",
+    comingSoon:"Скоро буде.",
+    comingSoonShort:"Скоро",
+    navHome:"Головна",
+    navCoach:"Коуч",
+    navProfile:"Профіль",
+    navMore:"Ще"
+  },
+
+  pl:{
+    subtitle:"Premium narzędzia AI do profilu, CV, listu motywacyjnego i przygotowania do rozmowy.",
+    chooseAppLang:"Wybierz język aplikacji",
+    languageNote:"Możesz zmienić to później w Ustawieniach.",
+    continue:"Kontynuuj",
+    homeTitle:"Znajdź pracę <span class='gold'>szybciej</span>",
+    homeSub:"CV, list motywacyjny, profil LinkedIn i trening rozmowy w jednej aplikacji.",
+    badgeCV:"Kreator CV",
+    badgeCover:"List motywacyjny",
+    badgeCoach:"Trener rozmowy",
+    startCV:"Zacznij CV",
+    practice:"Ćwicz",
+    profileTitle:"Mój profil zawodowy",
+    profileSub:"Uzupełnij raz. Używaj wszędzie.",
+    cvBuilder:"Kreator CV",
+    cvSub:"Profesjonalne układy CV z opcjami zdjęcia.",
+    coverLetter:"List motywacyjny",
+    coverSub:"Twórz listy pod konkretną ofertę.",
+    coach:"Trener rozmowy AI",
+    coachSub:"Ćwicz z wirtualnym rekruterem.",
+    profile:"Profil",
+    gender:"Płeć",
+    female:"Kobieta",
+    male:"Mężczyzna",
+    fullName:"Imię i nazwisko",
+    phone:"Telefon",
+    location:"Lokalizacja",
+    targetJob:"Docelowa praca",
+    languagesField:"Języki",
+    workExp:"Doświadczenie zawodowe",
+    addExperience:"+ Dodaj doświadczenie",
+    volunteer:"Wolontariat",
+    addVolunteer:"+ Dodaj wolontariat",
+    education:"Edukacja",
+    courses:"Kursy i dyplomy",
+    addDiploma:"+ Dodaj plik kursu / dyplomu",
+    skills:"Umiejętności",
+    saveProfile:"Zapisz profil",
+    contentLanguage:"Język treści",
+    chooseTemplate:"Wybierz szablon CV",
+    templateNote:"Wybierz podgląd. CV poniżej użyje tego stylu.",
+    selectedPreview:"Wybrany podgląd",
+    liveCVPreview:"Podgląd CV",
+    photoOnOff:"Zdjęcie wł./wył.",
+    uploadOldCV:"Wgraj stare CV",
+    useTemplate:"Użyj tego szablonu",
+    cvPreview:"Podgląd CV",
+    savePDF:"Zapisz jako PDF",
+    downloadTXT:"Pobierz TXT",
+    copyText:"Kopiuj tekst",
+    share:"Udostępnij",
+    jobTitle:"Stanowisko",
+    company:"Firma",
+    pasteJob:"Wklej opis oferty",
+    jobExample:"Przykład: obowiązki, wymagania, opis firmy, potrzebne umiejętności.",
+    formal:"Formalny",
+    confident:"Pewny",
+    shortTone:"Krótki",
+    ukStyle:"Styl UK",
+    generateCover:"Wygeneruj list",
+    result:"Wynik",
+    chooseRecruiter:"Wybierz rekrutera AI",
+    coachDesc:"Ćwiczenie rozmowy z głosem, transkrypcją i opinią.",
+    startSetup:"Rozpocznij",
+    recruiter:"Rekruter",
+    confirmSelection:"Potwierdź wybór",
+    interviewSetup:"Ustawienia rozmowy",
+    interviewLang:"Język rozmowy",
+    position:"Stanowisko",
+    companyCountry:"Firma / kraj",
+    vacancyDesc:"Opis oferty",
+    interviewType:"Typ rozmowy",
+    startInterview:"Rozpocznij rozmowę",
+    liveInterview:"Rozmowa na żywo",
+    endSmall:"Koniec",
+    aiRecruiter:"Rekruter AI",
+    yourAnswer:"Twoja odpowiedź",
+    answerPlaceholder:"Powiedz lub wpisz odpowiedź tutaj...",
+    startRecording:"Rozpocznij nagrywanie",
+    stopRecording:"Zatrzymaj nagrywanie",
+    sendAnswer:"Wyślij odpowiedź",
+    playMyAnswer:"Odtwórz odpowiedź",
+    rerecord:"Nagraj ponownie",
+    repeatQuestion:"Powtórz pytanie",
+    end:"Zakończ",
+    feedback:"Opinia",
+    practiseAgain:"Ćwicz ponownie",
+    premiumTitle:"Premium narzędzia kariery",
+    premiumSub:"Subskrypcje i Google Play Billing zostaną podłączone później.",
+    premium1:"Nielimitowane szablony CV",
+    premium2:"Listy AI dla każdej oferty",
+    premium3:"Ćwiczenie rozmowy głosem",
+    premium4:"Szczegółowa opinia i lepsze odpowiedzi",
+    goPremium:"Przejdź na Premium",
+    restorePurchase:"Przywróć zakup",
+    billingSoon:"Google Play Billing zostanie podłączony później.",
+    restoreSoon:"Przywracanie zakupu będzie działać po podłączeniu billing.",
+    settings:"Ustawienia",
+    theme:"Motyw",
+    themeSub:"Wybierz premium styl kolorów.",
+    changeLanguage:"Zmień język",
+    subscriptionBilling:"Subskrypcja i płatności",
+    contactSupport:"Kontakt z pomocą",
+    supportSoon:"Email wsparcia zostanie dodany później.",
+    privacyTerms:"Privacy Policy / Terms",
+    comingSoon:"Wkrótce.",
+    comingSoonShort:"Wkrótce",
+    navHome:"Start",
+    navCoach:"Trener",
+    navProfile:"Profil",
+    navMore:"Więcej"
+  },
+
+  de:{
+    subtitle:"Premium-KI-Tools für Profil, Lebenslauf, Anschreiben und Interviewtraining.",
+    chooseAppLang:"App-Sprache wählen",
+    languageNote:"Sie können dies später in den Einstellungen ändern.",
+    continue:"Weiter",
+    homeTitle:"Schneller <span class='gold'>eingestellt</span> werden",
+    homeSub:"Lebenslauf, Anschreiben, LinkedIn-Profil und KI-Interviewtraining in einer App.",
+    badgeCV:"CV Builder",
+    badgeCover:"Anschreiben",
+    badgeCoach:"Interview Coach",
+    startCV:"CV starten",
+    practice:"Üben",
+    profileTitle:"Mein berufliches Profil",
+    profileSub:"Einmal ausfüllen. Überall verwenden.",
+    cvBuilder:"CV Builder",
+    cvSub:"Professionelle Lebenslauf-Layouts mit Fotooptionen.",
+    coverLetter:"Anschreiben",
+    coverSub:"Jobbezogene Anschreiben in verschiedenen Stilen.",
+    coach:"KI Interview Coach",
+    coachSub:"Üben mit einem virtuellen Recruiter.",
+    profile:"Profil",
+    gender:"Geschlecht",
+    female:"Frau",
+    male:"Mann",
+    fullName:"Vollständiger Name",
+    phone:"Telefon",
+    location:"Standort",
+    targetJob:"Zielposition",
+    languagesField:"Sprachen",
+    workExp:"Berufserfahrung",
+    addExperience:"+ Erfahrung hinzufügen",
+    volunteer:"Ehrenamt",
+    addVolunteer:"+ Ehrenamt hinzufügen",
+    education:"Bildung",
+    courses:"Kurse & Diplome",
+    addDiploma:"+ Kurs- / Diplomdatei hinzufügen",
+    skills:"Fähigkeiten",
+    saveProfile:"Profil speichern",
+    contentLanguage:"Sprache des Inhalts",
+    chooseTemplate:"CV-Vorlage wählen",
+    templateNote:"Wählen Sie eine Vorschau. Der Lebenslauf unten nutzt diesen Stil.",
+    selectedPreview:"Ausgewählte Vorschau",
+    liveCVPreview:"Live-CV-Vorschau",
+    photoOnOff:"Foto an/aus",
+    uploadOldCV:"Alten Lebenslauf hochladen",
+    useTemplate:"Diese Vorlage verwenden",
+    cvPreview:"CV-Vorschau",
+    savePDF:"Als PDF speichern",
+    downloadTXT:"TXT herunterladen",
+    copyText:"Text kopieren",
+    share:"Teilen",
+    jobTitle:"Position",
+    company:"Firma",
+    pasteJob:"Stellenbeschreibung einfügen",
+    jobExample:"Beispiel: Aufgaben, Anforderungen, Firmenbeschreibung, benötigte Fähigkeiten.",
+    formal:"Formell",
+    confident:"Selbstbewusst",
+    shortTone:"Kurz",
+    ukStyle:"UK-Stil",
+    generateCover:"Anschreiben erstellen",
+    result:"Ergebnis",
+    chooseRecruiter:"Wählen Sie Ihren KI-Recruiter",
+    coachDesc:"Professionelles Interviewtraining mit Stimme, Transkript und Feedback.",
+    startSetup:"Start",
+    recruiter:"Recruiter",
+    confirmSelection:"Auswahl bestätigen",
+    interviewSetup:"Interview-Einstellungen",
+    interviewLang:"Interview-Sprache",
+    position:"Position",
+    companyCountry:"Firma / Land",
+    vacancyDesc:"Stellenbeschreibung",
+    interviewType:"Interviewtyp",
+    startInterview:"Interview starten",
+    liveInterview:"Live-Interview",
+    endSmall:"Ende",
+    aiRecruiter:"KI-Recruiter",
+    yourAnswer:"Ihre Antwort",
+    answerPlaceholder:"Sprechen oder schreiben Sie Ihre Antwort hier...",
+    startRecording:"Aufnahme starten",
+    stopRecording:"Aufnahme stoppen",
+    sendAnswer:"Antwort senden",
+    playMyAnswer:"Meine Antwort abspielen",
+    rerecord:"Neu aufnehmen",
+    repeatQuestion:"Frage wiederholen",
+    end:"Beenden",
+    feedback:"Feedback",
+    practiseAgain:"Erneut üben",
+    premiumTitle:"Premium-Karrieretools",
+    premiumSub:"Abonnements und Google Play Billing werden später verbunden.",
+    premium1:"Unbegrenzte CV-Vorlagen",
+    premium2:"KI-Anschreiben für jede Stelle",
+    premium3:"Sprachbasiertes Interviewtraining",
+    premium4:"Detailliertes Feedback und bessere Antworten",
+    goPremium:"Premium aktivieren",
+    restorePurchase:"Kauf wiederherstellen",
+    billingSoon:"Google Play Billing wird später verbunden.",
+    restoreSoon:"Kaufwiederherstellung funktioniert nach Billing-Verbindung.",
+    settings:"Einstellungen",
+    theme:"Design",
+    themeSub:"Premium-Farbstil wählen.",
+    changeLanguage:"Sprache ändern",
+    subscriptionBilling:"Abonnement & Abrechnung",
+    contactSupport:"Support kontaktieren",
+    supportSoon:"Support-E-Mail wird später hinzugefügt.",
+    privacyTerms:"Privacy Policy / Terms",
+    comingSoon:"Demnächst.",
+    comingSoonShort:"Bald",
+    navHome:"Home",
+    navCoach:"Coach",
+    navProfile:"Profil",
+    navMore:"Mehr"
+  },
+
+  fr:{
+    subtitle:"Outils IA premium pour créer votre profil, CV, lettre de motivation et préparer vos entretiens.",
+    chooseAppLang:"Choisir la langue de l’application",
+    languageNote:"Vous pourrez la modifier plus tard dans les paramètres.",
+    continue:"Continuer",
+    homeTitle:"Trouvez un emploi <span class='gold'>plus vite</span>",
+    homeSub:"CV, lettre de motivation, profil LinkedIn et entraînement d’entretien IA dans une seule application.",
+    badgeCV:"Créateur de CV",
+    badgeCover:"Lettre de motivation",
+    badgeCoach:"Coach entretien",
+    startCV:"Créer CV",
+    practice:"S’entraîner",
+    profileTitle:"Mon profil professionnel",
+    profileSub:"Remplissez une fois. Utilisez partout.",
+    cvBuilder:"Créateur de CV",
+    cvSub:"Modèles de CV professionnels avec options photo.",
+    coverLetter:"Lettre de motivation",
+    coverSub:"Générez des lettres adaptées à chaque offre.",
+    coach:"Coach d’entretien IA",
+    coachSub:"Entraînez-vous avec un recruteur virtuel.",
+    profile:"Profil",
+    gender:"Genre",
+    female:"Femme",
+    male:"Homme",
+    fullName:"Nom complet",
+    phone:"Téléphone",
+    location:"Lieu",
+    targetJob:"Poste visé",
+    languagesField:"Langues",
+    workExp:"Expérience professionnelle",
+    addExperience:"+ Ajouter une expérience",
+    volunteer:"Bénévolat",
+    addVolunteer:"+ Ajouter du bénévolat",
+    education:"Formation",
+    courses:"Cours et diplômes",
+    addDiploma:"+ Ajouter un fichier",
+    skills:"Compétences",
+    saveProfile:"Enregistrer le profil",
+    contentLanguage:"Langue du contenu",
+    chooseTemplate:"Choisir un modèle de CV",
+    templateNote:"Sélectionnez un aperçu. Votre CV utilisera ce style.",
+    selectedPreview:"Aperçu sélectionné",
+    liveCVPreview:"Aperçu du CV",
+    photoOnOff:"Photo oui/non",
+    uploadOldCV:"Importer ancien CV",
+    useTemplate:"Utiliser ce modèle",
+    cvPreview:"Aperçu CV",
+    savePDF:"Enregistrer en PDF",
+    downloadTXT:"Télécharger TXT",
+    copyText:"Copier le texte",
+    share:"Partager",
+    jobTitle:"Poste",
+    company:"Entreprise",
+    pasteJob:"Coller l’offre d’emploi",
+    jobExample:"Exemple : responsabilités, exigences, description de l’entreprise, compétences.",
+    formal:"Formel",
+    confident:"Confiant",
+    shortTone:"Court",
+    ukStyle:"Style UK",
+    generateCover:"Générer la lettre",
+    result:"Résultat",
+    chooseRecruiter:"Choisissez votre recruteur IA",
+    coachDesc:"Entraînement professionnel avec voix, transcription et feedback.",
+    startSetup:"Commencer",
+    recruiter:"Recruteur",
+    confirmSelection:"Confirmer",
+    interviewSetup:"Configuration entretien",
+    interviewLang:"Langue de l’entretien",
+    position:"Poste",
+    companyCountry:"Entreprise / pays",
+    vacancyDesc:"Description de l’offre",
+    interviewType:"Type d’entretien",
+    startInterview:"Commencer l’entretien",
+    liveInterview:"Entretien en direct",
+    endSmall:"Fin",
+    aiRecruiter:"Recruteur IA",
+    yourAnswer:"Votre réponse",
+    answerPlaceholder:"Parlez ou écrivez votre réponse ici...",
+    startRecording:"Démarrer l’enregistrement",
+    stopRecording:"Arrêter l’enregistrement",
+    sendAnswer:"Envoyer la réponse",
+    playMyAnswer:"Écouter ma réponse",
+    rerecord:"Réenregistrer",
+    repeatQuestion:"Répéter la question",
+    end:"Terminer",
+    feedback:"Feedback",
+    practiseAgain:"S’entraîner encore",
+    premiumTitle:"Outils carrière premium",
+    premiumSub:"Les abonnements et Google Play Billing seront connectés plus tard.",
+    premium1:"Modèles CV illimités",
+    premium2:"Lettres IA pour chaque offre",
+    premium3:"Pratique d’entretien vocal",
+    premium4:"Feedback détaillé et meilleures réponses",
+    goPremium:"Passer Premium",
+    restorePurchase:"Restaurer l’achat",
+    billingSoon:"Google Play Billing sera connecté plus tard.",
+    restoreSoon:"La restauration fonctionnera après connexion billing.",
+    settings:"Paramètres",
+    theme:"Thème",
+    themeSub:"Choisissez un style premium.",
+    changeLanguage:"Changer la langue",
+    subscriptionBilling:"Abonnement et paiement",
+    contactSupport:"Contacter le support",
+    supportSoon:"L’email support sera ajouté plus tard.",
+    privacyTerms:"Privacy Policy / Terms",
+    comingSoon:"Bientôt.",
+    comingSoonShort:"Bientôt",
+    navHome:"Accueil",
+    navCoach:"Coach",
+    navProfile:"Profil",
+    navMore:"Plus"
+  },
+
+  es:{
+    subtitle:"Herramientas premium de IA para crear tu perfil, CV, carta de presentación y preparar entrevistas.",
+    chooseAppLang:"Elige el idioma de la app",
+    languageNote:"Puedes cambiarlo más tarde en Ajustes.",
+    continue:"Continuar",
+    homeTitle:"Consigue trabajo <span class='gold'>más rápido</span>",
+    homeSub:"CV, carta de presentación, perfil de LinkedIn y práctica de entrevista con IA en una app.",
+    badgeCV:"Creador de CV",
+    badgeCover:"Carta de presentación",
+    badgeCoach:"Coach de entrevista",
+    startCV:"Empezar CV",
+    practice:"Practicar",
+    profileTitle:"Mi perfil profesional",
+    profileSub:"Rellena una vez. Usa en todas partes.",
+    cvBuilder:"Creador de CV",
+    cvSub:"Diseños profesionales de CV con opciones de foto.",
+    coverLetter:"Carta de presentación",
+    coverSub:"Genera cartas adaptadas a cada oferta.",
+    coach:"Coach de entrevista IA",
+    coachSub:"Practica con un reclutador virtual.",
+    profile:"Perfil",
+    gender:"Género",
+    female:"Mujer",
+    male:"Hombre",
+    fullName:"Nombre completo",
+    phone:"Teléfono",
+    location:"Ubicación",
+    targetJob:"Puesto objetivo",
+    languagesField:"Idiomas",
+    workExp:"Experiencia laboral",
+    addExperience:"+ Añadir experiencia",
+    volunteer:"Voluntariado",
+    addVolunteer:"+ Añadir voluntariado",
+    education:"Educación",
+    courses:"Cursos y diplomas",
+    addDiploma:"+ Añadir archivo",
+    skills:"Habilidades",
+    saveProfile:"Guardar perfil",
+    contentLanguage:"Idioma del contenido",
+    chooseTemplate:"Elige plantilla de CV",
+    templateNote:"Selecciona una vista previa. Tu CV usará este estilo.",
+    selectedPreview:"Vista previa seleccionada",
+    liveCVPreview:"Vista previa del CV",
+    photoOnOff:"Foto sí/no",
+    uploadOldCV:"Subir CV antiguo",
+    useTemplate:"Usar esta plantilla",
+    cvPreview:"Vista previa CV",
+    savePDF:"Guardar como PDF",
+    downloadTXT:"Descargar TXT",
+    copyText:"Copiar texto",
+    share:"Compartir",
+    jobTitle:"Puesto",
+    company:"Empresa",
+    pasteJob:"Pegar descripción de la oferta",
+    jobExample:"Ejemplo: responsabilidades, requisitos, descripción de empresa, habilidades.",
+    formal:"Formal",
+    confident:"Seguro",
+    shortTone:"Corto",
+    ukStyle:"Estilo UK",
+    generateCover:"Generar carta",
+    result:"Resultado",
+    chooseRecruiter:"Elige tu reclutador IA",
+    coachDesc:"Práctica profesional con voz, transcripción y feedback.",
+    startSetup:"Empezar",
+    recruiter:"Reclutador",
+    confirmSelection:"Confirmar selección",
+    interviewSetup:"Configuración entrevista",
+    interviewLang:"Idioma de entrevista",
+    position:"Puesto",
+    companyCountry:"Empresa / país",
+    vacancyDesc:"Descripción de oferta",
+    interviewType:"Tipo de entrevista",
+    startInterview:"Empezar entrevista",
+    liveInterview:"Entrevista en vivo",
+    endSmall:"Fin",
+    aiRecruiter:"Reclutador IA",
+    yourAnswer:"Tu respuesta",
+    answerPlaceholder:"Habla o escribe tu respuesta aquí...",
+    startRecording:"Empezar grabación",
+    stopRecording:"Detener grabación",
+    sendAnswer:"Enviar respuesta",
+    playMyAnswer:"Reproducir mi respuesta",
+    rerecord:"Grabar de nuevo",
+    repeatQuestion:"Repetir pregunta",
+    end:"Terminar",
+    feedback:"Feedback",
+    practiseAgain:"Practicar otra vez",
+    premiumTitle:"Herramientas premium de carrera",
+    premiumSub:"Las suscripciones y Google Play Billing se conectarán más tarde.",
+    premium1:"Plantillas CV ilimitadas",
+    premium2:"Cartas IA para cada oferta",
+    premium3:"Práctica de entrevista por voz",
+    premium4:"Feedback detallado y mejores respuestas",
+    goPremium:"Ir a Premium",
+    restorePurchase:"Restaurar compra",
+    billingSoon:"Google Play Billing se conectará más tarde.",
+    restoreSoon:"Restaurar compra funcionará después de conectar billing.",
+    settings:"Ajustes",
+    theme:"Tema",
+    themeSub:"Elige estilo de color premium.",
+    changeLanguage:"Cambiar idioma",
+    subscriptionBilling:"Suscripción y facturación",
+    contactSupport:"Contactar soporte",
+    supportSoon:"El email de soporte se añadirá más tarde.",
+    privacyTerms:"Privacy Policy / Terms",
+    comingSoon:"Próximamente.",
+    comingSoonShort:"Pronto",
+    navHome:"Inicio",
+    navCoach:"Coach",
+    navProfile:"Perfil",
+    navMore:"Más"
+  }
+};
+
+let appLang=localStorage.getItem("jsai_appLang") || "en";
+let selectedLanguageName=localStorage.getItem("jsai_languageName") || "English";
+let theme=localStorage.getItem("jsai_theme") || "purple";
+
+let currentTpl=Number(localStorage.getItem("jsai_currentTpl") || 0);
+let photoMode=localStorage.getItem("jsai_photoMode") !== "false";
+let photoShape=localStorage.getItem("jsai_photoShape") || "round";
+let photoSide=localStorage.getItem("jsai_photoSide") || "right";
+let selectedTone="formal";
+let oldCVFiles=[];
+let diplomas=[];
+let answers=[];
+let questions=[];
+let qIndex=0;
+let lastAI="";
+let currentRecruiterIndex=Number(localStorage.getItem("jsai_recruiter") || 0);
+let mediaRecorder=null;
+let audioChunks=[];
+let myAudioUrl=null;
+let isRecording=false;
+let recognition=null;
+let activeStream=null;
+let finalSpeechText="";
+
+const cvTemplates=[
+  {name:"Executive Clean",img:"cv1.jpg",className:"cv-modern"},
+  {name:"Elegant Beige",img:"cv2.jpg",className:"cv-elegant"},
+  {name:"Sidebar Pro",img:"cv3.jpg",className:"cv-sidebar"},
+  {name:"Creative Profile",img:"cv4.jpg",className:"cv-creative"}
+];
+
+const recruiters=[
+  {name:"Emma",role:"HR Recruiter",img:"interview-woman1.jpg"},
+  {name:"Naomi",role:"Talent Acquisition",img:"interview-woman2.jpg"},
+  {name:"James",role:"Hiring Manager",img:"interview-man1.jpg"},
+  {name:"Michael",role:"Technical Recruiter",img:"interview-man2.jpg"}
+];
+
+let exp=[
+  {company:"Company Name",position:"Marketing Assistant",desc:"Managed client communication, supported campaigns and prepared reports.",saved:true}
+];
+
+let vols=[
+  {org:"Volunteer Organisation",role:"Volunteer",desc:"Supported community activities and helped people in need.",saved:true}
+];
+
+function t(k){
+  return (tr[appLang] && tr[appLang][k]) || tr.en[k] || k;
+}
+
+function byId(id){
+  return document.getElementById(id);
+}
+
+function safe(v,fallback=""){
+  if(v===undefined || v===null || String(v).trim()==="") return fallback;
+  return String(v);
+}
+
+function escapeHtml(str){
+  return safe(str).replace(/[&<>"']/g,function(m){
+    return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[m];
+  });
+}
+
+function applyTranslations(){
+  document.querySelectorAll("[data-i]").forEach(el=>{
+    el.innerHTML=t(el.dataset.i);
+  });
+
+  document.querySelectorAll("[data-placeholder-i]").forEach(el=>{
+    el.setAttribute("placeholder",t(el.dataset.placeholderI));
+  });
+
+  updatePhotoButtons();
+}
+
 function buildLangs(){
- langs.innerHTML=languages.map((l,i)=>`<div class="lang" onclick="selectLang(this,'${l}')"><span>${l}</span><b>${i===0?"✓":"○"}</b></div>`).join("");
- interviewLang.innerHTML=languages.map(l=>`<option>${l}</option>`).join("");
- coverLang.innerHTML=languages.map(l=>`<option>${l}</option>`).join("");
+  byId("langs").innerHTML=appLanguages.map(l=>{
+    const active=l.name===selectedLanguageName;
+    const supported=["en","uk","pl","de","fr","es"].includes(l.code);
+    return `
+      <div class="lang ${active?'active':''}" onclick="selectLang('${l.name}','${l.code}')">
+        <span>${l.name}${supported?'':' <span class="small">(English UI)</span>'}</span>
+        <b>${active?'✓':'○'}</b>
+      </div>
+    `;
+  }).join("");
 }
-function selectLang(el,l){document.querySelectorAll(".lang b").forEach(b=>b.textContent="○");el.querySelector("b").textContent="✓";appLang=l==="Українська"?"uk":"en";interviewLang.value=l;coverLang.value=l;applyTranslations()}
-function go(id){document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));document.getElementById(id).classList.add("active");updateNav(id);if(id==="preview")fillPreview();window.scrollTo(0,0)}
-function updateNav(id){const map={home:0,cv:1,preview:1,interview:2,interviewer:2,setup:2,live:2,feedback:2,profile:3,settings:4,premium:4};document.querySelectorAll(".nav").forEach(n=>n.classList.remove("active"));document.querySelectorAll(".nav")[map[id]??0].classList.add("active")}
-function setTheme(x){document.body.classList.toggle("beige",x==="beige")}
-function defaultAvatarSvg(){let male=gender.value==="male";return `<svg viewBox="0 0 120 120" width="120" height="120"><rect width="120" height="120" fill="#182033"/><circle cx="60" cy="46" r="24" fill="${male?'#d9a27d':'#e6b18b'}"/><path d="${male?'M34 45 Q41 17 60 18 Q81 19 86 45 Q71 30 60 31 Q46 30 34 45':'M30 55 Q30 14 60 14 Q92 15 90 56 Q78 31 60 31 Q42 31 30 55'}" fill="${male?'#3b2418':'#4a261b'}"/><path d="M20 120 Q60 76 100 120" fill="#111827"/><path d="M42 91 L78 91 L90 120 L30 120z" fill="#fff"/></svg>`}
-function updateDefaultAvatar(){if(!localStorage.getItem("profilePhoto"))profileAvatar.innerHTML=defaultAvatarSvg()}
-function loadPhoto(e){let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{localStorage.setItem("profilePhoto",r.result);profileAvatar.innerHTML=`<img src="${r.result}">`;renderCV()};r.readAsDataURL(f)}
-function removePhoto(){localStorage.removeItem("profilePhoto");updateDefaultAvatar();renderCV()}
-function saveProfile(){localStorage.setItem("profileName",name.value);alert(appLang==="uk"?"Профіль збережено":"Profile saved")}
-function renderExperience(){experienceCards.innerHTML=exp.map((x,i)=>x.saved?`<div class="card"><b>${x.position||"Position"} — ${x.company||"Company"}</b><p>${x.desc||""}</p><div class="grid2"><button class="btn secondary" onclick="editExperience(${i})">Edit</button><button class="btn secondary" onclick="deleteExperience(${i})">Delete</button></div></div>`:`<div class="card"><label>Company</label><input value="${x.company}" oninput="exp[${i}].company=this.value"><label>Position</label><input value="${x.position}" oninput="exp[${i}].position=this.value"><label>Description</label><textarea oninput="exp[${i}].desc=this.value">${x.desc}</textarea><button class="btn secondary" onclick="saveExperience(${i})">Save Experience</button></div>`).join("")}
-function addExperienceCard(){exp.push({company:"",position:"",desc:"",saved:false});renderExperience()}
-function saveExperience(i){exp[i].saved=true;renderExperience()}
-function editExperience(i){exp[i].saved=false;renderExperience()}
-function deleteExperience(i){exp.splice(i,1);renderExperience()}
-function renderVolunteers(){volunteerCards.innerHTML=vols.map((x,i)=>x.saved?`<div class="card"><b>${x.role||"Role"} — ${x.org||"Organisation"}</b><p>${x.desc||""}</p><div class="grid2"><button class="btn secondary" onclick="editVolunteer(${i})">Edit</button><button class="btn secondary" onclick="deleteVolunteer(${i})">Delete</button></div></div>`:`<div class="card"><label>Organisation</label><input value="${x.org}" oninput="vols[${i}].org=this.value"><label>Role</label><input value="${x.role}" oninput="vols[${i}].role=this.value"><label>Description</label><textarea oninput="vols[${i}].desc=this.value">${x.desc}</textarea><button class="btn secondary" onclick="saveVolunteer(${i})">Save Volunteering</button></div>`).join("")}
-function addVolunteerCard(){vols.push({org:"",role:"",desc:"",saved:false});renderVolunteers()}
-function saveVolunteer(i){vols[i].saved=true;renderVolunteers()}
-function editVolunteer(i){vols[i].saved=false;renderVolunteers()}
-function deleteVolunteer(i){vols.splice(i,1);renderVolunteers()}
-function addDiplomaFile(e){let f=e.target.files[0];if(!f)return;let url=URL.createObjectURL(f);diplomas.push({name:f.name,url});renderDiplomas()}
-function renderDiplomas(){coursesBox.innerHTML=diplomas.length?diplomas.map((d,i)=>`<div class="list-btn"><span onclick="window.open('${d.url}','_blank')">${d.name}</span><b onclick="deleteDiploma(${i})">Delete</b></div>`).join(""):`<div class="list-btn"><span>No files added yet</span><b>—</b></div>`}
-function deleteDiploma(i){diplomas.splice(i,1);renderDiplomas()}
-function setCVCategory(el,n){document.querySelectorAll("#cv .tab").forEach(t=>t.classList.remove("active"));el.classList.add("active");currentCat=n;currentTpl=0;cvCat.textContent=n+" Templates";templateNote.textContent="Choose one of 5 "+n+" layouts.";renderTemplatePicker();renderCV()}
-function renderTemplatePicker(){templatePicker.innerHTML=cvTemplates[currentCat].map((x,i)=>`<div class="tpl-card ${i===currentTpl?'active':''}" onclick="selectTemplate(${i})"><div class="tpl-mini"><div class="photo"></div><b>${x}</b><div class="bar"></div><div class="bar"></div><div class="bar"></div><br><div class="bar"></div><div class="bar"></div></div><p class="small">${x}</p></div>`).join("")}
-function selectTemplate(i){currentTpl=i;renderTemplatePicker();renderCV()}
-function togglePhoto(){photoMode=!photoMode;renderCV()}
-function cyclePhotoShape(){photoShape=photoShape==="round"?"square":photoShape==="square"?"none":"round";if(photoShape==="none")photoMode=false;else photoMode=true;renderCV()}
-function movePhoto(){photoSide=photoSide==="right"?"left":"right";renderCV()}
-function getPhoto(){let img=localStorage.getItem("profilePhoto");return img?`<img class="cv-photo cv-top-photo" src="${img}">`:`<div class="cv-photo cv-top-photo"></div>`}
-function contact(){return `<p>${email.value} | ${phone.value} | ${location.value}</p>`}
-function expHtml(){return exp.map(x=>`${x.position} — ${x.company}<br>${x.desc}`).join("<br><br>")}
-function volHtml(){return vols.map(x=>`${x.role} — ${x.org}<br>${x.desc}`).join("<br><br>")}
-function basicSections(){return `<div class="cv-section"><div class="cv-title">SUMMARY</div><p>Motivated professional with strong communication, organisation and customer-focused skills.</p></div><div class="cv-section"><div class="cv-title">EXPERIENCE</div><p>${expHtml()}</p></div><div class="cv-section"><div class="cv-title">VOLUNTEERING</div><p>${volHtml()}</p></div><div class="cv-section"><div class="cv-title">EDUCATION</div><p>${education.value}</p></div><div class="cv-section"><div class="cv-title">LANGUAGES</div><p>${profileLanguages.value}</p></div><div class="cv-section"><div class="cv-title">SKILLS</div><p>${skills.value}</p></div>`}
-function cvInner(){return `${getPhoto()}<div class="cv-head"><h2>${name.value.toUpperCase()}</h2><p><b>${target.value.toUpperCase()}</b></p>${contact()}</div>${basicSections()}`}
+
+function buildContentSelects(){
+  const options=contentLanguages.map(l=>`<option>${l}</option>`).join("");
+  byId("interviewLang").innerHTML=options;
+  byId("coverLang").innerHTML=options;
+  byId("cvContentLang").innerHTML=options;
+
+  byId("interviewLang").value=localStorage.getItem("jsai_interviewLang") || "English";
+  byId("coverLang").value=localStorage.getItem("jsai_coverLang") || "English";
+  byId("cvContentLang").value=localStorage.getItem("jsai_cvLang") || "English";
+
+  byId("interviewLang").addEventListener("change",savePreferences);
+  byId("coverLang").addEventListener("change",savePreferences);
+}
+
+function selectLang(name,code){
+  selectedLanguageName=name;
+  appLang=["en","uk","pl","de","fr","es"].includes(code) ? code : "en";
+  localStorage.setItem("jsai_appLang",appLang);
+  localStorage.setItem("jsai_languageName",name);
+
+  if(contentLanguages.includes(name)){
+    byId("interviewLang").value=name;
+    byId("coverLang").value=name;
+    byId("cvContentLang").value=name;
+    savePreferences();
+  }
+
+  buildLangs();
+  applyTranslations();
+}
+
+function go(id){
+  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+  byId(id).classList.add("active");
+  updateNav(id);
+
+  if(id==="preview") fillPreview();
+  if(id==="cv") renderCV();
+  if(id==="interviewer") renderInterviewers();
+
+  window.scrollTo(0,0);
+}
+
+function updateNav(id){
+  const map={home:0,cv:1,preview:1,interview:2,interviewer:2,setup:2,live:2,feedback:2,profile:3,settings:4,premium:4,language:4,cover:0};
+  document.querySelectorAll(".nav").forEach(n=>n.classList.remove("active"));
+  const index=map[id] ?? 0;
+  const navs=document.querySelectorAll(".nav");
+  if(navs[index]) navs[index].classList.add("active");
+}
+
+function setTheme(x){
+  theme=x;
+  localStorage.setItem("jsai_theme",x);
+  document.body.classList.toggle("beige",x==="beige");
+}
+
+function savePreferences(){
+  localStorage.setItem("jsai_interviewLang",byId("interviewLang").value);
+  localStorage.setItem("jsai_coverLang",byId("coverLang").value);
+  localStorage.setItem("jsai_cvLang",byId("cvContentLang").value);
+  localStorage.setItem("jsai_currentTpl",String(currentTpl));
+  localStorage.setItem("jsai_photoMode",String(photoMode));
+  localStorage.setItem("jsai_photoShape",photoShape);
+  localStorage.setItem("jsai_photoSide",photoSide);
+}
+
+function updateDefaultAvatar(){
+  const photo=localStorage.getItem("jsai_profilePhoto");
+  if(photo){
+    byId("profileAvatar").innerHTML=`<img src="${photo}" alt="Profile photo">`;
+    return;
+  }
+
+  const g=byId("gender").value || "female";
+  byId("profileAvatar").innerHTML=`<div class="default-avatar ${g==='male'?'male':'female'}"></div>`;
+}
+
+function loadPhoto(e){
+  const f=e.target.files[0];
+  if(!f) return;
+
+  const r=new FileReader();
+  r.onload=function(){
+    localStorage.setItem("jsai_profilePhoto",r.result);
+    updateDefaultAvatar();
+    renderCV();
+  };
+  r.readAsDataURL(f);
+}
+
+function removePhoto(ev){
+  if(ev) ev.stopPropagation();
+  localStorage.removeItem("jsai_profilePhoto");
+  byId("photoInput").value="";
+  updateDefaultAvatar();
+  renderCV();
+}
+
+function saveProfile(showAlert){
+  const profile={
+    gender:byId("gender").value,
+    name:byId("name").value,
+    email:byId("email").value,
+    phone:byId("phone").value,
+    location:byId("location").value,
+    target:byId("target").value,
+    profileLanguages:byId("profileLanguages").value,
+    education:byId("education").value,
+    skills:byId("skills").value,
+    exp:exp,
+    vols:vols
+  };
+
+  localStorage.setItem("jsai_profile",JSON.stringify(profile));
+
+  if(showAlert){
+    alert(appLang==="uk" ? "Профіль збережено" : t("saveProfile"));
+  }
+}
+
+function loadProfile(){
+  try{
+    const saved=JSON.parse(localStorage.getItem("jsai_profile") || "{}");
+    if(saved.gender) byId("gender").value=saved.gender;
+    if(saved.name) byId("name").value=saved.name;
+    if(saved.email) byId("email").value=saved.email;
+    if(saved.phone) byId("phone").value=saved.phone;
+    if(saved.location) byId("location").value=saved.location;
+    if(saved.target) byId("target").value=saved.target;
+    if(saved.profileLanguages) byId("profileLanguages").value=saved.profileLanguages;
+    if(saved.education) byId("education").value=saved.education;
+    if(saved.skills) byId("skills").value=saved.skills;
+    if(Array.isArray(saved.exp)) exp=saved.exp;
+    if(Array.isArray(saved.vols)) vols=saved.vols;
+  }catch(e){}
+}
+
+function renderExperience(){
+  if(!exp.length){
+    byId("experienceCards").innerHTML=`<div class="empty">No experience added yet.</div>`;
+    return;
+  }
+
+  byId("experienceCards").innerHTML=exp.map((x,i)=>{
+    if(x.saved){
+      return `
+        <div class="card tight">
+          <h3>${escapeHtml(safe(x.position,"Position"))}</h3>
+          <p><b>${escapeHtml(safe(x.company,"Company"))}</b></p>
+          <p>${escapeHtml(safe(x.desc,""))}</p>
+          <div class="grid2">
+            <button class="btn secondary small-btn" onclick="editExperience(${i})">Edit</button>
+            <button class="btn secondary small-btn" onclick="deleteExperience(${i})">Delete</button>
+          </div>
+        </div>
+      `;
+    }
+
+    return `
+      <div class="card tight">
+        <label>Company</label>
+        <input value="${escapeHtml(safe(x.company))}" oninput="exp[${i}].company=this.value">
+        <label>Position</label>
+        <input value="${escapeHtml(safe(x.position))}" oninput="exp[${i}].position=this.value">
+        <label>Description</label>
+        <textarea oninput="exp[${i}].desc=this.value">${escapeHtml(safe(x.desc))}</textarea>
+        <button class="btn secondary" onclick="saveExperience(${i})">Save Experience</button>
+      </div>
+    `;
+  }).join("");
+}
+
+function addExperienceCard(){
+  exp.push({company:"",position:"",desc:"",saved:false});
+  renderExperience();
+}
+
+function saveExperience(i){
+  exp[i].saved=true;
+  saveProfile(false);
+  renderExperience();
+  renderCV();
+}
+
+function editExperience(i){
+  exp[i].saved=false;
+  renderExperience();
+}
+
+function deleteExperience(i){
+  exp.splice(i,1);
+  saveProfile(false);
+  renderExperience();
+  renderCV();
+}
+
+function renderVolunteers(){
+  if(!vols.length){
+    byId("volunteerCards").innerHTML=`<div class="empty">No volunteering added yet.</div>`;
+    return;
+  }
+
+  byId("volunteerCards").innerHTML=vols.map((x,i)=>{
+    if(x.saved){
+      return `
+        <div class="card tight">
+          <h3>${escapeHtml(safe(x.role,"Role"))}</h3>
+          <p><b>${escapeHtml(safe(x.org,"Organisation"))}</b></p>
+          <p>${escapeHtml(safe(x.desc,""))}</p>
+          <div class="grid2">
+            <button class="btn secondary small-btn" onclick="editVolunteer(${i})">Edit</button>
+            <button class="btn secondary small-btn" onclick="deleteVolunteer(${i})">Delete</button>
+          </div>
+        </div>
+      `;
+    }
+
+    return `
+      <div class="card tight">
+        <label>Organisation</label>
+        <input value="${escapeHtml(safe(x.org))}" oninput="vols[${i}].org=this.value">
+        <label>Role</label>
+        <input value="${escapeHtml(safe(x.role))}" oninput="vols[${i}].role=this.value">
+        <label>Description</label>
+        <textarea oninput="vols[${i}].desc=this.value">${escapeHtml(safe(x.desc))}</textarea>
+        <button class="btn secondary" onclick="saveVolunteer(${i})">Save Volunteering</button>
+      </div>
+    `;
+  }).join("");
+}
+
+function addVolunteerCard(){
+  vols.push({org:"",role:"",desc:"",saved:false});
+  renderVolunteers();
+}
+
+function saveVolunteer(i){
+  vols[i].saved=true;
+  saveProfile(false);
+  renderVolunteers();
+  renderCV();
+}
+
+function editVolunteer(i){
+  vols[i].saved=false;
+  renderVolunteers();
+}
+
+function deleteVolunteer(i){
+  vols.splice(i,1);
+  saveProfile(false);
+  renderVolunteers();
+  renderCV();
+}
+
+function addDiplomaFile(e){
+  const f=e.target.files[0];
+  if(!f) return;
+
+  const url=URL.createObjectURL(f);
+  diplomas.push({name:f.name,url:url});
+  renderDiplomas();
+  byId("diplomaFile").value="";
+}
+
+function renderDiplomas(){
+  if(!diplomas.length){
+    byId("coursesBox").innerHTML=`<div class="empty">No files added yet.</div>`;
+    return;
+  }
+
+  byId("coursesBox").innerHTML=diplomas.map((d,i)=>`
+    <div class="file-item">
+      <span>${escapeHtml(d.name)}</span>
+      <div class="file-actions">
+        <button class="mini-icon" onclick="openDiploma(${i})">Open</button>
+        <button class="mini-icon" onclick="deleteDiploma(${i})">×</button>
+      </div>
+    </div>
+  `).join("");
+}
+
+function openDiploma(i){
+  if(diplomas[i]) window.open(diplomas[i].url,"_blank");
+}
+
+function deleteDiploma(i){
+  diplomas.splice(i,1);
+  renderDiplomas();
+}
+
+function uploadOldCVFile(e){
+  const f=e.target.files[0];
+  if(!f) return;
+
+  oldCVFiles.push({name:f.name,url:URL.createObjectURL(f)});
+  renderOldCVFiles();
+  byId("uploadCV").value="";
+}
+
+function renderOldCVFiles(){
+  if(!oldCVFiles.length){
+    byId("oldCVBox").innerHTML="";
+    return;
+  }
+
+  byId("oldCVBox").innerHTML=oldCVFiles.map((f,i)=>`
+    <div class="file-item">
+      <span>${escapeHtml(f.name)}</span>
+      <div class="file-actions">
+        <button class="mini-icon" onclick="window.open(oldCVFiles[${i}].url,'_blank')">Open</button>
+        <button class="mini-icon" onclick="deleteOldCV(${i})">×</button>
+      </div>
+    </div>
+  `).join("");
+}
+
+function deleteOldCV(i){
+  oldCVFiles.splice(i,1);
+  renderOldCVFiles();
+}
+
+function renderTemplateGrid(){
+  byId("templateGrid").innerHTML=cvTemplates.map((tpl,i)=>`
+    <div class="tpl-card ${i===currentTpl?'active':''}" onclick="selectTemplate(${i})">
+      <img class="tpl-img" src="${tpl.img}" alt="${tpl.name}" onerror="this.style.display='none'">
+      <div class="tpl-name">${tpl.name}</div>
+    </div>
+  `).join("");
+
+  const tpl=cvTemplates[currentTpl] || cvTemplates[0];
+  byId("bigTemplatePreview").src=tpl.img;
+}
+
+function selectTemplate(i){
+  currentTpl=i;
+  savePreferences();
+  renderTemplateGrid();
+  renderCV();
+}
+
+function togglePhoto(){
+  photoMode=!photoMode;
+  savePreferences();
+  renderCV();
+}
+
+function cyclePhotoShape(){
+  const order=["round","square","rectangle"];
+  const index=order.indexOf(photoShape);
+  photoShape=order[(index+1)%order.length];
+  photoMode=true;
+  savePreferences();
+  renderCV();
+}
+
+function movePhoto(){
+  const order=["right","left","top"];
+  const index=order.indexOf(photoSide);
+  photoSide=order[(index+1)%order.length];
+  savePreferences();
+  renderCV();
+}
+
+function updatePhotoButtons(){
+  const shapeBtn=byId("photoShapeBtn");
+  const posBtn=byId("photoPositionBtn");
+  if(shapeBtn) shapeBtn.textContent=`Photo Shape: ${photoShape}`;
+  if(posBtn) posBtn.textContent=`Photo Position: ${photoSide}`;
+}
+
+function getPhotoHtml(){
+  const img=localStorage.getItem("jsai_profilePhoto");
+  if(img) return `<img class="cv-photo cv-top-photo" src="${img}" alt="Profile photo">`;
+  return `<div class="cv-photo cv-top-photo"></div>`;
+}
+
+function cvLabels(){
+  const lang=byId("cvContentLang").value;
+
+  if(lang==="Українська"){
+    return {summary:"ПРОФІЛЬ",experience:"ДОСВІД",volunteering:"ВОЛОНТЕРСТВО",education:"ОСВІТА",languages:"МОВИ",skills:"НАВИЧКИ",contact:"КОНТАКТИ"};
+  }
+
+  if(lang==="Polski"){
+    return {summary:"PROFIL",experience:"DOŚWIADCZENIE",volunteering:"WOLONTARIAT",education:"EDUKACJA",languages:"JĘZYKI",skills:"UMIEJĘTNOŚCI",contact:"KONTAKT"};
+  }
+
+  if(lang==="Deutsch"){
+    return {summary:"PROFIL",experience:"ERFAHRUNG",volunteering:"EHRENAMT",education:"BILDUNG",languages:"SPRACHEN",skills:"FÄHIGKEITEN",contact:"KONTAKT"};
+  }
+
+  if(lang==="Français"){
+    return {summary:"PROFIL",experience:"EXPÉRIENCE",volunteering:"BÉNÉVOLAT",education:"FORMATION",languages:"LANGUES",skills:"COMPÉTENCES",contact:"CONTACT"};
+  }
+
+  if(lang==="Español"){
+    return {summary:"PERFIL",experience:"EXPERIENCIA",volunteering:"VOLUNTARIADO",education:"EDUCACIÓN",languages:"IDIOMAS",skills:"HABILIDADES",contact:"CONTACTO"};
+  }
+
+  return {summary:"SUMMARY",experience:"EXPERIENCE",volunteering:"VOLUNTEERING",education:"EDUCATION",languages:"LANGUAGES",skills:"SKILLS",contact:"CONTACT"};
+}
+
+function cvSummary(){
+  const lang=byId("cvContentLang").value;
+  const role=safe(byId("target").value,"target role");
+
+  if(lang==="Українська") return `Мотивований фахівець, орієнтований на якісну роботу, комунікацію та розвиток у напрямку ${role}.`;
+  if(lang==="Polski") return `Zmotywowana osoba nastawiona na jakość pracy, komunikację i rozwój w roli ${role}.`;
+  if(lang==="Deutsch") return `Motivierte Fachkraft mit Fokus auf Qualität, Kommunikation und Weiterentwicklung in der Position ${role}.`;
+  if(lang==="Français") return `Professionnel motivé, orienté qualité, communication et développement dans le rôle de ${role}.`;
+  if(lang==="Español") return `Profesional motivado, orientado a la calidad, la comunicación y el desarrollo en el puesto de ${role}.`;
+  return `Motivated professional with strong communication, organisation and customer-focused skills for a ${role} role.`;
+}
+
+function expHtml(){
+  if(!exp.length) return "—";
+  return exp.map(x=>`
+    <p><b>${escapeHtml(safe(x.position,"Position"))} — ${escapeHtml(safe(x.company,"Company"))}</b><br>${escapeHtml(safe(x.desc,""))}</p>
+  `).join("");
+}
+
+function volHtml(){
+  if(!vols.length) return "—";
+  return vols.map(x=>`
+    <p><b>${escapeHtml(safe(x.role,"Role"))} — ${escapeHtml(safe(x.org,"Organisation"))}</b><br>${escapeHtml(safe(x.desc,""))}</p>
+  `).join("");
+}
+
+function contactLine(){
+  return `${escapeHtml(safe(byId("email").value,"email@example.com"))} | ${escapeHtml(safe(byId("phone").value,"+00 0000 000000"))} | ${escapeHtml(safe(byId("location").value,"Location"))}`;
+}
+
+function basicSections(){
+  const l=cvLabels();
+
+  return `
+    <div class="cv-section">
+      <div class="cv-title">${l.summary}</div>
+      <p>${escapeHtml(cvSummary())}</p>
+    </div>
+    <div class="cv-section">
+      <div class="cv-title">${l.experience}</div>
+      ${expHtml()}
+    </div>
+    <div class="cv-section">
+      <div class="cv-title">${l.volunteering}</div>
+      ${volHtml()}
+    </div>
+    <div class="cv-section">
+      <div class="cv-title">${l.education}</div>
+      <p>${escapeHtml(safe(byId("education").value,"University / College / School"))}</p>
+    </div>
+  `;
+}
+
+function sideSections(){
+  const l=cvLabels();
+  return `
+    <div class="cv-section">
+      <div class="cv-title">${l.contact}</div>
+      <p>${contactLine().replaceAll("|","<br>")}</p>
+    </div>
+    <div class="cv-section">
+      <div class="cv-title">${l.languages}</div>
+      <p>${escapeHtml(safe(byId("profileLanguages").value,"English"))}</p>
+    </div>
+    <div class="cv-section">
+      <div class="cv-title">${l.skills}</div>
+      <p>${escapeHtml(safe(byId("skills").value,"Communication"))}</p>
+    </div>
+  `;
+}
+
 function renderCV(){
- let cls="cv-document "+(photoMode?"with-photo ":"")+(photoShape==="round"?"round-photo ":"square-photo ")+`photo-${photoSide} `;
- if(currentCat==="Professional")cls+=["cv-bluebar","cv-sidebar","cv-minimal","cv-soft","cv-sidebar-dark"][currentTpl];
- if(currentCat==="Executive")cls+=["cv-executive","cv-soft","cv-sidebar-dark","cv-minimal","cv-bluebar"][currentTpl];
- if(currentCat==="Creative")cls+=["cv-creative","cv-student","cv-soft","cv-bluebar","cv-sidebar"][currentTpl];
- if(currentCat==="LinkedIn")cls+=["cv-linkedin","cv-sidebar","cv-minimal","cv-bluebar","cv-soft"][currentTpl];
- cvDoc.className=cls;
- if(cls.includes("cv-sidebar")) cvDoc.innerHTML=`<div class="side"><h2>${name.value}</h2><p>${target.value}</p><p>${email.value}<br>${phone.value}<br>${location.value}</p><div class="cv-section"><div class="cv-title">SKILLS</div><p>${skills.value}</p></div><div class="cv-section"><div class="cv-title">LANGUAGES</div><p>${profileLanguages.value}</p></div></div><div class="main">${basicSections()}</div>`;
- else if(cls.includes("cv-student")) cvDoc.innerHTML=`${getPhoto()}<div class="cv-head"><h2>${name.value}</h2><p>${target.value}</p>${contact()}</div><div class="grid2"><div><div class="cv-section"><div class="cv-title">SKILLS</div>${skills.value.split(",").map(s=>`<span class="skill-pill">${s.trim()}</span>`).join("")}<div class="cv-section"><div class="cv-title">EDUCATION</div><p>${education.value}</p></div></div></div><div>${basicSections()}</div></div>`;
- else cvDoc.innerHTML=cvInner();
+  updatePhotoButtons();
+
+  const tpl=cvTemplates[currentTpl] || cvTemplates[0];
+  let cls=`cv-document ${tpl.className} ${photoMode?'with-photo':''} ${photoShape}-photo photo-${photoSide}`;
+  byId("cvDoc").className=cls;
+
+  const name=escapeHtml(safe(byId("name").value,"Your Name")).toUpperCase();
+  const target=escapeHtml(safe(byId("target").value,"Target Position"));
+  const l=cvLabels();
+  const photo=getPhotoHtml();
+
+  if(tpl.className==="cv-sidebar"){
+    byId("cvDoc").innerHTML=`
+      <div class="side">
+        ${photoSide==="top" ? photo : ""}
+        <h2>${name}</h2>
+        <p><b>${target}</b></p>
+        ${photoSide!=="top" ? photo : ""}
+        ${sideSections()}
+      </div>
+      <div class="main">
+        ${basicSections()}
+      </div>
+    `;
+    return;
+  }
+
+  if(tpl.className==="cv-elegant"){
+    byId("cvDoc").innerHTML=`
+      <div class="cv-header">
+        ${photo}
+        <div class="cv-head">
+          <h2>${name}</h2>
+          <p><b>${target}</b></p>
+          <p>${contactLine()}</p>
+        </div>
+      </div>
+      <div class="cv-body">
+        ${basicSections()}
+        <div class="cv-section">
+          <div class="cv-title">${l.languages}</div>
+          <p>${escapeHtml(safe(byId("profileLanguages").value,"English"))}</p>
+        </div>
+        <div class="cv-section">
+          <div class="cv-title">${l.skills}</div>
+          <p>${escapeHtml(safe(byId("skills").value,"Communication"))}</p>
+        </div>
+      </div>
+    `;
+    return;
+  }
+
+  if(tpl.className==="cv-creative"){
+    byId("cvDoc").innerHTML=`
+      <div class="cv-page">
+        ${photo}
+        <div class="cv-head">
+          <h2>${name}</h2>
+          <p><b>${target}</b></p>
+          <p>${contactLine()}</p>
+        </div>
+        <div class="grid2">
+          <div>
+            <div class="cv-section">
+              <div class="cv-title">${l.skills}</div>
+              <p>${escapeHtml(safe(byId("skills").value,"Communication"))}</p>
+            </div>
+            <div class="cv-section">
+              <div class="cv-title">${l.languages}</div>
+              <p>${escapeHtml(safe(byId("profileLanguages").value,"English"))}</p>
+            </div>
+          </div>
+          <div>
+            ${basicSections()}
+          </div>
+        </div>
+      </div>
+    `;
+    return;
+  }
+
+  byId("cvDoc").innerHTML=`
+    <div class="cv-header-blue">
+      ${photo}
+      <div class="cv-head">
+        <h2>${name}</h2>
+        <p><b>${target}</b></p>
+        <p>${contactLine()}</p>
+      </div>
+    </div>
+    <div class="cv-body">
+      ${basicSections()}
+      <div class="cv-section">
+        <div class="cv-title">${l.languages}</div>
+        <p>${escapeHtml(safe(byId("profileLanguages").value,"English"))}</p>
+      </div>
+      <div class="cv-section">
+        <div class="cv-title">${l.skills}</div>
+        <p>${escapeHtml(safe(byId("skills").value,"Communication"))}</p>
+      </div>
+    </div>
+  `;
 }
-function fillPreview(){renderCV();cvPreview.className=cvDoc.className;cvPreview.innerHTML=cvDoc.innerHTML}
-function uploadOldCV(){alert(appLang==="uk"?"Файл CV додано. Переписування через AI підключимо після OpenAI API.":"CV file added. AI rewrite will work after OpenAI API connection.")}
-function cvText(){return `${name.value}\n${target.value}\n${email.value} | ${phone.value} | ${location.value}\n\nEXPERIENCE\n${expHtml().replaceAll("<br>","\n")}\n\nVOLUNTEERING\n${volHtml().replaceAll("<br>","\n")}\n\nEDUCATION\n${education.value}\n\nLANGUAGES\n${profileLanguages.value}\n\nSKILLS\n${skills.value}`}
-function downloadText(){let a=document.createElement("a");a.href=URL.createObjectURL(new Blob([cvText()],{type:"text/plain"}));a.download="CV.txt";a.click()}
-function copyCV(){navigator.clipboard.writeText(cvText());alert("CV copied")}
-function shareCV(){if(navigator.share)navigator.share({title:"My CV",text:cvText()});else copyCV()}
-function setTone(el,x){tone=x;document.querySelectorAll("#cover .tab").forEach(t=>t.classList.remove("active"));el.classList.add("active")}
+
+function fillPreview(){
+  renderCV();
+  byId("cvPreview").className=byId("cvDoc").className;
+  byId("cvPreview").innerHTML=byId("cvDoc").innerHTML;
+}
+
+function savePDF(){
+  fillPreview();
+  setTimeout(()=>window.print(),100);
+}
+
+function cvText(){
+  const name=safe(byId("name").value,"Your Name");
+  const target=safe(byId("target").value,"Target Position");
+  const lines=[
+    name,
+    target,
+    `${safe(byId("email").value)} | ${safe(byId("phone").value)} | ${safe(byId("location").value)}`,
+    "",
+    "SUMMARY",
+    cvSummary(),
+    "",
+    "EXPERIENCE",
+    exp.map(x=>`${safe(x.position,"Position")} — ${safe(x.company,"Company")}\n${safe(x.desc)}`).join("\n\n") || "—",
+    "",
+    "VOLUNTEERING",
+    vols.map(x=>`${safe(x.role,"Role")} — ${safe(x.org,"Organisation")}\n${safe(x.desc)}`).join("\n\n") || "—",
+    "",
+    "EDUCATION",
+    safe(byId("education").value),
+    "",
+    "LANGUAGES",
+    safe(byId("profileLanguages").value),
+    "",
+    "SKILLS",
+    safe(byId("skills").value)
+  ];
+
+  return lines.join("\n");
+}
+
+function downloadText(){
+  downloadFile("CV.txt",cvText(),"text/plain");
+}
+
+function copyCV(){
+  navigator.clipboard.writeText(cvText()).then(()=>alert("CV copied"));
+}
+
+function shareCV(){
+  if(navigator.share){
+    navigator.share({title:"My CV",text:cvText()});
+  }else{
+    copyCV();
+  }
+}
+
+function downloadFile(filename,text,type){
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(new Blob([text],{type:type || "text/plain"}));
+  a.download=filename;
+  a.click();
+}
+
+function setTone(el,x){
+  selectedTone=x;
+  document.querySelectorAll("#cover .tab").forEach(t=>t.classList.remove("active"));
+  el.classList.add("active");
+}
+
 function generateCover(){
- let lang=coverLang.value,job=coverJob.value,company=coverCompany.value,n=name.value||"Candidate";
- if(lang==="Українська"){coverResult.textContent=`Шановний менеджере з найму,\n\nХочу подати свою кандидатуру на позицію ${job} у ${company}. Мій досвід, відповідальність і мотивація допоможуть мені бути корисною вашій команді.\n\nЯ готова працювати якісно, уважно виконувати обов’язки та швидко адаптуватися до вимог посади.\n\nЗ повагою,\n${n}`;}
- else{coverResult.textContent=`Dear Hiring Manager,\n\nI am writing to apply for the ${job} position at ${company}. My experience, reliability and motivation would allow me to contribute positively to your team.\n\nI am organised, responsible and ready to deliver high-quality work in this role.\n\nKind regards,\n${n}`;}
- coverResult.classList.remove("hidden");
+  const lang=byId("coverLang").value;
+  const job=safe(byId("coverJob").value,"the role");
+  const company=safe(byId("coverCompany").value,"your company");
+  const candidate=safe(byId("name").value,"Candidate");
+  const advert=safe(byId("coverText").value,"");
+  const skillsText=safe(byId("skills").value,"communication, reliability and teamwork");
+  const experienceText=exp.length ? safe(exp[0].desc,"relevant experience") : "relevant experience";
+  let result="";
+
+  if(lang==="Українська"){
+    if(selectedTone==="short"){
+      result=`Шановний менеджере з найму,\n\nХочу подати свою кандидатуру на позицію ${job} у ${company}. Маю релевантний досвід, відповідальне ставлення до роботи та навички: ${skillsText}.\n\nЯ готова швидко адаптуватися до вимог посади й приносити користь команді.\n\nЗ повагою,\n${candidate}`;
+    }else if(selectedTone==="confident"){
+      result=`Шановний менеджере з найму,\n\nЯ зацікавлена у позиції ${job} у ${company}, тому що бачу можливість застосувати свій досвід і дати реальну користь вашій команді. Мої сильні сторони — ${skillsText}.\n\nУ попередньому досвіді я розвивала навички, які прямо підходять для цієї ролі: ${experienceText}. Я відповідально ставлюся до роботи, швидко навчаюся та вмію працювати з людьми.\n\nБуду рада можливості обговорити, як мій досвід може бути корисним для ${company}.\n\nЗ повагою,\n${candidate}`;
+    }else if(selectedTone==="uk"){
+      result=`Dear Hiring Manager,\n\nI would like to apply for the position of ${job} at ${company}. I am particularly interested in this opportunity because it matches my experience, professional attitude and ability to work responsibly within a team.\n\nMy background includes ${experienceText}. I can offer strong ${skillsText}, attention to detail and a reliable approach to daily tasks.\n\nI would welcome the opportunity to discuss my application further.\n\nYours faithfully,\n${candidate}`;
+    }else{
+      result=`Шановний менеджере з найму,\n\nХочу подати свою кандидатуру на позицію ${job} у ${company}. Мене зацікавила ця вакансія, оскільки вона відповідає моєму досвіду, навичкам і бажанню професійно розвиватися.\n\nМій досвід включає: ${experienceText}. Також я можу запропонувати такі навички: ${skillsText}. Я уважна до деталей, відповідальна та готова якісно виконувати завдання.\n\nБуду вдячна за можливість пройти співбесіду та детальніше обговорити мою кандидатуру.\n\nЗ повагою,\n${candidate}`;
+    }
+  }else{
+    if(selectedTone==="short"){
+      result=`Dear Hiring Manager,\n\nI am applying for the ${job} position at ${company}. I can offer relevant experience, reliability and strong ${skillsText}.\n\nI would be pleased to discuss how I can contribute to your team.\n\nKind regards,\n${candidate}`;
+    }else if(selectedTone==="confident"){
+      result=`Dear Hiring Manager,\n\nI am excited to apply for the ${job} position at ${company}. I believe I can bring real value to your team through my practical experience, strong work ethic and ability to adapt quickly.\n\nMy background includes ${experienceText}. I can also offer ${skillsText}, which match the needs of this role and would help me contribute from the start.\n\nI would welcome the opportunity to discuss how my skills and motivation can support ${company}.\n\nKind regards,\n${candidate}`;
+    }else if(selectedTone==="uk"){
+      result=`Dear Hiring Manager,\n\nI would like to apply for the position of ${job} at ${company}. I am very interested in this opportunity, as it matches my experience, professional attitude and commitment to delivering high-quality work.\n\nMy background includes ${experienceText}. I can offer ${skillsText}, a reliable approach and the ability to work well with colleagues, customers and managers.\n\nI would be grateful for the opportunity to discuss my application in more detail.\n\nYours faithfully,\n${candidate}`;
+    }else{
+      result=`Dear Hiring Manager,\n\nI am writing to apply for the ${job} position at ${company}. I was interested in this vacancy because it matches my experience, strengths and motivation to develop professionally.\n\nMy experience includes ${experienceText}. I can also offer ${skillsText}, attention to detail and a responsible attitude to work.\n\nI would welcome the opportunity to discuss my application and explain how I could contribute to your team.\n\nKind regards,\n${candidate}`;
+    }
+  }
+
+  if(advert.length>80 && selectedTone!=="short"){
+    result += lang==="Українська"
+      ? `\n\nЯ також звернула увагу на вимоги у вакансії та готова адаптувати свій досвід під конкретні завдання цієї ролі.`
+      : `\n\nI have also considered the requirements in the job description and would be ready to adapt my experience to the specific needs of this role.`;
+  }
+
+  byId("coverOutput").textContent=result;
+  byId("coverResult").classList.remove("hidden");
 }
-function selectInterviewer(el,name,closed,open){document.querySelectorAll(".interviewer").forEach(i=>i.classList.remove("active"));el.classList.add("active");currentRecruiter=name;closedAvatar=closed;openAvatar=open}
-function startInterview(){let pos=jobPosition.value,comp=jobCompany.value,lang=interviewLang.value;questions=makeQuestions(pos,comp,lang);qIndex=0;answers=[];dialog.innerHTML="";liveAvatar.innerHTML=`<img src="${closedAvatar}" onerror="this.style.display='none'">`;recruiterName.textContent=currentRecruiter;addAI(questions[0]);go("live")}
-function makeQuestions(pos,comp,lang){if(lang==="Українська")return[`Вітаю. Ми готуємося до співбесіди на позицію ${pos} у ${comp}. Розкажіть коротко про себе.`,`Який ваш досвід саме для цієї посади?`,`Яка ваша найсильніша професійна якість?`,`Опишіть складну ситуацію на роботі і як ви її вирішили.`,`Чому ви хочете працювати саме в ${comp}?`,`Чому ми маємо обрати саме вас?`];return[`Hello. We are preparing for your ${pos} interview at ${comp}. Please introduce yourself briefly.`,`What experience do you have that is most relevant to this role?`,`What is your strongest professional skill for this position?`,`Tell me about a difficult situation at work and how you handled it.`,`Why do you want to work at ${comp}?`,`Why should we hire you?`]}
-function addAI(x){lastAI=x;dialog.innerHTML+=`<div class="bubble ai"><b>${currentRecruiter}:</b><br>${x}</div>`;speak(x);dialog.scrollTop=dialog.scrollHeight}
-function addMe(x){answers.push(x);dialog.innerHTML+=`<div class="bubble me"><b>You:</b><br>${x}</div>`;dialog.scrollTop=dialog.scrollHeight}
-function sendAnswer(){let a=userAnswer.value.trim();if(a)addMe(a);userAnswer.value="";qIndex++;if(qIndex>=questions.length){finishInterview();return}setTimeout(()=>addAI(questions[qIndex]),500)}
-function speakLastAI(){speak(lastAI)}
-function speak(text){if(!("speechSynthesis" in window))return;speechSynthesis.cancel();let u=new SpeechSynthesisUtterance(text);u.lang=langCodes[interviewLang.value]||"en-GB";let timer=setInterval(()=>{liveAvatar.innerHTML=`<img src="${Math.random()>.5?openAvatar:closedAvatar}" onerror="this.style.display='none'">`},180);u.onend=()=>{clearInterval(timer);liveAvatar.innerHTML=`<img src="${closedAvatar}" onerror="this.style.display='none'">`};speechSynthesis.speak(u)}
-async function toggleRecording(){if(isRecording){stopRecording();return}isRecording=true;recordBtn.textContent="Stop Recording";audioChunks=[];try{let stream=await navigator.mediaDevices.getUserMedia({audio:true});mediaRecorder=new MediaRecorder(stream);mediaRecorder.ondataavailable=e=>audioChunks.push(e.data);mediaRecorder.onstop=()=>{myAudioUrl=URL.createObjectURL(new Blob(audioChunks,{type:"audio/webm"}));audioControls.classList.add("active");stream.getTracks().forEach(t=>t.stop())};mediaRecorder.start();startSpeechText()}catch(e){alert("Microphone access failed");isRecording=false;recordBtn.textContent="Start Recording"}}
-function stopRecording(){isRecording=false;recordBtn.textContent="Start Recording";if(mediaRecorder&&mediaRecorder.state!=="inactive")mediaRecorder.stop();if(recognition)recognition.stop()}
-function startSpeechText(){let SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR)return;recognition=new SR();recognition.lang=langCodes[interviewLang.value]||"en-US";recognition.continuous=true;recognition.interimResults=true;let finalText="";recognition.onresult=e=>{let interim="";for(let i=e.resultIndex;i<e.results.length;i++){if(e.results[i].isFinal)finalText+=e.results[i][0].transcript+" ";else interim+=e.results[i][0].transcript}userAnswer.value=(finalText+interim).trim()};recognition.onend=()=>{if(isRecording)try{recognition.start()}catch(e){}};recognition.start()}
-function playMyAnswer(){if(myAudioUrl)new Audio(myAudioUrl).play()}
-function clearMyAnswer(){userAnswer.value="";audioControls.classList.remove("active");myAudioUrl=null}
-function finishInterview(){let score=Math.min(9,5+answers.length);scoreNum.textContent=score.toFixed(1);feedbackTitle.textContent=answers.length<3?"Partial Feedback":"Interview Feedback";feedbackText.innerHTML=`<p><b>Answers completed:</b> ${answers.length}</p><p><b>Advice:</b> Add more specific examples, numbers and achievements. Avoid very short answers.</p><p><b>Better structure:</b> Situation → Action → Result.</p>`;go("feedback")}
-buildLangs();applyTranslations();updateDefaultAvatar();renderExperience();renderVolunteers();renderDiplomas();renderTemplatePicker();renderCV();
+
+function copyCover(){
+  navigator.clipboard.writeText(byId("coverOutput").textContent).then(()=>alert("Copied"));
+}
+
+function downloadCover(){
+  downloadFile("Cover-Letter.txt",byId("coverOutput").textContent,"text/plain");
+}
+
+function renderInterviewers(){
+  byId("interviewerGrid").innerHTML=recruiters.map((r,i)=>`
+    <div class="interviewer ${i===currentRecruiterIndex?'active':''}" onclick="selectInterviewer(${i})">
+      <div class="face"><img src="${r.img}" alt="${r.name}" onerror="this.style.display='none'"></div>
+      <b>${r.name}</b><br>
+      <span class="small">${r.role}</span>
+    </div>
+  `).join("");
+}
+
+function selectInterviewer(i){
+  currentRecruiterIndex=i;
+  localStorage.setItem("jsai_recruiter",String(i));
+  renderInterviewers();
+}
+
+function startInterview(){
+  stopAllRecording();
+
+  const recruiter=recruiters[currentRecruiterIndex] || recruiters[0];
+  byId("liveAvatar").innerHTML=`<img src="${recruiter.img}" alt="${recruiter.name}" onerror="this.style.display='none'">`;
+  byId("recruiterName").textContent=recruiter.name;
+
+  const pos=safe(byId("jobPosition").value,"this role");
+  const comp=safe(byId("jobCompany").value,"the company");
+  const lang=byId("interviewLang").value;
+
+  questions=makeQuestions(pos,comp,lang);
+  qIndex=0;
+  answers=[];
+  finalSpeechText="";
+  byId("dialog").innerHTML="";
+  byId("userAnswer").value="";
+  byId("audioControls").classList.remove("active");
+  byId("recordStatus").classList.add("hidden");
+
+  go("live");
+  addAI(questions[0]);
+}
+
+function makeQuestions(pos,comp,lang){
+  if(lang==="Українська"){
+    return [
+      `Вітаю. Ми готуємося до співбесіди на позицію ${pos} у ${comp}. Розкажіть коротко про себе.`,
+      `Який ваш досвід найбільше підходить для позиції ${pos}?`,
+      `Чому ви хочете працювати саме в ${comp}?`,
+      `Опишіть складну робочу ситуацію та як ви її вирішили.`,
+      `Які ваші найсильніші навички для цієї посади?`,
+      `Чому ми маємо обрати саме вас на позицію ${pos}?`
+    ];
+  }
+
+  if(lang==="Polski"){
+    return [
+      `Dzień dobry. Przygotowujemy się do rozmowy na stanowisko ${pos} w ${comp}. Proszę krótko opowiedzieć o sobie.`,
+      `Jakie doświadczenie jest najbardziej związane z rolą ${pos}?`,
+      `Dlaczego chce Pan/Pani pracować w ${comp}?`,
+      `Proszę opisać trudną sytuację w pracy i jak została rozwiązana.`,
+      `Jakie są Pana/Pani najmocniejsze umiejętności na tym stanowisku?`,
+      `Dlaczego powinniśmy wybrać właśnie Pana/Panią?`
+    ];
+  }
+
+  if(lang==="Deutsch"){
+    return [
+      `Guten Tag. Wir bereiten ein Interview für die Position ${pos} bei ${comp} vor. Bitte stellen Sie sich kurz vor.`,
+      `Welche Erfahrung ist für die Position ${pos} am relevantesten?`,
+      `Warum möchten Sie bei ${comp} arbeiten?`,
+      `Beschreiben Sie eine schwierige Situation bei der Arbeit und wie Sie sie gelöst haben.`,
+      `Was sind Ihre stärksten Fähigkeiten für diese Position?`,
+      `Warum sollten wir gerade Sie für die Position ${pos} auswählen?`
+    ];
+  }
+
+  if(lang==="Français"){
+    return [
+      `Bonjour. Nous préparons un entretien pour le poste de ${pos} chez ${comp}. Présentez-vous brièvement.`,
+      `Quelle expérience est la plus pertinente pour ce poste de ${pos} ?`,
+      `Pourquoi souhaitez-vous travailler chez ${comp} ?`,
+      `Décrivez une situation difficile au travail et comment vous l’avez résolue.`,
+      `Quelles sont vos compétences les plus fortes pour ce poste ?`,
+      `Pourquoi devrions-nous vous choisir pour le poste de ${pos} ?`
+    ];
+  }
+
+  if(lang==="Español"){
+    return [
+      `Hola. Estamos preparando una entrevista para el puesto de ${pos} en ${comp}. Preséntate brevemente.`,
+      `¿Qué experiencia tienes que sea más relevante para el puesto de ${pos}?`,
+      `¿Por qué quieres trabajar en ${comp}?`,
+      `Describe una situación difícil en el trabajo y cómo la resolviste.`,
+      `¿Cuáles son tus habilidades más fuertes para este puesto?`,
+      `¿Por qué deberíamos elegirte para el puesto de ${pos}?`
+    ];
+  }
+
+  return [
+    `Hello. We are preparing for your ${pos} interview at ${comp}. Please introduce yourself briefly.`,
+    `What experience do you have that is most relevant to the ${pos} role?`,
+    `Why do you want to work at ${comp}?`,
+    `Tell me about a difficult situation at work and how you handled it.`,
+    `What are your strongest professional skills for this position?`,
+    `Why should we hire you for the ${pos} role?`
+  ];
+}
+
+function addAI(text){
+  const recruiter=recruiters[currentRecruiterIndex] || recruiters[0];
+  lastAI=text;
+  byId("dialog").innerHTML += `<div class="bubble ai"><b>${escapeHtml(recruiter.name)}:</b><br>${escapeHtml(text)}</div>`;
+  scrollDialog();
+  speak(text);
+}
+
+function addMe(text){
+  answers.push(text);
+  byId("dialog").innerHTML += `<div class="bubble me"><b>You:</b><br>${escapeHtml(text)}</div>`;
+  scrollDialog();
+}
+
+function scrollDialog(){
+  const d=byId("dialog");
+  d.scrollTop=d.scrollHeight;
+}
+
+function sendAnswer(){
+  const a=byId("userAnswer").value.trim();
+  if(a) addMe(a);
+
+  byId("userAnswer").value="";
+  finalSpeechText="";
+  byId("audioControls").classList.remove("active");
+
+  qIndex++;
+
+  if(qIndex>=questions.length){
+    finishInterview();
+    return;
+  }
+
+  setTimeout(()=>addAI(questions[qIndex]),450);
+}
+
+function speakLastAI(){
+  if(lastAI) speak(lastAI);
+}
+
+function speak(text){
+  if(!("speechSynthesis" in window)) return;
+
+  speechSynthesis.cancel();
+
+  const u=new SpeechSynthesisUtterance(text);
+  u.lang=speechCodes[byId("interviewLang").value] || "en-GB";
+  u.rate=.96;
+  u.pitch=1;
+
+  byId("liveAvatar").classList.add("speaking");
+
+  u.onend=function(){
+    byId("liveAvatar").classList.remove("speaking");
+  };
+
+  u.onerror=function(){
+    byId("liveAvatar").classList.remove("speaking");
+  };
+
+  speechSynthesis.speak(u);
+}
+
+async function toggleRecording(){
+  if(isRecording){
+    stopRecording();
+    return;
+  }
+
+  try{
+    isRecording=true;
+    finalSpeechText="";
+    audioChunks=[];
+    byId("recordBtn").textContent=t("stopRecording");
+    showRecordStatus("Recording...");
+
+    activeStream=await navigator.mediaDevices.getUserMedia({audio:true});
+    mediaRecorder=new MediaRecorder(activeStream);
+
+    mediaRecorder.ondataavailable=function(e){
+      if(e.data && e.data.size>0) audioChunks.push(e.data);
+    };
+
+    mediaRecorder.onstop=function(){
+      if(audioChunks.length){
+        myAudioUrl=URL.createObjectURL(new Blob(audioChunks,{type:"audio/webm"}));
+        byId("audioControls").classList.add("active");
+      }
+      if(activeStream){
+        activeStream.getTracks().forEach(track=>track.stop());
+        activeStream=null;
+      }
+    };
+
+    mediaRecorder.start(1000);
+    startSpeechText();
+
+  }catch(e){
+    isRecording=false;
+    byId("recordBtn").textContent=t("startRecording");
+    showRecordStatus("Microphone access failed.");
+  }
+}
+
+function stopRecording(){
+  isRecording=false;
+  byId("recordBtn").textContent=t("startRecording");
+  showRecordStatus("Recording stopped.");
+
+  if(mediaRecorder && mediaRecorder.state!=="inactive"){
+    mediaRecorder.stop();
+  }
+
+  if(recognition){
+    try{recognition.onend=null; recognition.stop();}catch(e){}
+  }
+}
+
+function stopAllRecording(){
+  if(isRecording) stopRecording();
+  if("speechSynthesis" in window) speechSynthesis.cancel();
+  byId("liveAvatar")?.classList.remove("speaking");
+}
+
+function startSpeechText(){
+  const SR=window.SpeechRecognition || window.webkitSpeechRecognition;
+  if(!SR){
+    showRecordStatus("Audio recording works. Speech-to-text is not supported on this device/browser.");
+    return;
+  }
+
+  recognition=new SR();
+  recognition.lang=speechCodes[byId("interviewLang").value] || "en-GB";
+  recognition.continuous=true;
+  recognition.interimResults=true;
+  recognition.maxAlternatives=1;
+
+  recognition.onresult=function(e){
+    let interim="";
+    for(let i=e.resultIndex;i<e.results.length;i++){
+      const transcript=e.results[i][0].transcript;
+      if(e.results[i].isFinal){
+        finalSpeechText += transcript + " ";
+      }else{
+        interim += transcript;
+      }
+    }
+    byId("userAnswer").value=(finalSpeechText + interim).trim();
+  };
+
+  recognition.onerror=function(){
+    if(isRecording){
+      showRecordStatus("Recording continues. Speech text may pause on this device.");
+    }
+  };
+
+  recognition.onend=function(){
+    if(isRecording){
+      setTimeout(()=>{
+        try{recognition.start();}catch(e){}
+      },350);
+    }
+  };
+
+  try{
+    recognition.start();
+  }catch(e){}
+}
+
+function showRecordStatus(text){
+  byId("recordStatus").textContent=text;
+  byId("recordStatus").classList.remove("hidden");
+}
+
+function playMyAnswer(){
+  if(myAudioUrl){
+    new Audio(myAudioUrl).play();
+  }else{
+    showRecordStatus("No recorded answer yet.");
+  }
+}
+
+function clearMyAnswer(){
+  byId("userAnswer").value="";
+  finalSpeechText="";
+  myAudioUrl=null;
+  audioChunks=[];
+  byId("audioControls").classList.remove("active");
+  showRecordStatus("Ready to record again.");
+}
+
+function finishInterview(){
+  stopAllRecording();
+
+  const count=answers.length;
+  const totalWords=answers.join(" ").trim().split(/\s+/).filter(Boolean).length;
+  let score=5.4 + count*.55 + Math.min(totalWords/90,2.2);
+  score=Math.max(4.8,Math.min(9.4,score));
+  byId("scoreNum").textContent=score.toFixed(1);
+
+  const lang=byId("interviewLang").value;
+  const partial=count<3;
+  byId("feedbackTitle").textContent=partial
+    ? (lang==="Українська" ? "Partial Feedback" : "Partial Feedback")
+    : (lang==="Українська" ? "Interview Feedback" : "Interview Feedback");
+
+  let feedback="";
+
+  if(lang==="Українська"){
+    if(partial){
+      feedback=`
+        <p><b>Відповідей завершено:</b> ${count}</p>
+        <p>Це поки частковий фідбек, тому що відповідей мало. Щоб отримати точнішу оцінку, пройдіть хоча б 4–5 питань.</p>
+        <p><b>Що покращити:</b> відповідайте повнішими реченнями, додавайте конкретні приклади з досвіду.</p>
+      `;
+    }else{
+      feedback=`
+        <p><b>Відповідей завершено:</b> ${count}</p>
+        <p><b>Сильні сторони:</b> ви пройшли основну частину співбесіди та дали достатньо матеріалу для оцінки.</p>
+        <p><b>Що покращити:</b> додайте більше конкретики: цифри, результати, приклади ситуацій.</p>
+        <p><b>Краща структура:</b> Ситуація → Дія → Результат. Це робить відповідь професійнішою.</p>
+      `;
+    }
+  }else{
+    if(partial){
+      feedback=`
+        <p><b>Answers completed:</b> ${count}</p>
+        <p>This is partial feedback because there are not enough answers yet. Complete at least 4–5 questions for a stronger review.</p>
+        <p><b>Improve:</b> use fuller sentences and add specific examples from your experience.</p>
+      `;
+    }else{
+      feedback=`
+        <p><b>Answers completed:</b> ${count}</p>
+        <p><b>Strength:</b> you completed the main part of the interview and gave enough material for feedback.</p>
+        <p><b>Improve:</b> add more specific achievements, numbers and examples.</p>
+        <p><b>Better structure:</b> Situation → Action → Result. This makes answers sound more professional.</p>
+      `;
+    }
+  }
+
+  byId("feedbackText").innerHTML=feedback;
+  go("feedback");
+}
+
+function init(){
+  setTheme(theme);
+  buildLangs();
+  buildContentSelects();
+  loadProfile();
+  updateDefaultAvatar();
+  renderExperience();
+  renderVolunteers();
+  renderDiplomas();
+  renderOldCVFiles();
+  renderTemplateGrid();
+  renderInterviewers();
+  applyTranslations();
+  renderCV();
+}
+
+init();
 </script>
 </body>
 </html>
