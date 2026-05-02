@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
@@ -9,45 +9,32 @@
 :root{
   --bg:#1a0625;
   --bg2:#31134b;
-  --bg3:#4b1d72;
-  --card:rgba(255,255,255,.105);
-  --card2:rgba(255,255,255,.16);
+  --card:rgba(255,255,255,.11);
+  --card2:rgba(255,255,255,.18);
   --text:#ffffff;
   --muted:#d8c7e8;
-  --soft:#f6edff;
   --accent:#9b5cff;
-  --accent2:#6f32e6;
+  --accent2:#5d22d6;
   --gold:#f2c36b;
-  --gold2:#ffe6a3;
+  --gold2:#ffe8ad;
   --line:rgba(255,255,255,.16);
-  --line2:rgba(255,255,255,.24);
-  --danger:#e55757;
-  --ok:#4fd18b;
-  --ink:#17100a;
-  --paper:#ffffff;
   --shadow:0 20px 60px rgba(0,0,0,.36);
-  --shadow2:0 12px 32px rgba(0,0,0,.22);
+  --danger:#df3f3f;
 }
 
 body.beige{
-  --bg:#f5ead8;
-  --bg2:#fff7e9;
-  --bg3:#f4dfbe;
-  --card:rgba(255,255,255,.86);
+  --bg:#f7efe2;
+  --bg2:#fff8ed;
+  --card:rgba(255,255,255,.88);
   --card2:rgba(255,255,255,.96);
-  --text:#22170d;
+  --text:#21160b;
   --muted:#715f48;
-  --soft:#fff8ec;
   --accent:#9d6b1f;
-  --accent2:#74460f;
+  --accent2:#70460f;
   --gold:#d9a540;
-  --gold2:#ffe0a1;
+  --gold2:#ffdfa0;
   --line:rgba(80,50,10,.16);
-  --line2:rgba(80,50,10,.25);
-  --ink:#17100a;
-  --paper:#ffffff;
   --shadow:0 18px 45px rgba(90,60,20,.16);
-  --shadow2:0 12px 28px rgba(90,60,20,.13);
 }
 
 *{
@@ -61,13 +48,13 @@ html{
 
 body{
   margin:0;
-  min-height:100vh;
   font-family:Arial, Helvetica, sans-serif;
   color:var(--text);
   background:
-    radial-gradient(circle at 12% 0%,rgba(242,195,107,.26),transparent 28%),
-    radial-gradient(circle at 92% 8%,rgba(155,92,255,.36),transparent 34%),
+    radial-gradient(circle at 12% 0%,rgba(242,195,107,.25),transparent 30%),
+    radial-gradient(circle at 90% 8%,rgba(155,92,255,.36),transparent 34%),
     linear-gradient(180deg,var(--bg),var(--bg2));
+  min-height:100vh;
 }
 
 button,input,textarea,select{
@@ -82,7 +69,7 @@ button{
   max-width:430px;
   margin:0 auto;
   min-height:100vh;
-  padding:18px 18px 104px;
+  padding:18px 18px 102px;
 }
 
 .screen{
@@ -101,31 +88,31 @@ button{
 
 .top{
   display:flex;
-  justify-content:space-between;
   align-items:center;
+  justify-content:space-between;
   gap:12px;
   margin:4px 0 18px;
 }
 
 .top h2{
-  margin:0;
-  text-align:center;
   flex:1;
+  text-align:center;
+  margin:0;
 }
 
 .icon{
   width:43px;
   height:43px;
   border-radius:16px;
-  background:var(--card);
   border:1px solid var(--line);
+  background:var(--card);
   color:var(--text);
   display:flex;
   align-items:center;
   justify-content:center;
   cursor:pointer;
-  font-size:19px;
-  box-shadow:var(--shadow2);
+  font-size:18px;
+  box-shadow:0 10px 24px rgba(0,0,0,.15);
 }
 
 .logo-img{
@@ -138,12 +125,12 @@ button{
   box-shadow:0 0 38px rgba(242,195,107,.42);
 }
 
-.home-logo{
+.logo-home{
   width:74px;
   height:74px;
-  margin-top:4px;
-  margin-bottom:14px;
   border-radius:22px;
+  margin-top:2px;
+  margin-bottom:14px;
 }
 
 h1{
@@ -157,12 +144,11 @@ h2{
   font-size:24px;
   line-height:1.15;
   margin:0 0 8px;
-  letter-spacing:-.35px;
 }
 
 h3{
-  margin:0 0 6px;
   font-size:17px;
+  margin:0 0 6px;
 }
 
 p{
@@ -194,8 +180,9 @@ p{
   backdrop-filter:blur(18px);
 }
 
-.card.tight{
+.card.small-card{
   padding:14px;
+  margin:10px 0;
 }
 
 .btn{
@@ -208,7 +195,7 @@ p{
   cursor:pointer;
   color:#1b1107;
   background:linear-gradient(135deg,var(--gold),#fff0b8);
-  box-shadow:var(--shadow2);
+  box-shadow:0 10px 24px rgba(0,0,0,.18);
 }
 
 .btn:active{
@@ -221,18 +208,18 @@ p{
 }
 
 .btn.secondary{
-  background:var(--card);
   color:var(--text);
+  background:var(--card);
   border:1px solid var(--line);
   box-shadow:none;
 }
 
 .btn.danger{
   color:white;
-  background:linear-gradient(135deg,#e55757,#a72020);
+  background:linear-gradient(135deg,#e34c4c,#a91f1f);
 }
 
-.btn.small-btn{
+.btn.mini{
   padding:10px 12px;
   border-radius:14px;
   font-size:13px;
@@ -243,7 +230,7 @@ input,textarea,select{
   padding:14px;
   border-radius:16px;
   border:1px solid var(--line);
-  background:rgba(255,255,255,.085);
+  background:rgba(255,255,255,.08);
   color:var(--text);
   margin:8px 0 14px;
   font-size:15px;
@@ -290,20 +277,36 @@ label{
   gap:12px;
 }
 
-.grid3{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:10px;
+.hero{
+  border-radius:28px;
+  padding:20px;
+  background:
+    linear-gradient(135deg,rgba(255,255,255,.16),rgba(255,255,255,.07)),
+    radial-gradient(circle at 0 0,rgba(242,195,107,.24),transparent 42%);
+  border:1px solid var(--line);
+  box-shadow:var(--shadow);
+}
+
+.badge{
+  display:inline-flex;
+  padding:7px 10px;
+  border-radius:999px;
+  border:1px solid var(--line);
+  color:var(--muted);
+  background:var(--card);
+  font-size:12px;
+  font-weight:700;
+  margin:3px 4px 3px 0;
 }
 
 .action{
   display:flex;
-  gap:14px;
   align-items:center;
+  gap:14px;
   cursor:pointer;
 }
 
-.action-content{
+.action-text{
   flex:1;
   min-width:0;
 }
@@ -315,11 +318,12 @@ label{
   display:flex;
   align-items:center;
   justify-content:center;
-  font-size:24px;
-  background:linear-gradient(135deg,var(--accent),var(--accent2));
-  color:white;
-  overflow:hidden;
   flex:0 0 auto;
+  font-size:15px;
+  font-weight:900;
+  color:white;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  overflow:hidden;
 }
 
 .square img{
@@ -341,8 +345,8 @@ label{
   margin:9px 0;
   background:var(--card);
   display:flex;
-  justify-content:space-between;
   align-items:center;
+  justify-content:space-between;
   gap:12px;
   cursor:pointer;
 }
@@ -351,36 +355,6 @@ label{
 .list-btn.active{
   border-color:var(--gold);
   background:linear-gradient(135deg,rgba(242,195,107,.22),rgba(155,92,255,.12));
-}
-
-.badge{
-  display:inline-flex;
-  align-items:center;
-  gap:6px;
-  padding:7px 10px;
-  border-radius:999px;
-  border:1px solid var(--line);
-  background:var(--card);
-  color:var(--muted);
-  font-size:12px;
-  margin:3px 4px 3px 0;
-}
-
-.hero-card{
-  padding:20px;
-  border-radius:28px;
-  background:
-    linear-gradient(135deg,rgba(255,255,255,.16),rgba(255,255,255,.07)),
-    radial-gradient(circle at 0 0,rgba(242,195,107,.24),transparent 40%);
-  border:1px solid var(--line2);
-  box-shadow:var(--shadow);
-}
-
-.hero-buttons{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:12px;
-  margin-top:16px;
 }
 
 .avatar-wrap{
@@ -400,7 +374,7 @@ label{
   justify-content:center;
   overflow:hidden;
   cursor:pointer;
-  box-shadow:var(--shadow2);
+  box-shadow:0 14px 32px rgba(0,0,0,.22);
 }
 
 .avatar img{
@@ -412,49 +386,49 @@ label{
 .default-avatar{
   width:122px;
   height:122px;
+  border-radius:50%;
   position:relative;
   overflow:hidden;
-  border-radius:50%;
   background:
-    radial-gradient(circle at 50% 28%,#ffd4b2 0 18%,transparent 19%),
-    radial-gradient(circle at 50% 72%,#ffffff 0 27%,transparent 28%),
-    linear-gradient(135deg,#1b2438,#7651d9);
+    radial-gradient(circle at 50% 36%,#ffd5b5 0 25%,transparent 26%),
+    radial-gradient(circle at 50% 115%,#ffffff 0 42%,transparent 43%),
+    linear-gradient(135deg,#1e2640,#8158db);
 }
 
 .default-avatar.female:before{
   content:"";
   position:absolute;
-  left:28px;
-  top:17px;
-  width:66px;
-  height:72px;
-  border-radius:42px 42px 34px 34px;
-  background:#4a271e;
+  left:24px;
+  top:14px;
+  width:74px;
+  height:84px;
+  border-radius:46px 46px 36px 36px;
+  background:#4a261b;
 }
 
 .default-avatar.female:after{
   content:"";
   position:absolute;
   left:34px;
-  top:28px;
+  top:30px;
   width:54px;
   height:54px;
   border-radius:50%;
   background:
-    radial-gradient(circle at 35% 42%,#2a160f 0 2px,transparent 3px),
-    radial-gradient(circle at 65% 42%,#2a160f 0 2px,transparent 3px),
-    radial-gradient(circle at 50% 65%,#c77963 0 8px,transparent 9px),
-    #ffd4b2;
+    radial-gradient(circle at 35% 42%,#24120c 0 2px,transparent 3px),
+    radial-gradient(circle at 65% 42%,#24120c 0 2px,transparent 3px),
+    radial-gradient(circle at 50% 68%,#c67862 0 7px,transparent 8px),
+    #ffd5b5;
 }
 
 .default-avatar.male:before{
   content:"";
   position:absolute;
-  left:31px;
-  top:20px;
-  width:60px;
-  height:45px;
-  border-radius:28px 28px 18px 18px;
+  left:30px;
+  top:18px;
+  width:62px;
+  height:48px;
+  border-radius:30px 30px 18px 18px;
   background:#3a2418;
   z-index:1;
 }
@@ -469,10 +443,10 @@ label{
   border-radius:50%;
   z-index:2;
   background:
-    radial-gradient(circle at 35% 42%,#2a160f 0 2px,transparent 3px),
-    radial-gradient(circle at 65% 42%,#2a160f 0 2px,transparent 3px),
-    radial-gradient(circle at 50% 66%,#c77963 0 7px,transparent 8px),
-    #ffd4b2;
+    radial-gradient(circle at 35% 42%,#24120c 0 2px,transparent 3px),
+    radial-gradient(circle at 65% 42%,#24120c 0 2px,transparent 3px),
+    radial-gradient(circle at 50% 68%,#c67862 0 7px,transparent 8px),
+    #ffd5b5;
 }
 
 .remove-photo{
@@ -487,15 +461,15 @@ label{
   color:white;
   font-weight:900;
   cursor:pointer;
-  box-shadow:var(--shadow2);
+  box-shadow:0 8px 18px rgba(0,0,0,.25);
 }
 
 .tabs{
   display:flex;
   gap:8px;
-  overflow:auto;
-  margin:12px 0;
+  overflow-x:auto;
   padding-bottom:4px;
+  margin:12px 0;
 }
 
 .tab{
@@ -503,16 +477,16 @@ label{
   border-radius:999px;
   border:1px solid var(--line);
   color:var(--muted);
+  background:var(--card);
   white-space:nowrap;
   cursor:pointer;
-  background:var(--card);
   font-size:13px;
   font-weight:700;
 }
 
 .tab.active{
-  background:linear-gradient(135deg,var(--accent),var(--accent2));
   color:white;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
   border-color:transparent;
 }
 
@@ -520,7 +494,7 @@ label{
   display:grid;
   grid-template-columns:1fr 1fr;
   gap:12px;
-  margin:14px 0 16px;
+  margin:14px 0;
 }
 
 .tpl-card{
@@ -529,54 +503,53 @@ label{
   padding:10px;
   background:var(--card);
   cursor:pointer;
-  box-shadow:var(--shadow2);
+  box-shadow:0 10px 22px rgba(0,0,0,.14);
 }
 
 .tpl-card.active{
   border-color:var(--gold);
-  box-shadow:0 0 0 2px rgba(242,195,107,.25),var(--shadow2);
+  box-shadow:0 0 0 2px rgba(242,195,107,.28),0 12px 26px rgba(0,0,0,.18);
 }
 
 .tpl-img{
   width:100%;
-  height:142px;
+  height:145px;
+  border-radius:14px;
   object-fit:cover;
   object-position:top;
-  border-radius:14px;
   background:#fff;
   display:block;
 }
 
 .tpl-name{
-  font-size:13px;
-  font-weight:800;
   margin:9px 2px 2px;
+  font-size:13px;
+  font-weight:900;
 }
 
 .big-preview-wrap{
+  background:#fff;
   border-radius:24px;
   overflow:hidden;
-  background:#fff;
-  box-shadow:var(--shadow2);
-  margin:10px 0 14px;
+  box-shadow:0 14px 34px rgba(0,0,0,.22);
+  margin:10px 0 16px;
 }
 
 .big-preview-img{
+  display:block;
   width:100%;
-  max-height:300px;
+  max-height:320px;
   object-fit:cover;
   object-position:top;
-  display:block;
   background:#fff;
 }
 
 .cv-document{
   width:100%;
   min-height:560px;
-  border-radius:20px;
   background:#fff;
   color:#17100a;
-  padding:0;
+  border-radius:20px;
   box-shadow:0 16px 45px rgba(0,0,0,.25);
   position:relative;
   overflow:hidden;
@@ -586,16 +559,9 @@ label{
   box-sizing:border-box;
 }
 
-.cv-document p{
-  color:#333;
-  font-size:12px;
-  line-height:1.38;
-  margin:5px 0;
-}
-
 .cv-document h2{
-  font-size:24px;
   color:#111;
+  font-size:23px;
   margin:0 0 4px;
   letter-spacing:.2px;
 }
@@ -604,6 +570,17 @@ label{
   color:#111;
   font-size:14px;
   margin:0;
+}
+
+.cv-document p{
+  color:#333;
+  font-size:12px;
+  line-height:1.38;
+  margin:5px 0;
+}
+
+.cv-page{
+  padding:18px;
 }
 
 .cv-section{
@@ -623,11 +600,11 @@ label{
 .cv-photo{
   width:82px;
   height:82px;
-  background:#d5d5d5;
   object-fit:cover;
-  display:none;
+  background:#d8d8d8;
   border:3px solid #fff;
-  box-shadow:0 8px 22px rgba(0,0,0,.18);
+  box-shadow:0 8px 20px rgba(0,0,0,.18);
+  display:none;
 }
 
 .with-photo .cv-photo{
@@ -643,16 +620,16 @@ label{
 }
 
 .rectangle-photo .cv-photo{
-  width:96px;
+  width:98px;
   height:72px;
   border-radius:10px;
 }
 
 .cv-top-photo{
   position:absolute;
-  right:18px;
   top:18px;
-  z-index:4;
+  right:18px;
+  z-index:5;
 }
 
 .photo-left .cv-top-photo{
@@ -661,62 +638,55 @@ label{
 }
 
 .photo-right .cv-head{
-  padding-right:96px;
+  padding-right:100px;
 }
 
 .photo-left .cv-head{
-  padding-left:96px;
+  padding-left:100px;
 }
 
 .photo-top .cv-top-photo{
   position:relative;
+  top:auto;
   left:auto;
   right:auto;
-  top:auto;
   margin:0 auto 12px;
 }
 
 .photo-top .cv-head{
-  padding:0;
   text-align:center;
+  padding:0;
 }
 
-.cv-page{
-  padding:18px;
-}
-
-.cv-header-blue{
+.cv-blue .cv-head-wrap{
   background:#173a59;
   color:white;
   padding:20px 18px;
   position:relative;
 }
 
-.cv-header-blue h2,
-.cv-header-blue p{
+.cv-blue .cv-head-wrap h2,
+.cv-blue .cv-head-wrap p{
   color:white;
 }
 
-.cv-body{
+.cv-blue .cv-body{
   padding:18px;
 }
 
-.cv-modern{
-  border-top:34px solid #173a59;
-}
-
-.cv-modern .cv-page{
-  padding-top:22px;
-}
-
-.cv-elegant .cv-header{
-  padding:22px 18px 16px;
+.cv-beige .cv-head-wrap{
   background:#f7efe2;
   border-bottom:5px solid #d9a540;
+  padding:22px 18px 16px;
+  position:relative;
 }
 
-.cv-elegant .cv-title{
+.cv-beige .cv-title{
   color:#9d6b1f;
+}
+
+.cv-beige .cv-body{
+  padding:18px;
 }
 
 .cv-sidebar{
@@ -727,13 +697,14 @@ label{
 
 .cv-sidebar .side{
   background:#26354f;
-  color:#fff;
+  color:white;
   padding:18px 14px;
+  position:relative;
 }
 
 .cv-sidebar .side h2,
 .cv-sidebar .side p{
-  color:#fff;
+  color:white;
 }
 
 .cv-sidebar .main{
@@ -745,43 +716,26 @@ label{
 }
 
 .cv-creative{
-  background:linear-gradient(135deg,#fff,#f5edff);
   border-left:24px solid #9b5cff;
+  background:linear-gradient(135deg,#fff,#f5edff);
+}
+
+.cv-creative .cv-head-box{
+  background:#f4e9ff;
+  border-radius:18px;
+  padding:16px;
+  position:relative;
+  margin-bottom:12px;
 }
 
 .cv-creative .cv-title{
   color:#7f43e8;
 }
 
-.cv-creative .cv-head{
-  background:#f4e9ff;
-  border-radius:16px;
-  padding:16px;
-  margin-bottom:12px;
-}
-
-.cv-ats{
-  background:#fff;
-  border-radius:0;
-}
-
-.cv-ats .cv-page{
-  padding:22px;
-}
-
-.cv-ats .cv-title{
-  color:#111;
-  border-bottom:1px solid #111;
-}
-
 .cv-actions{
   display:grid;
   grid-template-columns:1fr 1fr;
   gap:10px;
-}
-
-.file-list{
-  margin:8px 0 0;
 }
 
 .file-item{
@@ -797,10 +751,10 @@ label{
 }
 
 .file-item span{
-  overflow:hidden;
-  text-overflow:ellipsis;
-  white-space:nowrap;
   font-size:13px;
+  overflow:hidden;
+  white-space:nowrap;
+  text-overflow:ellipsis;
 }
 
 .file-actions{
@@ -809,7 +763,7 @@ label{
   flex:0 0 auto;
 }
 
-.mini-icon{
+.file-actions button{
   border:1px solid var(--line);
   background:var(--card);
   color:var(--text);
@@ -817,6 +771,22 @@ label{
   padding:7px 9px;
   cursor:pointer;
   font-weight:800;
+}
+
+.empty{
+  padding:12px;
+  border-radius:16px;
+  border:1px dashed var(--line);
+  color:var(--muted);
+  font-size:13px;
+  margin:8px 0;
+}
+
+.cover-output{
+  white-space:pre-wrap;
+  color:var(--text);
+  font-size:14px;
+  line-height:1.5;
 }
 
 .interviewer-grid{
@@ -829,26 +799,23 @@ label{
   border:1px solid var(--line);
   border-radius:22px;
   padding:12px;
-  text-align:center;
-  cursor:pointer;
   background:var(--card);
-  box-shadow:var(--shadow2);
+  cursor:pointer;
+  text-align:center;
+  box-shadow:0 10px 24px rgba(0,0,0,.15);
 }
 
 .interviewer.active{
   border-color:var(--gold);
-  box-shadow:0 0 0 2px rgba(246,197,107,.25),var(--shadow2);
+  box-shadow:0 0 0 2px rgba(242,195,107,.28),0 12px 28px rgba(0,0,0,.2);
 }
 
 .face{
   height:160px;
   border-radius:18px;
-  background:linear-gradient(135deg,#20152c,#b68a53);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  margin-bottom:9px;
+  background:#222;
   overflow:hidden;
+  margin-bottom:9px;
 }
 
 .face img{
@@ -858,13 +825,13 @@ label{
 }
 
 .live-face{
-  width:76px;
-  height:76px;
+  width:78px;
+  height:78px;
   border-radius:22px;
   overflow:hidden;
   background:var(--card);
+  box-shadow:0 12px 26px rgba(0,0,0,.22);
   flex:0 0 auto;
-  box-shadow:var(--shadow2);
 }
 
 .live-face img{
@@ -879,7 +846,7 @@ label{
 
 @keyframes speakPulse{
   from{transform:scale(1);filter:brightness(1)}
-  to{transform:scale(1.035) translateY(-2px);filter:brightness(1.08)}
+  to{transform:scale(1.04) translateY(-2px);filter:brightness(1.08)}
 }
 
 .dialog{
@@ -910,58 +877,31 @@ label{
   border:1px solid rgba(155,92,255,.35);
 }
 
+.status{
+  padding:10px 12px;
+  border-radius:14px;
+  background:rgba(79,209,139,.12);
+  border:1px solid rgba(79,209,139,.28);
+  color:var(--muted);
+  font-size:13px;
+  margin:10px 0;
+}
+
 .score{
   width:145px;
   height:145px;
   border-radius:50%;
   border:12px solid var(--gold);
+  background:var(--card);
   display:flex;
   flex-direction:column;
   align-items:center;
   justify-content:center;
   margin:20px auto;
-  background:var(--card);
 }
 
 .score b{
   font-size:40px;
-}
-
-.bottom{
-  position:fixed;
-  left:50%;
-  transform:translateX(-50%);
-  bottom:0;
-  max-width:430px;
-  width:100%;
-  display:grid;
-  grid-template-columns:repeat(5,1fr);
-  background:rgba(15,8,24,.92);
-  backdrop-filter:blur(18px);
-  border-top:1px solid var(--line);
-  padding:9px 6px 15px;
-  z-index:10;
-}
-
-body.beige .bottom{
-  background:rgba(255,248,238,.92);
-}
-
-.nav{
-  text-align:center;
-  font-size:11px;
-  color:var(--muted);
-  cursor:pointer;
-  font-weight:700;
-}
-
-.nav div{
-  font-size:20px;
-  line-height:1.1;
-}
-
-.nav.active{
-  color:var(--gold);
 }
 
 .theme{
@@ -970,7 +910,7 @@ body.beige .bottom{
   border-radius:50%;
   border:2px solid var(--line);
   cursor:pointer;
-  box-shadow:var(--shadow2);
+  box-shadow:0 10px 24px rgba(0,0,0,.15);
 }
 
 .theme.beige{
@@ -994,30 +934,41 @@ body.beige .bottom{
   display:grid;
 }
 
-.cover-output{
-  white-space:pre-wrap;
-  font-size:14px;
-  line-height:1.5;
-  color:var(--text);
+.bottom{
+  position:fixed;
+  left:50%;
+  bottom:0;
+  transform:translateX(-50%);
+  max-width:430px;
+  width:100%;
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  background:rgba(15,8,24,.93);
+  backdrop-filter:blur(18px);
+  border-top:1px solid var(--line);
+  padding:9px 6px 15px;
+  z-index:20;
 }
 
-.empty{
-  padding:12px;
-  border-radius:16px;
-  border:1px dashed var(--line);
-  color:var(--muted);
-  font-size:13px;
-  margin:8px 0;
+body.beige .bottom{
+  background:rgba(255,248,238,.93);
 }
 
-.status{
-  padding:10px 12px;
-  border-radius:14px;
-  background:rgba(79,209,139,.12);
-  border:1px solid rgba(79,209,139,.28);
+.nav{
+  text-align:center;
+  font-size:11px;
   color:var(--muted);
-  font-size:13px;
-  margin:10px 0;
+  cursor:pointer;
+  font-weight:700;
+}
+
+.nav div{
+  font-size:20px;
+  line-height:1.1;
+}
+
+.nav.active{
+  color:var(--gold);
 }
 
 @media(max-width:360px){
@@ -1041,7 +992,7 @@ body.beige .bottom{
   }
 
   .tpl-img{
-    height:122px;
+    height:124px;
   }
 }
 
@@ -1052,7 +1003,7 @@ body.beige .bottom{
   }
 
   html,body{
-    background:#fff!important;
+    background:white!important;
     margin:0!important;
     padding:0!important;
   }
@@ -1073,14 +1024,14 @@ body.beige .bottom{
     width:100%!important;
     margin:0!important;
     padding:0!important;
-    background:#fff!important;
+    background:white!important;
   }
 
   #printArea .cv-document{
-    box-shadow:none!important;
-    border-radius:0!important;
     width:100%!important;
     min-height:auto!important;
+    box-shadow:none!important;
+    border-radius:0!important;
     page-break-inside:avoid;
   }
 }
@@ -1105,13 +1056,13 @@ body.beige .bottom{
 
 <section id="home" class="screen">
   <div class="top">
-    <button class="icon" onclick="go('settings')">☰</button>
+    <button class="icon" onclick="go('settings')">≡</button>
     <button class="icon" onclick="go('premium')">♕</button>
   </div>
 
-  <img src="logo.jpg" class="logo-img home-logo" alt="Job Success AI logo" onerror="this.style.display='none'">
+  <img src="logo.jpg" class="logo-img logo-home" alt="Job Success AI logo" onerror="this.style.display='none'">
 
-  <div class="hero-card">
+  <div class="hero">
     <h1 data-i="homeTitle">Get hired <span class="gold">faster</span></h1>
     <p data-i="homeSub">CV, cover letter, LinkedIn profile and AI interview practice in one premium app.</p>
     <div>
@@ -1119,7 +1070,7 @@ body.beige .bottom{
       <span class="badge" data-i="badgeCover">Cover Letter</span>
       <span class="badge" data-i="badgeCoach">Interview Coach</span>
     </div>
-    <div class="hero-buttons">
+    <div class="grid2" style="margin-top:14px">
       <button class="btn purple" onclick="go('cv')" data-i="startCV">Start CV</button>
       <button class="btn secondary" onclick="go('interview')" data-i="practice">Practise</button>
     </div>
@@ -1127,7 +1078,7 @@ body.beige .bottom{
 
   <div class="card action" onclick="go('profile')">
     <div class="square">P</div>
-    <div class="action-content">
+    <div class="action-text">
       <h3 data-i="profileTitle">My Professional Profile</h3>
       <p data-i="profileSub">Fill once. Use everywhere.</p>
     </div>
@@ -1136,7 +1087,7 @@ body.beige .bottom{
 
   <div class="card action" onclick="go('cv')">
     <div class="square">CV</div>
-    <div class="action-content">
+    <div class="action-text">
       <h3 data-i="cvBuilder">CV Builder</h3>
       <p data-i="cvSub">Professional CV layouts with photo options.</p>
     </div>
@@ -1145,7 +1096,7 @@ body.beige .bottom{
 
   <div class="card action" onclick="go('cover')">
     <div class="square">CL</div>
-    <div class="action-content">
+    <div class="action-text">
       <h3 data-i="coverLetter">Cover Letter</h3>
       <p data-i="coverSub">Generate job-specific letters in different tones.</p>
     </div>
@@ -1154,7 +1105,7 @@ body.beige .bottom{
 
   <div class="card action" onclick="go('interview')">
     <div class="square">AI</div>
-    <div class="action-content">
+    <div class="action-text">
       <h3 data-i="coach">AI Interview Coach</h3>
       <p data-i="coachSub">Practise with a virtual recruiter.</p>
     </div>
@@ -1240,15 +1191,7 @@ body.beige .bottom{
 
   <div class="card">
     <label data-i="contentLanguage">Content language</label>
-    <select id="cvContentLang" onchange="savePreferences(); renderCV();">
-      <option>English</option>
-      <option>Українська</option>
-      <option>Polski</option>
-      <option>Deutsch</option>
-      <option>Français</option>
-      <option>Español</option>
-      <option>ქართული</option>
-    </select>
+    <select id="cvContentLang" onchange="savePreferences(); renderCV();"></select>
   </div>
 
   <div class="card">
@@ -1274,7 +1217,7 @@ body.beige .bottom{
     </div>
 
     <input id="uploadCV" type="file" accept=".pdf,.doc,.docx,.txt" style="display:none" onchange="uploadOldCVFile(event)">
-    <div id="oldCVBox" class="file-list"></div>
+    <div id="oldCVBox"></div>
 
     <br>
     <button class="btn purple" onclick="go('preview')" data-i="useTemplate">Use This Template</button>
@@ -1292,6 +1235,7 @@ body.beige .bottom{
     <div id="printArea">
       <div id="cvPreview" class="cv-document"></div>
     </div>
+
     <br>
     <div class="grid2">
       <button class="btn purple" onclick="savePDF()" data-i="savePDF">Save as PDF</button>
@@ -1497,8 +1441,8 @@ body.beige .bottom{
     <h2 data-i="theme">Theme</h2>
     <p data-i="themeSub">Choose premium colour style.</p>
     <div class="row start">
-      <div class="theme beige" onclick="setTheme('beige')" title="Beige"></div>
-      <div class="theme purple" onclick="setTheme('purple')" title="Purple"></div>
+      <div class="theme beige" onclick="setTheme('beige')"></div>
+      <div class="theme purple" onclick="setTheme('purple')"></div>
     </div>
   </div>
 
@@ -1527,7 +1471,7 @@ body.beige .bottom{
 
 <nav class="bottom">
   <div class="nav active" onclick="go('home')"><div>⌂</div><span data-i="navHome">Home</span></div>
-  <div class="nav" onclick="go('cv')"><div>▣</div><span>CV</span></div>
+  <div class="nav" onclick="go('cv')"><div>▣</div><span data-i="navCV">CV</span></div>
   <div class="nav" onclick="go('interview')"><div>●</div><span data-i="navCoach">Coach</span></div>
   <div class="nav" onclick="go('profile')"><div>◉</div><span data-i="navProfile">Profile</span></div>
   <div class="nav" onclick="go('settings')"><div>☰</div><span data-i="navMore">More</span></div>
@@ -1578,683 +1522,689 @@ const speechCodes={
 };
 
 const tr={
-  en:{
-    subtitle:"Premium AI tools to build your profile, CV, cover letter and interview confidence.",
-    chooseAppLang:"Choose app language",
-    languageNote:"You can change this later in Settings.",
-    continue:"Continue",
-    homeTitle:"Get hired <span class='gold'>faster</span>",
-    homeSub:"CV, cover letter, LinkedIn profile and AI interview practice in one premium app.",
-    badgeCV:"CV Builder",
-    badgeCover:"Cover Letter",
-    badgeCoach:"Interview Coach",
-    startCV:"Start CV",
-    practice:"Practise",
-    profileTitle:"My Professional Profile",
-    profileSub:"Fill once. Use everywhere.",
-    cvBuilder:"CV Builder",
-    cvSub:"Professional CV layouts with photo options.",
-    coverLetter:"Cover Letter",
-    coverSub:"Generate job-specific letters in different tones.",
-    coach:"AI Interview Coach",
-    coachSub:"Practise with a virtual recruiter.",
-    profile:"Profile",
-    gender:"Gender",
-    female:"Female",
-    male:"Male",
-    fullName:"Full name",
-    phone:"Phone",
-    location:"Location",
-    targetJob:"Target job",
-    languagesField:"Languages",
-    workExp:"Work Experience",
-    addExperience:"+ Add New Experience",
-    volunteer:"Volunteering",
-    addVolunteer:"+ Add Volunteering",
-    education:"Education",
-    courses:"Courses & Diplomas",
-    addDiploma:"+ Add Course / Diploma File",
-    skills:"Skills",
-    saveProfile:"Save Profile",
-    contentLanguage:"Content language",
-    chooseTemplate:"Choose CV template",
-    templateNote:"Select a preview. Your CV below will use the same style.",
-    selectedPreview:"Selected preview",
-    liveCVPreview:"Live CV preview",
-    photoOnOff:"Photo On/Off",
-    uploadOldCV:"Upload Old CV",
-    useTemplate:"Use This Template",
-    cvPreview:"CV Preview",
-    savePDF:"Save as PDF",
-    downloadTXT:"Download TXT",
-    copyText:"Copy Text",
-    share:"Share",
-    jobTitle:"Job title",
-    company:"Company",
-    pasteJob:"Paste Job Description",
-    jobExample:"Example: responsibilities, requirements, company description, skills needed.",
-    formal:"Formal",
-    confident:"Confident",
-    shortTone:"Short",
-    ukStyle:"UK Style",
-    generateCover:"Generate Cover Letter",
-    result:"Result",
-    chooseRecruiter:"Choose your AI recruiter",
-    coachDesc:"Professional interview practice with voice, transcript and feedback.",
-    startSetup:"Start Setup",
-    recruiter:"Recruiter",
-    confirmSelection:"Confirm Selection",
-    interviewSetup:"Interview Setup",
-    interviewLang:"Interview language",
-    position:"Position",
-    companyCountry:"Company / Country",
-    vacancyDesc:"Vacancy description",
-    interviewType:"Interview type",
-    startInterview:"Start Interview",
-    liveInterview:"Live Interview",
-    endSmall:"End",
-    aiRecruiter:"AI Recruiter",
-    yourAnswer:"Your answer",
-    answerPlaceholder:"Speak or type your answer here...",
-    startRecording:"Start Recording",
-    stopRecording:"Stop Recording",
-    sendAnswer:"Send Answer",
-    playMyAnswer:"Play My Answer",
-    rerecord:"Re-record",
-    repeatQuestion:"Repeat AI Question",
-    end:"End",
-    feedback:"Feedback",
-    practiseAgain:"Practise Again",
-    premiumTitle:"Premium Career Tools",
-    premiumSub:"Subscriptions and Google Play Billing will be connected later. This screen is ready for the future paid version.",
-    premium1:"Unlimited CV templates",
-    premium2:"AI cover letters for every vacancy",
-    premium3:"Voice interview practice",
-    premium4:"Detailed feedback and better answers",
-    goPremium:"Go Premium",
-    restorePurchase:"Restore Purchase",
-    billingSoon:"Google Play Billing will be connected later.",
-    restoreSoon:"Restore Purchase will work after billing connection.",
-    settings:"Settings",
-    theme:"Theme",
-    themeSub:"Choose premium colour style.",
-    changeLanguage:"Change Language",
-    subscriptionBilling:"Subscription & Billing",
-    contactSupport:"Contact Support",
-    supportSoon:"Support email will be added later.",
-    privacyTerms:"Privacy Policy / Terms",
-    comingSoon:"Coming soon.",
-    comingSoonShort:"Soon",
-    navHome:"Home",
-    navCoach:"Coach",
-    navProfile:"Profile",
-    navMore:"More"
-  },
+en:{
+subtitle:"Premium AI tools to build your profile, CV, cover letter and interview confidence.",
+chooseAppLang:"Choose app language",
+languageNote:"You can change this later in Settings.",
+continue:"Continue",
+homeTitle:"Get hired <span class='gold'>faster</span>",
+homeSub:"CV, cover letter, LinkedIn profile and AI interview practice in one premium app.",
+badgeCV:"CV Builder",
+badgeCover:"Cover Letter",
+badgeCoach:"Interview Coach",
+startCV:"Start CV",
+practice:"Practise",
+profileTitle:"My Professional Profile",
+profileSub:"Fill once. Use everywhere.",
+cvBuilder:"CV Builder",
+cvSub:"Professional CV layouts with photo options.",
+coverLetter:"Cover Letter",
+coverSub:"Generate job-specific letters in different tones.",
+coach:"AI Interview Coach",
+coachSub:"Practise with a virtual recruiter.",
+profile:"Profile",
+gender:"Gender",
+female:"Female",
+male:"Male",
+fullName:"Full name",
+phone:"Phone",
+location:"Location",
+targetJob:"Target job",
+languagesField:"Languages",
+workExp:"Work Experience",
+addExperience:"+ Add New Experience",
+volunteer:"Volunteering",
+addVolunteer:"+ Add Volunteering",
+education:"Education",
+courses:"Courses & Diplomas",
+addDiploma:"+ Add Course / Diploma File",
+skills:"Skills",
+saveProfile:"Save Profile",
+contentLanguage:"Content language",
+chooseTemplate:"Choose CV template",
+templateNote:"Select a preview. Your CV below will use the same style.",
+selectedPreview:"Selected preview",
+liveCVPreview:"Live CV preview",
+photoOnOff:"Photo On/Off",
+uploadOldCV:"Upload Old CV",
+useTemplate:"Use This Template",
+cvPreview:"CV Preview",
+savePDF:"Save as PDF",
+downloadTXT:"Download TXT",
+copyText:"Copy Text",
+share:"Share",
+jobTitle:"Job title",
+company:"Company",
+pasteJob:"Paste Job Description",
+jobExample:"Example: responsibilities, requirements, company description, skills needed.",
+formal:"Formal",
+confident:"Confident",
+shortTone:"Short",
+ukStyle:"UK Style",
+generateCover:"Generate Cover Letter",
+result:"Result",
+chooseRecruiter:"Choose your AI recruiter",
+coachDesc:"Professional interview practice with voice, transcript and feedback.",
+startSetup:"Start Setup",
+recruiter:"Recruiter",
+confirmSelection:"Confirm Selection",
+interviewSetup:"Interview Setup",
+interviewLang:"Interview language",
+position:"Position",
+companyCountry:"Company / Country",
+vacancyDesc:"Vacancy description",
+interviewType:"Interview type",
+startInterview:"Start Interview",
+liveInterview:"Live Interview",
+endSmall:"End",
+aiRecruiter:"AI Recruiter",
+yourAnswer:"Your answer",
+answerPlaceholder:"Speak or type your answer here...",
+startRecording:"Start Recording",
+stopRecording:"Stop Recording",
+sendAnswer:"Send Answer",
+playMyAnswer:"Play My Answer",
+rerecord:"Re-record",
+repeatQuestion:"Repeat AI Question",
+end:"End",
+feedback:"Feedback",
+practiseAgain:"Practise Again",
+premiumTitle:"Premium Career Tools",
+premiumSub:"Subscriptions and Google Play Billing will be connected later. This screen is ready for the future paid version.",
+premium1:"Unlimited CV templates",
+premium2:"AI cover letters for every vacancy",
+premium3:"Voice interview practice",
+premium4:"Detailed feedback and better answers",
+goPremium:"Go Premium",
+restorePurchase:"Restore Purchase",
+billingSoon:"Google Play Billing will be connected later.",
+restoreSoon:"Restore Purchase will work after billing connection.",
+settings:"Settings",
+theme:"Theme",
+themeSub:"Choose premium colour style.",
+changeLanguage:"Change Language",
+subscriptionBilling:"Subscription & Billing",
+contactSupport:"Contact Support",
+supportSoon:"Support email will be added later.",
+privacyTerms:"Privacy Policy / Terms",
+comingSoon:"Coming soon.",
+comingSoonShort:"Soon",
+navHome:"Home",
+navCV:"CV",
+navCoach:"Coach",
+navProfile:"Profile",
+navMore:"More"
+},
 
-  uk:{
-    subtitle:"Преміум AI-інструменти для профілю, CV, супровідного листа та підготовки до співбесіди.",
-    chooseAppLang:"Оберіть мову застосунку",
-    languageNote:"Пізніше це можна змінити в Налаштуваннях.",
-    continue:"Продовжити",
-    homeTitle:"Отримай роботу <span class='gold'>швидше</span>",
-    homeSub:"CV, супровідний лист, LinkedIn-профіль та підготовка до співбесіди в одному застосунку.",
-    badgeCV:"Конструктор CV",
-    badgeCover:"Супровідний лист",
-    badgeCoach:"Коуч співбесіди",
-    startCV:"Почати CV",
-    practice:"Тренуватися",
-    profileTitle:"Мій професійний профіль",
-    profileSub:"Заповни один раз. Використовуй всюди.",
-    cvBuilder:"Конструктор CV",
-    cvSub:"Професійні макети резюме з налаштуванням фото.",
-    coverLetter:"Супровідний лист",
-    coverSub:"Створення листів під вакансію в різних тонах.",
-    coach:"AI-коуч співбесіди",
-    coachSub:"Тренуйся з віртуальним рекрутером.",
-    profile:"Профіль",
-    gender:"Стать",
-    female:"Жінка",
-    male:"Чоловік",
-    fullName:"Повне ім’я",
-    phone:"Телефон",
-    location:"Локація",
-    targetJob:"Бажана посада",
-    languagesField:"Мови",
-    workExp:"Досвід роботи",
-    addExperience:"+ Додати досвід",
-    volunteer:"Волонтерство",
-    addVolunteer:"+ Додати волонтерство",
-    education:"Освіта",
-    courses:"Курси та дипломи",
-    addDiploma:"+ Додати диплом / сертифікат",
-    skills:"Навички",
-    saveProfile:"Зберегти профіль",
-    contentLanguage:"Мова контенту",
-    chooseTemplate:"Оберіть шаблон CV",
-    templateNote:"Оберіть прев’ю. CV нижче буде в цьому стилі.",
-    selectedPreview:"Обране прев’ю",
-    liveCVPreview:"Живий перегляд CV",
-    photoOnOff:"Фото увімк/вимк",
-    uploadOldCV:"Завантажити старе CV",
-    useTemplate:"Використати шаблон",
-    cvPreview:"Перегляд CV",
-    savePDF:"Зберегти як PDF",
-    downloadTXT:"Завантажити TXT",
-    copyText:"Копіювати текст",
-    share:"Поділитися",
-    jobTitle:"Назва посади",
-    company:"Компанія",
-    pasteJob:"Вставте опис вакансії",
-    jobExample:"Приклад: обов’язки, вимоги, опис компанії, потрібні навички.",
-    formal:"Формально",
-    confident:"Впевнено",
-    shortTone:"Коротко",
-    ukStyle:"Британський стиль",
-    generateCover:"Створити супровідний лист",
-    result:"Результат",
-    chooseRecruiter:"Оберіть AI-рекрутера",
-    coachDesc:"Практика співбесіди з голосом, діалогом і фідбеком.",
-    startSetup:"Почати налаштування",
-    recruiter:"Рекрутер",
-    confirmSelection:"Підтвердити вибір",
-    interviewSetup:"Налаштування співбесіди",
-    interviewLang:"Мова співбесіди",
-    position:"Посада",
-    companyCountry:"Компанія / країна",
-    vacancyDesc:"Опис вакансії",
-    interviewType:"Тип співбесіди",
-    startInterview:"Почати співбесіду",
-    liveInterview:"Жива співбесіда",
-    endSmall:"Кінець",
-    aiRecruiter:"AI-рекрутер",
-    yourAnswer:"Ваша відповідь",
-    answerPlaceholder:"Говоріть або напишіть відповідь тут...",
-    startRecording:"Почати запис",
-    stopRecording:"Зупинити запис",
-    sendAnswer:"Надіслати відповідь",
-    playMyAnswer:"Прослухати відповідь",
-    rerecord:"Перезаписати",
-    repeatQuestion:"Повторити питання",
-    end:"Завершити",
-    feedback:"Фідбек",
-    practiseAgain:"Тренуватися знову",
-    premiumTitle:"Преміум кар’єрні інструменти",
-    premiumSub:"Підписки та Google Play Billing будуть підключені пізніше. Екран готовий для майбутньої платної версії.",
-    premium1:"Необмежені шаблони CV",
-    premium2:"AI-супровідні листи під кожну вакансію",
-    premium3:"Голосова практика співбесіди",
-    premium4:"Детальний фідбек і кращі відповіді",
-    goPremium:"Перейти на Premium",
-    restorePurchase:"Відновити покупку",
-    billingSoon:"Google Play Billing буде підключено пізніше.",
-    restoreSoon:"Відновлення покупки запрацює після підключення billing.",
-    settings:"Налаштування",
-    theme:"Тема",
-    themeSub:"Оберіть преміальний стиль кольорів.",
-    changeLanguage:"Змінити мову",
-    subscriptionBilling:"Підписка та оплата",
-    contactSupport:"Підтримка",
-    supportSoon:"Email підтримки буде додано пізніше.",
-    privacyTerms:"Privacy Policy / Terms",
-    comingSoon:"Скоро буде.",
-    comingSoonShort:"Скоро",
-    navHome:"Головна",
-    navCoach:"Коуч",
-    navProfile:"Профіль",
-    navMore:"Ще"
-  },
+uk:{
+subtitle:"Преміум AI-інструменти для профілю, CV, супровідного листа та підготовки до співбесіди.",
+chooseAppLang:"Оберіть мову застосунку",
+languageNote:"Пізніше це можна змінити в Налаштуваннях.",
+continue:"Продовжити",
+homeTitle:"Отримай роботу <span class='gold'>швидше</span>",
+homeSub:"CV, супровідний лист, LinkedIn-профіль та підготовка до співбесіди в одному застосунку.",
+badgeCV:"Конструктор CV",
+badgeCover:"Супровідний лист",
+badgeCoach:"Коуч співбесіди",
+startCV:"Почати CV",
+practice:"Тренуватися",
+profileTitle:"Мій професійний профіль",
+profileSub:"Заповни один раз. Використовуй всюди.",
+cvBuilder:"Конструктор CV",
+cvSub:"Професійні макети резюме з налаштуванням фото.",
+coverLetter:"Супровідний лист",
+coverSub:"Створення листів під вакансію в різних тонах.",
+coach:"AI-коуч співбесіди",
+coachSub:"Тренуйся з віртуальним рекрутером.",
+profile:"Профіль",
+gender:"Стать",
+female:"Жінка",
+male:"Чоловік",
+fullName:"Повне ім’я",
+phone:"Телефон",
+location:"Локація",
+targetJob:"Бажана посада",
+languagesField:"Мови",
+workExp:"Досвід роботи",
+addExperience:"+ Додати досвід",
+volunteer:"Волонтерство",
+addVolunteer:"+ Додати волонтерство",
+education:"Освіта",
+courses:"Курси та дипломи",
+addDiploma:"+ Додати диплом / сертифікат",
+skills:"Навички",
+saveProfile:"Зберегти профіль",
+contentLanguage:"Мова контенту",
+chooseTemplate:"Оберіть шаблон CV",
+templateNote:"Оберіть прев’ю. CV нижче буде в цьому стилі.",
+selectedPreview:"Обране прев’ю",
+liveCVPreview:"Живий перегляд CV",
+photoOnOff:"Фото увімк/вимк",
+uploadOldCV:"Завантажити старе CV",
+useTemplate:"Використати шаблон",
+cvPreview:"Перегляд CV",
+savePDF:"Зберегти як PDF",
+downloadTXT:"Завантажити TXT",
+copyText:"Копіювати текст",
+share:"Поділитися",
+jobTitle:"Назва посади",
+company:"Компанія",
+pasteJob:"Вставте опис вакансії",
+jobExample:"Приклад: обов’язки, вимоги, опис компанії, потрібні навички.",
+formal:"Формально",
+confident:"Впевнено",
+shortTone:"Коротко",
+ukStyle:"Британський стиль",
+generateCover:"Створити супровідний лист",
+result:"Результат",
+chooseRecruiter:"Оберіть AI-рекрутера",
+coachDesc:"Практика співбесіди з голосом, діалогом і фідбеком.",
+startSetup:"Почати налаштування",
+recruiter:"Рекрутер",
+confirmSelection:"Підтвердити вибір",
+interviewSetup:"Налаштування співбесіди",
+interviewLang:"Мова співбесіди",
+position:"Посада",
+companyCountry:"Компанія / країна",
+vacancyDesc:"Опис вакансії",
+interviewType:"Тип співбесіди",
+startInterview:"Почати співбесіду",
+liveInterview:"Жива співбесіда",
+endSmall:"Кінець",
+aiRecruiter:"AI-рекрутер",
+yourAnswer:"Ваша відповідь",
+answerPlaceholder:"Говоріть або напишіть відповідь тут...",
+startRecording:"Почати запис",
+stopRecording:"Зупинити запис",
+sendAnswer:"Надіслати відповідь",
+playMyAnswer:"Прослухати відповідь",
+rerecord:"Перезаписати",
+repeatQuestion:"Повторити питання",
+end:"Завершити",
+feedback:"Фідбек",
+practiseAgain:"Тренуватися знову",
+premiumTitle:"Преміум кар’єрні інструменти",
+premiumSub:"Підписки та Google Play Billing будуть підключені пізніше. Екран готовий для майбутньої платної версії.",
+premium1:"Необмежені шаблони CV",
+premium2:"AI-супровідні листи під кожну вакансію",
+premium3:"Голосова практика співбесіди",
+premium4:"Детальний фідбек і кращі відповіді",
+goPremium:"Перейти на Premium",
+restorePurchase:"Відновити покупку",
+billingSoon:"Google Play Billing буде підключено пізніше.",
+restoreSoon:"Відновлення покупки запрацює після підключення billing.",
+settings:"Налаштування",
+theme:"Тема",
+themeSub:"Оберіть преміальний стиль кольорів.",
+changeLanguage:"Змінити мову",
+subscriptionBilling:"Підписка та оплата",
+contactSupport:"Підтримка",
+supportSoon:"Email підтримки буде додано пізніше.",
+privacyTerms:"Privacy Policy / Terms",
+comingSoon:"Скоро буде.",
+comingSoonShort:"Скоро",
+navHome:"Головна",
+navCV:"CV",
+navCoach:"Коуч",
+navProfile:"Профіль",
+navMore:"Ще"
+},
 
-  pl:{
-    subtitle:"Premium narzędzia AI do profilu, CV, listu motywacyjnego i przygotowania do rozmowy.",
-    chooseAppLang:"Wybierz język aplikacji",
-    languageNote:"Możesz zmienić to później w Ustawieniach.",
-    continue:"Kontynuuj",
-    homeTitle:"Znajdź pracę <span class='gold'>szybciej</span>",
-    homeSub:"CV, list motywacyjny, profil LinkedIn i trening rozmowy w jednej aplikacji.",
-    badgeCV:"Kreator CV",
-    badgeCover:"List motywacyjny",
-    badgeCoach:"Trener rozmowy",
-    startCV:"Zacznij CV",
-    practice:"Ćwicz",
-    profileTitle:"Mój profil zawodowy",
-    profileSub:"Uzupełnij raz. Używaj wszędzie.",
-    cvBuilder:"Kreator CV",
-    cvSub:"Profesjonalne układy CV z opcjami zdjęcia.",
-    coverLetter:"List motywacyjny",
-    coverSub:"Twórz listy pod konkretną ofertę.",
-    coach:"Trener rozmowy AI",
-    coachSub:"Ćwicz z wirtualnym rekruterem.",
-    profile:"Profil",
-    gender:"Płeć",
-    female:"Kobieta",
-    male:"Mężczyzna",
-    fullName:"Imię i nazwisko",
-    phone:"Telefon",
-    location:"Lokalizacja",
-    targetJob:"Docelowa praca",
-    languagesField:"Języki",
-    workExp:"Doświadczenie zawodowe",
-    addExperience:"+ Dodaj doświadczenie",
-    volunteer:"Wolontariat",
-    addVolunteer:"+ Dodaj wolontariat",
-    education:"Edukacja",
-    courses:"Kursy i dyplomy",
-    addDiploma:"+ Dodaj plik kursu / dyplomu",
-    skills:"Umiejętności",
-    saveProfile:"Zapisz profil",
-    contentLanguage:"Język treści",
-    chooseTemplate:"Wybierz szablon CV",
-    templateNote:"Wybierz podgląd. CV poniżej użyje tego stylu.",
-    selectedPreview:"Wybrany podgląd",
-    liveCVPreview:"Podgląd CV",
-    photoOnOff:"Zdjęcie wł./wył.",
-    uploadOldCV:"Wgraj stare CV",
-    useTemplate:"Użyj tego szablonu",
-    cvPreview:"Podgląd CV",
-    savePDF:"Zapisz jako PDF",
-    downloadTXT:"Pobierz TXT",
-    copyText:"Kopiuj tekst",
-    share:"Udostępnij",
-    jobTitle:"Stanowisko",
-    company:"Firma",
-    pasteJob:"Wklej opis oferty",
-    jobExample:"Przykład: obowiązki, wymagania, opis firmy, potrzebne umiejętności.",
-    formal:"Formalny",
-    confident:"Pewny",
-    shortTone:"Krótki",
-    ukStyle:"Styl UK",
-    generateCover:"Wygeneruj list",
-    result:"Wynik",
-    chooseRecruiter:"Wybierz rekrutera AI",
-    coachDesc:"Ćwiczenie rozmowy z głosem, transkrypcją i opinią.",
-    startSetup:"Rozpocznij",
-    recruiter:"Rekruter",
-    confirmSelection:"Potwierdź wybór",
-    interviewSetup:"Ustawienia rozmowy",
-    interviewLang:"Język rozmowy",
-    position:"Stanowisko",
-    companyCountry:"Firma / kraj",
-    vacancyDesc:"Opis oferty",
-    interviewType:"Typ rozmowy",
-    startInterview:"Rozpocznij rozmowę",
-    liveInterview:"Rozmowa na żywo",
-    endSmall:"Koniec",
-    aiRecruiter:"Rekruter AI",
-    yourAnswer:"Twoja odpowiedź",
-    answerPlaceholder:"Powiedz lub wpisz odpowiedź tutaj...",
-    startRecording:"Rozpocznij nagrywanie",
-    stopRecording:"Zatrzymaj nagrywanie",
-    sendAnswer:"Wyślij odpowiedź",
-    playMyAnswer:"Odtwórz odpowiedź",
-    rerecord:"Nagraj ponownie",
-    repeatQuestion:"Powtórz pytanie",
-    end:"Zakończ",
-    feedback:"Opinia",
-    practiseAgain:"Ćwicz ponownie",
-    premiumTitle:"Premium narzędzia kariery",
-    premiumSub:"Subskrypcje i Google Play Billing zostaną podłączone później.",
-    premium1:"Nielimitowane szablony CV",
-    premium2:"Listy AI dla każdej oferty",
-    premium3:"Ćwiczenie rozmowy głosem",
-    premium4:"Szczegółowa opinia i lepsze odpowiedzi",
-    goPremium:"Przejdź na Premium",
-    restorePurchase:"Przywróć zakup",
-    billingSoon:"Google Play Billing zostanie podłączony później.",
-    restoreSoon:"Przywracanie zakupu będzie działać po podłączeniu billing.",
-    settings:"Ustawienia",
-    theme:"Motyw",
-    themeSub:"Wybierz premium styl kolorów.",
-    changeLanguage:"Zmień język",
-    subscriptionBilling:"Subskrypcja i płatności",
-    contactSupport:"Kontakt z pomocą",
-    supportSoon:"Email wsparcia zostanie dodany później.",
-    privacyTerms:"Privacy Policy / Terms",
-    comingSoon:"Wkrótce.",
-    comingSoonShort:"Wkrótce",
-    navHome:"Start",
-    navCoach:"Trener",
-    navProfile:"Profil",
-    navMore:"Więcej"
-  },
+pl:{
+subtitle:"Premium narzędzia AI do profilu, CV, listu motywacyjnego i przygotowania do rozmowy.",
+chooseAppLang:"Wybierz język aplikacji",
+languageNote:"Możesz zmienić to później w Ustawieniach.",
+continue:"Kontynuuj",
+homeTitle:"Znajdź pracę <span class='gold'>szybciej</span>",
+homeSub:"CV, list motywacyjny, profil LinkedIn i trening rozmowy w jednej aplikacji.",
+badgeCV:"Kreator CV",
+badgeCover:"List motywacyjny",
+badgeCoach:"Trener rozmowy",
+startCV:"Zacznij CV",
+practice:"Ćwicz",
+profileTitle:"Mój profil zawodowy",
+profileSub:"Uzupełnij raz. Używaj wszędzie.",
+cvBuilder:"Kreator CV",
+cvSub:"Profesjonalne układy CV z opcjami zdjęcia.",
+coverLetter:"List motywacyjny",
+coverSub:"Twórz listy pod konkretną ofertę.",
+coach:"Trener rozmowy AI",
+coachSub:"Ćwicz z wirtualnym rekruterem.",
+profile:"Profil",
+gender:"Płeć",
+female:"Kobieta",
+male:"Mężczyzna",
+fullName:"Imię i nazwisko",
+phone:"Telefon",
+location:"Lokalizacja",
+targetJob:"Docelowa praca",
+languagesField:"Języki",
+workExp:"Doświadczenie zawodowe",
+addExperience:"+ Dodaj doświadczenie",
+volunteer:"Wolontariat",
+addVolunteer:"+ Dodaj wolontariat",
+education:"Edukacja",
+courses:"Kursy i dyplomy",
+addDiploma:"+ Dodaj plik kursu / dyplomu",
+skills:"Umiejętności",
+saveProfile:"Zapisz profil",
+contentLanguage:"Język treści",
+chooseTemplate:"Wybierz szablon CV",
+templateNote:"Wybierz podgląd. CV poniżej użyje tego stylu.",
+selectedPreview:"Wybrany podgląd",
+liveCVPreview:"Podgląd CV",
+photoOnOff:"Zdjęcie wł./wył.",
+uploadOldCV:"Wgraj stare CV",
+useTemplate:"Użyj tego szablonu",
+cvPreview:"Podgląd CV",
+savePDF:"Zapisz jako PDF",
+downloadTXT:"Pobierz TXT",
+copyText:"Kopiuj tekst",
+share:"Udostępnij",
+jobTitle:"Stanowisko",
+company:"Firma",
+pasteJob:"Wklej opis oferty",
+jobExample:"Przykład: obowiązki, wymagania, opis firmy, potrzebne umiejętności.",
+formal:"Formalny",
+confident:"Pewny",
+shortTone:"Krótki",
+ukStyle:"Styl UK",
+generateCover:"Wygeneruj list",
+result:"Wynik",
+chooseRecruiter:"Wybierz rekrutera AI",
+coachDesc:"Ćwiczenie rozmowy z głosem, transkrypcją i opinią.",
+startSetup:"Rozpocznij",
+recruiter:"Rekruter",
+confirmSelection:"Potwierdź wybór",
+interviewSetup:"Ustawienia rozmowy",
+interviewLang:"Język rozmowy",
+position:"Stanowisko",
+companyCountry:"Firma / kraj",
+vacancyDesc:"Opis oferty",
+interviewType:"Typ rozmowy",
+startInterview:"Rozpocznij rozmowę",
+liveInterview:"Rozmowa na żywo",
+endSmall:"Koniec",
+aiRecruiter:"Rekruter AI",
+yourAnswer:"Twoja odpowiedź",
+answerPlaceholder:"Powiedz lub wpisz odpowiedź tutaj...",
+startRecording:"Rozpocznij nagrywanie",
+stopRecording:"Zatrzymaj nagrywanie",
+sendAnswer:"Wyślij odpowiedź",
+playMyAnswer:"Odtwórz odpowiedź",
+rerecord:"Nagraj ponownie",
+repeatQuestion:"Powtórz pytanie",
+end:"Zakończ",
+feedback:"Opinia",
+practiseAgain:"Ćwicz ponownie",
+premiumTitle:"Premium narzędzia kariery",
+premiumSub:"Subskrypcje i Google Play Billing zostaną podłączone później.",
+premium1:"Nielimitowane szablony CV",
+premium2:"Listy AI dla każdej oferty",
+premium3:"Ćwiczenie rozmowy głosem",
+premium4:"Szczegółowa opinia i lepsze odpowiedzi",
+goPremium:"Przejdź na Premium",
+restorePurchase:"Przywróć zakup",
+billingSoon:"Google Play Billing zostanie podłączony później.",
+restoreSoon:"Przywracanie zakupu będzie działać po podłączeniu billing.",
+settings:"Ustawienia",
+theme:"Motyw",
+themeSub:"Wybierz premium styl kolorów.",
+changeLanguage:"Zmień język",
+subscriptionBilling:"Subskrypcja i płatności",
+contactSupport:"Kontakt z pomocą",
+supportSoon:"Email wsparcia zostanie dodany później.",
+privacyTerms:"Privacy Policy / Terms",
+comingSoon:"Wkrótce.",
+comingSoonShort:"Wkrótce",
+navHome:"Start",
+navCV:"CV",
+navCoach:"Trener",
+navProfile:"Profil",
+navMore:"Więcej"
+},
 
-  de:{
-    subtitle:"Premium-KI-Tools für Profil, Lebenslauf, Anschreiben und Interviewtraining.",
-    chooseAppLang:"App-Sprache wählen",
-    languageNote:"Sie können dies später in den Einstellungen ändern.",
-    continue:"Weiter",
-    homeTitle:"Schneller <span class='gold'>eingestellt</span> werden",
-    homeSub:"Lebenslauf, Anschreiben, LinkedIn-Profil und KI-Interviewtraining in einer App.",
-    badgeCV:"CV Builder",
-    badgeCover:"Anschreiben",
-    badgeCoach:"Interview Coach",
-    startCV:"CV starten",
-    practice:"Üben",
-    profileTitle:"Mein berufliches Profil",
-    profileSub:"Einmal ausfüllen. Überall verwenden.",
-    cvBuilder:"CV Builder",
-    cvSub:"Professionelle Lebenslauf-Layouts mit Fotooptionen.",
-    coverLetter:"Anschreiben",
-    coverSub:"Jobbezogene Anschreiben in verschiedenen Stilen.",
-    coach:"KI Interview Coach",
-    coachSub:"Üben mit einem virtuellen Recruiter.",
-    profile:"Profil",
-    gender:"Geschlecht",
-    female:"Frau",
-    male:"Mann",
-    fullName:"Vollständiger Name",
-    phone:"Telefon",
-    location:"Standort",
-    targetJob:"Zielposition",
-    languagesField:"Sprachen",
-    workExp:"Berufserfahrung",
-    addExperience:"+ Erfahrung hinzufügen",
-    volunteer:"Ehrenamt",
-    addVolunteer:"+ Ehrenamt hinzufügen",
-    education:"Bildung",
-    courses:"Kurse & Diplome",
-    addDiploma:"+ Kurs- / Diplomdatei hinzufügen",
-    skills:"Fähigkeiten",
-    saveProfile:"Profil speichern",
-    contentLanguage:"Sprache des Inhalts",
-    chooseTemplate:"CV-Vorlage wählen",
-    templateNote:"Wählen Sie eine Vorschau. Der Lebenslauf unten nutzt diesen Stil.",
-    selectedPreview:"Ausgewählte Vorschau",
-    liveCVPreview:"Live-CV-Vorschau",
-    photoOnOff:"Foto an/aus",
-    uploadOldCV:"Alten Lebenslauf hochladen",
-    useTemplate:"Diese Vorlage verwenden",
-    cvPreview:"CV-Vorschau",
-    savePDF:"Als PDF speichern",
-    downloadTXT:"TXT herunterladen",
-    copyText:"Text kopieren",
-    share:"Teilen",
-    jobTitle:"Position",
-    company:"Firma",
-    pasteJob:"Stellenbeschreibung einfügen",
-    jobExample:"Beispiel: Aufgaben, Anforderungen, Firmenbeschreibung, benötigte Fähigkeiten.",
-    formal:"Formell",
-    confident:"Selbstbewusst",
-    shortTone:"Kurz",
-    ukStyle:"UK-Stil",
-    generateCover:"Anschreiben erstellen",
-    result:"Ergebnis",
-    chooseRecruiter:"Wählen Sie Ihren KI-Recruiter",
-    coachDesc:"Professionelles Interviewtraining mit Stimme, Transkript und Feedback.",
-    startSetup:"Start",
-    recruiter:"Recruiter",
-    confirmSelection:"Auswahl bestätigen",
-    interviewSetup:"Interview-Einstellungen",
-    interviewLang:"Interview-Sprache",
-    position:"Position",
-    companyCountry:"Firma / Land",
-    vacancyDesc:"Stellenbeschreibung",
-    interviewType:"Interviewtyp",
-    startInterview:"Interview starten",
-    liveInterview:"Live-Interview",
-    endSmall:"Ende",
-    aiRecruiter:"KI-Recruiter",
-    yourAnswer:"Ihre Antwort",
-    answerPlaceholder:"Sprechen oder schreiben Sie Ihre Antwort hier...",
-    startRecording:"Aufnahme starten",
-    stopRecording:"Aufnahme stoppen",
-    sendAnswer:"Antwort senden",
-    playMyAnswer:"Meine Antwort abspielen",
-    rerecord:"Neu aufnehmen",
-    repeatQuestion:"Frage wiederholen",
-    end:"Beenden",
-    feedback:"Feedback",
-    practiseAgain:"Erneut üben",
-    premiumTitle:"Premium-Karrieretools",
-    premiumSub:"Abonnements und Google Play Billing werden später verbunden.",
-    premium1:"Unbegrenzte CV-Vorlagen",
-    premium2:"KI-Anschreiben für jede Stelle",
-    premium3:"Sprachbasiertes Interviewtraining",
-    premium4:"Detailliertes Feedback und bessere Antworten",
-    goPremium:"Premium aktivieren",
-    restorePurchase:"Kauf wiederherstellen",
-    billingSoon:"Google Play Billing wird später verbunden.",
-    restoreSoon:"Kaufwiederherstellung funktioniert nach Billing-Verbindung.",
-    settings:"Einstellungen",
-    theme:"Design",
-    themeSub:"Premium-Farbstil wählen.",
-    changeLanguage:"Sprache ändern",
-    subscriptionBilling:"Abonnement & Abrechnung",
-    contactSupport:"Support kontaktieren",
-    supportSoon:"Support-E-Mail wird später hinzugefügt.",
-    privacyTerms:"Privacy Policy / Terms",
-    comingSoon:"Demnächst.",
-    comingSoonShort:"Bald",
-    navHome:"Home",
-    navCoach:"Coach",
-    navProfile:"Profil",
-    navMore:"Mehr"
-  },
+de:{
+subtitle:"Premium-KI-Tools für Profil, Lebenslauf, Anschreiben und Interviewtraining.",
+chooseAppLang:"App-Sprache wählen",
+languageNote:"Sie können dies später in den Einstellungen ändern.",
+continue:"Weiter",
+homeTitle:"Schneller <span class='gold'>eingestellt</span> werden",
+homeSub:"Lebenslauf, Anschreiben, LinkedIn-Profil und KI-Interviewtraining in einer App.",
+badgeCV:"CV Builder",
+badgeCover:"Anschreiben",
+badgeCoach:"Interview Coach",
+startCV:"CV starten",
+practice:"Üben",
+profileTitle:"Mein berufliches Profil",
+profileSub:"Einmal ausfüllen. Überall verwenden.",
+cvBuilder:"CV Builder",
+cvSub:"Professionelle Lebenslauf-Layouts mit Fotooptionen.",
+coverLetter:"Anschreiben",
+coverSub:"Erstellen Sie jobbezogene Anschreiben.",
+coach:"KI Interview Coach",
+coachSub:"Üben mit einem virtuellen Recruiter.",
+profile:"Profil",
+gender:"Geschlecht",
+female:"Frau",
+male:"Mann",
+fullName:"Vollständiger Name",
+phone:"Telefon",
+location:"Standort",
+targetJob:"Zielposition",
+languagesField:"Sprachen",
+workExp:"Berufserfahrung",
+addExperience:"+ Erfahrung hinzufügen",
+volunteer:"Ehrenamt",
+addVolunteer:"+ Ehrenamt hinzufügen",
+education:"Bildung",
+courses:"Kurse und Diplome",
+addDiploma:"+ Kurs- / Diplomdatei hinzufügen",
+skills:"Fähigkeiten",
+saveProfile:"Profil speichern",
+contentLanguage:"Sprache des Inhalts",
+chooseTemplate:"CV-Vorlage wählen",
+templateNote:"Wählen Sie eine Vorschau. Der Lebenslauf unten nutzt diesen Stil.",
+selectedPreview:"Ausgewählte Vorschau",
+liveCVPreview:"Live-CV-Vorschau",
+photoOnOff:"Foto an/aus",
+uploadOldCV:"Alten Lebenslauf hochladen",
+useTemplate:"Diese Vorlage verwenden",
+cvPreview:"CV-Vorschau",
+savePDF:"Als PDF speichern",
+downloadTXT:"TXT herunterladen",
+copyText:"Text kopieren",
+share:"Teilen",
+jobTitle:"Position",
+company:"Firma",
+pasteJob:"Stellenbeschreibung einfügen",
+jobExample:"Beispiel: Aufgaben, Anforderungen, Firmenbeschreibung, benötigte Fähigkeiten.",
+formal:"Formell",
+confident:"Selbstbewusst",
+shortTone:"Kurz",
+ukStyle:"UK-Stil",
+generateCover:"Anschreiben erstellen",
+result:"Ergebnis",
+chooseRecruiter:"Wählen Sie Ihren KI-Recruiter",
+coachDesc:"Professionelles Interviewtraining mit Stimme, Transkript und Feedback.",
+startSetup:"Start",
+recruiter:"Recruiter",
+confirmSelection:"Auswahl bestätigen",
+interviewSetup:"Interview-Einstellungen",
+interviewLang:"Interview-Sprache",
+position:"Position",
+companyCountry:"Firma / Land",
+vacancyDesc:"Stellenbeschreibung",
+interviewType:"Interviewtyp",
+startInterview:"Interview starten",
+liveInterview:"Live-Interview",
+endSmall:"Ende",
+aiRecruiter:"KI-Recruiter",
+yourAnswer:"Ihre Antwort",
+answerPlaceholder:"Sprechen oder schreiben Sie Ihre Antwort hier...",
+startRecording:"Aufnahme starten",
+stopRecording:"Aufnahme stoppen",
+sendAnswer:"Antwort senden",
+playMyAnswer:"Meine Antwort abspielen",
+rerecord:"Neu aufnehmen",
+repeatQuestion:"Frage wiederholen",
+end:"Beenden",
+feedback:"Feedback",
+practiseAgain:"Erneut üben",
+premiumTitle:"Premium-Karrieretools",
+premiumSub:"Abonnements und Google Play Billing werden später verbunden.",
+premium1:"Unbegrenzte CV-Vorlagen",
+premium2:"KI-Anschreiben für jede Stelle",
+premium3:"Sprachbasiertes Interviewtraining",
+premium4:"Detailliertes Feedback und bessere Antworten",
+goPremium:"Premium aktivieren",
+restorePurchase:"Kauf wiederherstellen",
+billingSoon:"Google Play Billing wird später verbunden.",
+restoreSoon:"Kaufwiederherstellung funktioniert nach Billing-Verbindung.",
+settings:"Einstellungen",
+theme:"Design",
+themeSub:"Premium-Farbstil wählen.",
+changeLanguage:"Sprache ändern",
+subscriptionBilling:"Abonnement & Abrechnung",
+contactSupport:"Support kontaktieren",
+supportSoon:"Support-E-Mail wird später hinzugefügt.",
+privacyTerms:"Privacy Policy / Terms",
+comingSoon:"Demnächst.",
+comingSoonShort:"Bald",
+navHome:"Home",
+navCV:"CV",
+navCoach:"Coach",
+navProfile:"Profil",
+navMore:"Mehr"
+},
 
-  fr:{
-    subtitle:"Outils IA premium pour créer votre profil, CV, lettre de motivation et préparer vos entretiens.",
-    chooseAppLang:"Choisir la langue de l’application",
-    languageNote:"Vous pourrez la modifier plus tard dans les paramètres.",
-    continue:"Continuer",
-    homeTitle:"Trouvez un emploi <span class='gold'>plus vite</span>",
-    homeSub:"CV, lettre de motivation, profil LinkedIn et entraînement d’entretien IA dans une seule application.",
-    badgeCV:"Créateur de CV",
-    badgeCover:"Lettre de motivation",
-    badgeCoach:"Coach entretien",
-    startCV:"Créer CV",
-    practice:"S’entraîner",
-    profileTitle:"Mon profil professionnel",
-    profileSub:"Remplissez une fois. Utilisez partout.",
-    cvBuilder:"Créateur de CV",
-    cvSub:"Modèles de CV professionnels avec options photo.",
-    coverLetter:"Lettre de motivation",
-    coverSub:"Générez des lettres adaptées à chaque offre.",
-    coach:"Coach d’entretien IA",
-    coachSub:"Entraînez-vous avec un recruteur virtuel.",
-    profile:"Profil",
-    gender:"Genre",
-    female:"Femme",
-    male:"Homme",
-    fullName:"Nom complet",
-    phone:"Téléphone",
-    location:"Lieu",
-    targetJob:"Poste visé",
-    languagesField:"Langues",
-    workExp:"Expérience professionnelle",
-    addExperience:"+ Ajouter une expérience",
-    volunteer:"Bénévolat",
-    addVolunteer:"+ Ajouter du bénévolat",
-    education:"Formation",
-    courses:"Cours et diplômes",
-    addDiploma:"+ Ajouter un fichier",
-    skills:"Compétences",
-    saveProfile:"Enregistrer le profil",
-    contentLanguage:"Langue du contenu",
-    chooseTemplate:"Choisir un modèle de CV",
-    templateNote:"Sélectionnez un aperçu. Votre CV utilisera ce style.",
-    selectedPreview:"Aperçu sélectionné",
-    liveCVPreview:"Aperçu du CV",
-    photoOnOff:"Photo oui/non",
-    uploadOldCV:"Importer ancien CV",
-    useTemplate:"Utiliser ce modèle",
-    cvPreview:"Aperçu CV",
-    savePDF:"Enregistrer en PDF",
-    downloadTXT:"Télécharger TXT",
-    copyText:"Copier le texte",
-    share:"Partager",
-    jobTitle:"Poste",
-    company:"Entreprise",
-    pasteJob:"Coller l’offre d’emploi",
-    jobExample:"Exemple : responsabilités, exigences, description de l’entreprise, compétences.",
-    formal:"Formel",
-    confident:"Confiant",
-    shortTone:"Court",
-    ukStyle:"Style UK",
-    generateCover:"Générer la lettre",
-    result:"Résultat",
-    chooseRecruiter:"Choisissez votre recruteur IA",
-    coachDesc:"Entraînement professionnel avec voix, transcription et feedback.",
-    startSetup:"Commencer",
-    recruiter:"Recruteur",
-    confirmSelection:"Confirmer",
-    interviewSetup:"Configuration entretien",
-    interviewLang:"Langue de l’entretien",
-    position:"Poste",
-    companyCountry:"Entreprise / pays",
-    vacancyDesc:"Description de l’offre",
-    interviewType:"Type d’entretien",
-    startInterview:"Commencer l’entretien",
-    liveInterview:"Entretien en direct",
-    endSmall:"Fin",
-    aiRecruiter:"Recruteur IA",
-    yourAnswer:"Votre réponse",
-    answerPlaceholder:"Parlez ou écrivez votre réponse ici...",
-    startRecording:"Démarrer l’enregistrement",
-    stopRecording:"Arrêter l’enregistrement",
-    sendAnswer:"Envoyer la réponse",
-    playMyAnswer:"Écouter ma réponse",
-    rerecord:"Réenregistrer",
-    repeatQuestion:"Répéter la question",
-    end:"Terminer",
-    feedback:"Feedback",
-    practiseAgain:"S’entraîner encore",
-    premiumTitle:"Outils carrière premium",
-    premiumSub:"Les abonnements et Google Play Billing seront connectés plus tard.",
-    premium1:"Modèles CV illimités",
-    premium2:"Lettres IA pour chaque offre",
-    premium3:"Pratique d’entretien vocal",
-    premium4:"Feedback détaillé et meilleures réponses",
-    goPremium:"Passer Premium",
-    restorePurchase:"Restaurer l’achat",
-    billingSoon:"Google Play Billing sera connecté plus tard.",
-    restoreSoon:"La restauration fonctionnera après connexion billing.",
-    settings:"Paramètres",
-    theme:"Thème",
-    themeSub:"Choisissez un style premium.",
-    changeLanguage:"Changer la langue",
-    subscriptionBilling:"Abonnement et paiement",
-    contactSupport:"Contacter le support",
-    supportSoon:"L’email support sera ajouté plus tard.",
-    privacyTerms:"Privacy Policy / Terms",
-    comingSoon:"Bientôt.",
-    comingSoonShort:"Bientôt",
-    navHome:"Accueil",
-    navCoach:"Coach",
-    navProfile:"Profil",
-    navMore:"Plus"
-  },
+fr:{
+subtitle:"Outils IA premium pour créer votre profil, CV, lettre de motivation et préparer vos entretiens.",
+chooseAppLang:"Choisir la langue de l’application",
+languageNote:"Vous pourrez la modifier plus tard dans les paramètres.",
+continue:"Continuer",
+homeTitle:"Trouvez un emploi <span class='gold'>plus vite</span>",
+homeSub:"CV, lettre de motivation, profil LinkedIn et entraînement d’entretien IA dans une seule application.",
+badgeCV:"Créateur de CV",
+badgeCover:"Lettre de motivation",
+badgeCoach:"Coach entretien",
+startCV:"Créer CV",
+practice:"S’entraîner",
+profileTitle:"Mon profil professionnel",
+profileSub:"Remplissez une fois. Utilisez partout.",
+cvBuilder:"Créateur de CV",
+cvSub:"Modèles de CV professionnels avec options photo.",
+coverLetter:"Lettre de motivation",
+coverSub:"Générez des lettres adaptées à chaque offre.",
+coach:"Coach d’entretien IA",
+coachSub:"Entraînez-vous avec un recruteur virtuel.",
+profile:"Profil",
+gender:"Genre",
+female:"Femme",
+male:"Homme",
+fullName:"Nom complet",
+phone:"Téléphone",
+location:"Lieu",
+targetJob:"Poste visé",
+languagesField:"Langues",
+workExp:"Expérience professionnelle",
+addExperience:"+ Ajouter une expérience",
+volunteer:"Bénévolat",
+addVolunteer:"+ Ajouter du bénévolat",
+education:"Formation",
+courses:"Cours et diplômes",
+addDiploma:"+ Ajouter un fichier",
+skills:"Compétences",
+saveProfile:"Enregistrer le profil",
+contentLanguage:"Langue du contenu",
+chooseTemplate:"Choisir un modèle de CV",
+templateNote:"Sélectionnez un aperçu. Votre CV utilisera ce style.",
+selectedPreview:"Aperçu sélectionné",
+liveCVPreview:"Aperçu du CV",
+photoOnOff:"Photo oui/non",
+uploadOldCV:"Importer ancien CV",
+useTemplate:"Utiliser ce modèle",
+cvPreview:"Aperçu CV",
+savePDF:"Enregistrer en PDF",
+downloadTXT:"Télécharger TXT",
+copyText:"Copier le texte",
+share:"Partager",
+jobTitle:"Poste",
+company:"Entreprise",
+pasteJob:"Coller l’offre d’emploi",
+jobExample:"Exemple : responsabilités, exigences, description de l’entreprise, compétences.",
+formal:"Formel",
+confident:"Confiant",
+shortTone:"Court",
+ukStyle:"Style UK",
+generateCover:"Générer la lettre",
+result:"Résultat",
+chooseRecruiter:"Choisissez votre recruteur IA",
+coachDesc:"Entraînement professionnel avec voix, transcription et feedback.",
+startSetup:"Commencer",
+recruiter:"Recruteur",
+confirmSelection:"Confirmer",
+interviewSetup:"Configuration entretien",
+interviewLang:"Langue de l’entretien",
+position:"Poste",
+companyCountry:"Entreprise / pays",
+vacancyDesc:"Description de l’offre",
+interviewType:"Type d’entretien",
+startInterview:"Commencer l’entretien",
+liveInterview:"Entretien en direct",
+endSmall:"Fin",
+aiRecruiter:"Recruteur IA",
+yourAnswer:"Votre réponse",
+answerPlaceholder:"Parlez ou écrivez votre réponse ici...",
+startRecording:"Démarrer l’enregistrement",
+stopRecording:"Arrêter l’enregistrement",
+sendAnswer:"Envoyer la réponse",
+playMyAnswer:"Écouter ma réponse",
+rerecord:"Réenregistrer",
+repeatQuestion:"Répéter la question",
+end:"Terminer",
+feedback:"Feedback",
+practiseAgain:"S’entraîner encore",
+premiumTitle:"Outils carrière premium",
+premiumSub:"Les abonnements et Google Play Billing seront connectés plus tard.",
+premium1:"Modèles CV illimités",
+premium2:"Lettres IA pour chaque offre",
+premium3:"Pratique d’entretien vocal",
+premium4:"Feedback détaillé et meilleures réponses",
+goPremium:"Passer Premium",
+restorePurchase:"Restaurer l’achat",
+billingSoon:"Google Play Billing sera connecté plus tard.",
+restoreSoon:"La restauration fonctionnera après connexion billing.",
+settings:"Paramètres",
+theme:"Thème",
+themeSub:"Choisissez un style premium.",
+changeLanguage:"Changer la langue",
+subscriptionBilling:"Abonnement et paiement",
+contactSupport:"Contacter le support",
+supportSoon:"L’email support sera ajouté plus tard.",
+privacyTerms:"Privacy Policy / Terms",
+comingSoon:"Bientôt.",
+comingSoonShort:"Bientôt",
+navHome:"Accueil",
+navCV:"CV",
+navCoach:"Coach",
+navProfile:"Profil",
+navMore:"Plus"
+},
 
-  es:{
-    subtitle:"Herramientas premium de IA para crear tu perfil, CV, carta de presentación y preparar entrevistas.",
-    chooseAppLang:"Elige el idioma de la app",
-    languageNote:"Puedes cambiarlo más tarde en Ajustes.",
-    continue:"Continuar",
-    homeTitle:"Consigue trabajo <span class='gold'>más rápido</span>",
-    homeSub:"CV, carta de presentación, perfil de LinkedIn y práctica de entrevista con IA en una app.",
-    badgeCV:"Creador de CV",
-    badgeCover:"Carta de presentación",
-    badgeCoach:"Coach de entrevista",
-    startCV:"Empezar CV",
-    practice:"Practicar",
-    profileTitle:"Mi perfil profesional",
-    profileSub:"Rellena una vez. Usa en todas partes.",
-    cvBuilder:"Creador de CV",
-    cvSub:"Diseños profesionales de CV con opciones de foto.",
-    coverLetter:"Carta de presentación",
-    coverSub:"Genera cartas adaptadas a cada oferta.",
-    coach:"Coach de entrevista IA",
-    coachSub:"Practica con un reclutador virtual.",
-    profile:"Perfil",
-    gender:"Género",
-    female:"Mujer",
-    male:"Hombre",
-    fullName:"Nombre completo",
-    phone:"Teléfono",
-    location:"Ubicación",
-    targetJob:"Puesto objetivo",
-    languagesField:"Idiomas",
-    workExp:"Experiencia laboral",
-    addExperience:"+ Añadir experiencia",
-    volunteer:"Voluntariado",
-    addVolunteer:"+ Añadir voluntariado",
-    education:"Educación",
-    courses:"Cursos y diplomas",
-    addDiploma:"+ Añadir archivo",
-    skills:"Habilidades",
-    saveProfile:"Guardar perfil",
-    contentLanguage:"Idioma del contenido",
-    chooseTemplate:"Elige plantilla de CV",
-    templateNote:"Selecciona una vista previa. Tu CV usará este estilo.",
-    selectedPreview:"Vista previa seleccionada",
-    liveCVPreview:"Vista previa del CV",
-    photoOnOff:"Foto sí/no",
-    uploadOldCV:"Subir CV antiguo",
-    useTemplate:"Usar esta plantilla",
-    cvPreview:"Vista previa CV",
-    savePDF:"Guardar como PDF",
-    downloadTXT:"Descargar TXT",
-    copyText:"Copiar texto",
-    share:"Compartir",
-    jobTitle:"Puesto",
-    company:"Empresa",
-    pasteJob:"Pegar descripción de la oferta",
-    jobExample:"Ejemplo: responsabilidades, requisitos, descripción de empresa, habilidades.",
-    formal:"Formal",
-    confident:"Seguro",
-    shortTone:"Corto",
-    ukStyle:"Estilo UK",
-    generateCover:"Generar carta",
-    result:"Resultado",
-    chooseRecruiter:"Elige tu reclutador IA",
-    coachDesc:"Práctica profesional con voz, transcripción y feedback.",
-    startSetup:"Empezar",
-    recruiter:"Reclutador",
-    confirmSelection:"Confirmar selección",
-    interviewSetup:"Configuración entrevista",
-    interviewLang:"Idioma de entrevista",
-    position:"Puesto",
-    companyCountry:"Empresa / país",
-    vacancyDesc:"Descripción de oferta",
-    interviewType:"Tipo de entrevista",
-    startInterview:"Empezar entrevista",
-    liveInterview:"Entrevista en vivo",
-    endSmall:"Fin",
-    aiRecruiter:"Reclutador IA",
-    yourAnswer:"Tu respuesta",
-    answerPlaceholder:"Habla o escribe tu respuesta aquí...",
-    startRecording:"Empezar grabación",
-    stopRecording:"Detener grabación",
-    sendAnswer:"Enviar respuesta",
-    playMyAnswer:"Reproducir mi respuesta",
-    rerecord:"Grabar de nuevo",
-    repeatQuestion:"Repetir pregunta",
-    end:"Terminar",
-    feedback:"Feedback",
-    practiseAgain:"Practicar otra vez",
-    premiumTitle:"Herramientas premium de carrera",
-    premiumSub:"Las suscripciones y Google Play Billing se conectarán más tarde.",
-    premium1:"Plantillas CV ilimitadas",
-    premium2:"Cartas IA para cada oferta",
-    premium3:"Práctica de entrevista por voz",
-    premium4:"Feedback detallado y mejores respuestas",
-    goPremium:"Ir a Premium",
-    restorePurchase:"Restaurar compra",
-    billingSoon:"Google Play Billing se conectará más tarde.",
-    restoreSoon:"Restaurar compra funcionará después de conectar billing.",
-    settings:"Ajustes",
-    theme:"Tema",
-    themeSub:"Elige estilo de color premium.",
-    changeLanguage:"Cambiar idioma",
-    subscriptionBilling:"Suscripción y facturación",
-    contactSupport:"Contactar soporte",
-    supportSoon:"El email de soporte se añadirá más tarde.",
-    privacyTerms:"Privacy Policy / Terms",
-    comingSoon:"Próximamente.",
-    comingSoonShort:"Pronto",
-    navHome:"Inicio",
-    navCoach:"Coach",
-    navProfile:"Perfil",
-    navMore:"Más"
-  }
+es:{
+subtitle:"Herramientas premium de IA para crear tu perfil, CV, carta de presentación y preparar entrevistas.",
+chooseAppLang:"Elige el idioma de la app",
+languageNote:"Puedes cambiarlo más tarde en Ajustes.",
+continue:"Continuar",
+homeTitle:"Consigue trabajo <span class='gold'>más rápido</span>",
+homeSub:"CV, carta de presentación, perfil de LinkedIn y práctica de entrevista con IA en una app.",
+badgeCV:"Creador de CV",
+badgeCover:"Carta de presentación",
+badgeCoach:"Coach de entrevista",
+startCV:"Empezar CV",
+practice:"Practicar",
+profileTitle:"Mi perfil profesional",
+profileSub:"Rellena una vez. Usa en todas partes.",
+cvBuilder:"Creador de CV",
+cvSub:"Diseños profesionales de CV con opciones de foto.",
+coverLetter:"Carta de presentación",
+coverSub:"Genera cartas adaptadas a cada oferta.",
+coach:"Coach de entrevista IA",
+coachSub:"Practica con un reclutador virtual.",
+profile:"Perfil",
+gender:"Género",
+female:"Mujer",
+male:"Hombre",
+fullName:"Nombre completo",
+phone:"Teléfono",
+location:"Ubicación",
+targetJob:"Puesto objetivo",
+languagesField:"Idiomas",
+workExp:"Experiencia laboral",
+addExperience:"+ Añadir experiencia",
+volunteer:"Voluntariado",
+addVolunteer:"+ Añadir voluntariado",
+education:"Educación",
+courses:"Cursos y diplomas",
+addDiploma:"+ Añadir archivo",
+skills:"Habilidades",
+saveProfile:"Guardar perfil",
+contentLanguage:"Idioma del contenido",
+chooseTemplate:"Elige plantilla de CV",
+templateNote:"Selecciona una vista previa. Tu CV usará este estilo.",
+selectedPreview:"Vista previa seleccionada",
+liveCVPreview:"Vista previa del CV",
+photoOnOff:"Foto sí/no",
+uploadOldCV:"Subir CV antiguo",
+useTemplate:"Usar esta plantilla",
+cvPreview:"Vista previa CV",
+savePDF:"Guardar como PDF",
+downloadTXT:"Descargar TXT",
+copyText:"Copiar texto",
+share:"Compartir",
+jobTitle:"Puesto",
+company:"Empresa",
+pasteJob:"Pegar descripción de la oferta",
+jobExample:"Ejemplo: responsabilidades, requisitos, descripción de empresa, habilidades.",
+formal:"Formal",
+confident:"Seguro",
+shortTone:"Corto",
+ukStyle:"Estilo UK",
+generateCover:"Generar carta",
+result:"Resultado",
+chooseRecruiter:"Elige tu reclutador IA",
+coachDesc:"Práctica profesional con voz, transcripción y feedback.",
+startSetup:"Empezar",
+recruiter:"Reclutador",
+confirmSelection:"Confirmar selección",
+interviewSetup:"Configuración entrevista",
+interviewLang:"Idioma de entrevista",
+position:"Puesto",
+companyCountry:"Empresa / país",
+vacancyDesc:"Descripción de oferta",
+interviewType:"Tipo de entrevista",
+startInterview:"Empezar entrevista",
+liveInterview:"Entrevista en vivo",
+endSmall:"Fin",
+aiRecruiter:"Reclutador IA",
+yourAnswer:"Tu respuesta",
+answerPlaceholder:"Habla o escribe tu respuesta aquí...",
+startRecording:"Empezar grabación",
+stopRecording:"Detener grabación",
+sendAnswer:"Enviar respuesta",
+playMyAnswer:"Reproducir mi respuesta",
+rerecord:"Grabar de nuevo",
+repeatQuestion:"Repetir pregunta",
+end:"Terminar",
+feedback:"Feedback",
+practiseAgain:"Practicar otra vez",
+premiumTitle:"Herramientas premium de carrera",
+premiumSub:"Las suscripciones y Google Play Billing se conectarán más tarde.",
+premium1:"Plantillas CV ilimitadas",
+premium2:"Cartas IA para cada oferta",
+premium3:"Práctica de entrevista por voz",
+premium4:"Feedback detallado y mejores respuestas",
+goPremium:"Ir a Premium",
+restorePurchase:"Restaurar compra",
+billingSoon:"Google Play Billing se conectará más tarde.",
+restoreSoon:"Restaurar compra funcionará después de conectar billing.",
+settings:"Ajustes",
+theme:"Tema",
+themeSub:"Elige estilo de color premium.",
+changeLanguage:"Cambiar idioma",
+subscriptionBilling:"Suscripción y facturación",
+contactSupport:"Contactar soporte",
+supportSoon:"El email de soporte se añadirá más tarde.",
+privacyTerms:"Privacy Policy / Terms",
+comingSoon:"Próximamente.",
+comingSoonShort:"Pronto",
+navHome:"Inicio",
+navCV:"CV",
+navCoach:"Coach",
+navProfile:"Perfil",
+navMore:"Más"
+}
 };
 
 let appLang=localStorage.getItem("jsai_appLang") || "en";
@@ -2282,8 +2232,8 @@ let activeStream=null;
 let finalSpeechText="";
 
 const cvTemplates=[
-  {name:"Executive Clean",img:"cv1.jpg",className:"cv-modern"},
-  {name:"Elegant Beige",img:"cv2.jpg",className:"cv-elegant"},
+  {name:"Executive Clean",img:"cv1.jpg",className:"cv-blue"},
+  {name:"Elegant Beige",img:"cv2.jpg",className:"cv-beige"},
   {name:"Sidebar Pro",img:"cv3.jpg",className:"cv-sidebar"},
   {name:"Creative Profile",img:"cv4.jpg",className:"cv-creative"}
 ];
@@ -2303,12 +2253,12 @@ let vols=[
   {org:"Volunteer Organisation",role:"Volunteer",desc:"Supported community activities and helped people in need.",saved:true}
 ];
 
-function t(k){
-  return (tr[appLang] && tr[appLang][k]) || tr.en[k] || k;
-}
-
 function byId(id){
   return document.getElementById(id);
+}
+
+function t(k){
+  return (tr[appLang] && tr[appLang][k]) || tr.en[k] || k;
 }
 
 function safe(v,fallback=""){
@@ -2359,11 +2309,13 @@ function buildContentSelects(){
 
   byId("interviewLang").addEventListener("change",savePreferences);
   byId("coverLang").addEventListener("change",savePreferences);
+  byId("cvContentLang").addEventListener("change",savePreferences);
 }
 
 function selectLang(name,code){
   selectedLanguageName=name;
   appLang=["en","uk","pl","de","fr","es"].includes(code) ? code : "en";
+
   localStorage.setItem("jsai_appLang",appLang);
   localStorage.setItem("jsai_languageName",name);
 
@@ -2391,10 +2343,25 @@ function go(id){
 }
 
 function updateNav(id){
-  const map={home:0,cv:1,preview:1,interview:2,interviewer:2,setup:2,live:2,feedback:2,profile:3,settings:4,premium:4,language:4,cover:0};
+  const map={
+    home:0,
+    cv:1,
+    preview:1,
+    interview:2,
+    interviewer:2,
+    setup:2,
+    live:2,
+    feedback:2,
+    profile:3,
+    settings:4,
+    premium:4,
+    language:4,
+    cover:0
+  };
+
   document.querySelectorAll(".nav").forEach(n=>n.classList.remove("active"));
-  const index=map[id] ?? 0;
   const navs=document.querySelectorAll(".nav");
+  const index=map[id] ?? 0;
   if(navs[index]) navs[index].classList.add("active");
 }
 
@@ -2416,6 +2383,7 @@ function savePreferences(){
 
 function updateDefaultAvatar(){
   const photo=localStorage.getItem("jsai_profilePhoto");
+
   if(photo){
     byId("profileAvatar").innerHTML=`<img src="${photo}" alt="Profile photo">`;
     return;
@@ -2471,6 +2439,7 @@ function saveProfile(showAlert){
 function loadProfile(){
   try{
     const saved=JSON.parse(localStorage.getItem("jsai_profile") || "{}");
+
     if(saved.gender) byId("gender").value=saved.gender;
     if(saved.name) byId("name").value=saved.name;
     if(saved.email) byId("email").value=saved.email;
@@ -2494,20 +2463,20 @@ function renderExperience(){
   byId("experienceCards").innerHTML=exp.map((x,i)=>{
     if(x.saved){
       return `
-        <div class="card tight">
+        <div class="card small-card">
           <h3>${escapeHtml(safe(x.position,"Position"))}</h3>
           <p><b>${escapeHtml(safe(x.company,"Company"))}</b></p>
           <p>${escapeHtml(safe(x.desc,""))}</p>
           <div class="grid2">
-            <button class="btn secondary small-btn" onclick="editExperience(${i})">Edit</button>
-            <button class="btn secondary small-btn" onclick="deleteExperience(${i})">Delete</button>
+            <button class="btn secondary mini" onclick="editExperience(${i})">Edit</button>
+            <button class="btn secondary mini" onclick="deleteExperience(${i})">Delete</button>
           </div>
         </div>
       `;
     }
 
     return `
-      <div class="card tight">
+      <div class="card small-card">
         <label>Company</label>
         <input value="${escapeHtml(safe(x.company))}" oninput="exp[${i}].company=this.value">
         <label>Position</label>
@@ -2553,20 +2522,20 @@ function renderVolunteers(){
   byId("volunteerCards").innerHTML=vols.map((x,i)=>{
     if(x.saved){
       return `
-        <div class="card tight">
+        <div class="card small-card">
           <h3>${escapeHtml(safe(x.role,"Role"))}</h3>
           <p><b>${escapeHtml(safe(x.org,"Organisation"))}</b></p>
           <p>${escapeHtml(safe(x.desc,""))}</p>
           <div class="grid2">
-            <button class="btn secondary small-btn" onclick="editVolunteer(${i})">Edit</button>
-            <button class="btn secondary small-btn" onclick="deleteVolunteer(${i})">Delete</button>
+            <button class="btn secondary mini" onclick="editVolunteer(${i})">Edit</button>
+            <button class="btn secondary mini" onclick="deleteVolunteer(${i})">Delete</button>
           </div>
         </div>
       `;
     }
 
     return `
-      <div class="card tight">
+      <div class="card small-card">
         <label>Organisation</label>
         <input value="${escapeHtml(safe(x.org))}" oninput="vols[${i}].org=this.value">
         <label>Role</label>
@@ -2607,8 +2576,7 @@ function addDiplomaFile(e){
   const f=e.target.files[0];
   if(!f) return;
 
-  const url=URL.createObjectURL(f);
-  diplomas.push({name:f.name,url:url});
+  diplomas.push({name:f.name,url:URL.createObjectURL(f)});
   renderDiplomas();
   byId("diplomaFile").value="";
 }
@@ -2623,8 +2591,8 @@ function renderDiplomas(){
     <div class="file-item">
       <span>${escapeHtml(d.name)}</span>
       <div class="file-actions">
-        <button class="mini-icon" onclick="openDiploma(${i})">Open</button>
-        <button class="mini-icon" onclick="deleteDiploma(${i})">×</button>
+        <button onclick="openDiploma(${i})">Open</button>
+        <button onclick="deleteDiploma(${i})">×</button>
       </div>
     </div>
   `).join("");
@@ -2658,8 +2626,8 @@ function renderOldCVFiles(){
     <div class="file-item">
       <span>${escapeHtml(f.name)}</span>
       <div class="file-actions">
-        <button class="mini-icon" onclick="window.open(oldCVFiles[${i}].url,'_blank')">Open</button>
-        <button class="mini-icon" onclick="deleteOldCV(${i})">×</button>
+        <button onclick="window.open(oldCVFiles[${i}].url,'_blank')">Open</button>
+        <button onclick="deleteOldCV(${i})">×</button>
       </div>
     </div>
   `).join("");
@@ -2715,6 +2683,7 @@ function movePhoto(){
 function updatePhotoButtons(){
   const shapeBtn=byId("photoShapeBtn");
   const posBtn=byId("photoPositionBtn");
+
   if(shapeBtn) shapeBtn.textContent=`Photo Shape: ${photoShape}`;
   if(posBtn) posBtn.textContent=`Photo Position: ${photoSide}`;
 }
@@ -2765,6 +2734,7 @@ function cvSummary(){
 
 function expHtml(){
   if(!exp.length) return "—";
+
   return exp.map(x=>`
     <p><b>${escapeHtml(safe(x.position,"Position"))} — ${escapeHtml(safe(x.company,"Company"))}</b><br>${escapeHtml(safe(x.desc,""))}</p>
   `).join("");
@@ -2772,6 +2742,7 @@ function expHtml(){
 
 function volHtml(){
   if(!vols.length) return "—";
+
   return vols.map(x=>`
     <p><b>${escapeHtml(safe(x.role,"Role"))} — ${escapeHtml(safe(x.org,"Organisation"))}</b><br>${escapeHtml(safe(x.desc,""))}</p>
   `).join("");
@@ -2789,14 +2760,17 @@ function basicSections(){
       <div class="cv-title">${l.summary}</div>
       <p>${escapeHtml(cvSummary())}</p>
     </div>
+
     <div class="cv-section">
       <div class="cv-title">${l.experience}</div>
       ${expHtml()}
     </div>
+
     <div class="cv-section">
       <div class="cv-title">${l.volunteering}</div>
       ${volHtml()}
     </div>
+
     <div class="cv-section">
       <div class="cv-title">${l.education}</div>
       <p>${escapeHtml(safe(byId("education").value,"University / College / School"))}</p>
@@ -2806,15 +2780,18 @@ function basicSections(){
 
 function sideSections(){
   const l=cvLabels();
+
   return `
     <div class="cv-section">
       <div class="cv-title">${l.contact}</div>
       <p>${contactLine().replaceAll("|","<br>")}</p>
     </div>
+
     <div class="cv-section">
       <div class="cv-title">${l.languages}</div>
       <p>${escapeHtml(safe(byId("profileLanguages").value,"English"))}</p>
     </div>
+
     <div class="cv-section">
       <div class="cv-title">${l.skills}</div>
       <p>${escapeHtml(safe(byId("skills").value,"Communication"))}</p>
@@ -2826,7 +2803,7 @@ function renderCV(){
   updatePhotoButtons();
 
   const tpl=cvTemplates[currentTpl] || cvTemplates[0];
-  let cls=`cv-document ${tpl.className} ${photoMode?'with-photo':''} ${photoShape}-photo photo-${photoSide}`;
+  const cls=`cv-document ${tpl.className} ${photoMode?'with-photo':''} ${photoShape}-photo photo-${photoSide}`;
   byId("cvDoc").className=cls;
 
   const name=escapeHtml(safe(byId("name").value,"Your Name")).toUpperCase();
@@ -2850,9 +2827,9 @@ function renderCV(){
     return;
   }
 
-  if(tpl.className==="cv-elegant"){
+  if(tpl.className==="cv-beige"){
     byId("cvDoc").innerHTML=`
-      <div class="cv-header">
+      <div class="cv-head-wrap">
         ${photo}
         <div class="cv-head">
           <h2>${name}</h2>
@@ -2878,11 +2855,13 @@ function renderCV(){
   if(tpl.className==="cv-creative"){
     byId("cvDoc").innerHTML=`
       <div class="cv-page">
-        ${photo}
-        <div class="cv-head">
-          <h2>${name}</h2>
-          <p><b>${target}</b></p>
-          <p>${contactLine()}</p>
+        <div class="cv-head-box">
+          ${photo}
+          <div class="cv-head">
+            <h2>${name}</h2>
+            <p><b>${target}</b></p>
+            <p>${contactLine()}</p>
+          </div>
         </div>
         <div class="grid2">
           <div>
@@ -2905,7 +2884,7 @@ function renderCV(){
   }
 
   byId("cvDoc").innerHTML=`
-    <div class="cv-header-blue">
+    <div class="cv-head-wrap">
       ${photo}
       <div class="cv-head">
         <h2>${name}</h2>
@@ -2939,11 +2918,9 @@ function savePDF(){
 }
 
 function cvText(){
-  const name=safe(byId("name").value,"Your Name");
-  const target=safe(byId("target").value,"Target Position");
   const lines=[
-    name,
-    target,
+    safe(byId("name").value,"Your Name"),
+    safe(byId("target").value,"Target Position"),
     `${safe(byId("email").value)} | ${safe(byId("phone").value)} | ${safe(byId("location").value)}`,
     "",
     "SUMMARY",
@@ -2968,6 +2945,13 @@ function cvText(){
   return lines.join("\n");
 }
 
+function downloadFile(filename,text,type){
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(new Blob([text],{type:type || "text/plain"}));
+  a.download=filename;
+  a.click();
+}
+
 function downloadText(){
   downloadFile("CV.txt",cvText(),"text/plain");
 }
@@ -2982,13 +2966,6 @@ function shareCV(){
   }else{
     copyCV();
   }
-}
-
-function downloadFile(filename,text,type){
-  const a=document.createElement("a");
-  a.href=URL.createObjectURL(new Blob([text],{type:type || "text/plain"}));
-  a.download=filename;
-  a.click();
 }
 
 function setTone(el,x){
@@ -3156,6 +3133,7 @@ function makeQuestions(pos,comp,lang){
 function addAI(text){
   const recruiter=recruiters[currentRecruiterIndex] || recruiters[0];
   lastAI=text;
+
   byId("dialog").innerHTML += `<div class="bubble ai"><b>${escapeHtml(recruiter.name)}:</b><br>${escapeHtml(text)}</div>`;
   scrollDialog();
   speak(text);
@@ -3163,6 +3141,7 @@ function addAI(text){
 
 function addMe(text){
   answers.push(text);
+
   byId("dialog").innerHTML += `<div class="bubble me"><b>You:</b><br>${escapeHtml(text)}</div>`;
   scrollDialog();
 }
@@ -3174,6 +3153,7 @@ function scrollDialog(){
 
 function sendAnswer(){
   const a=byId("userAnswer").value.trim();
+
   if(a) addMe(a);
 
   byId("userAnswer").value="";
@@ -3242,6 +3222,7 @@ async function toggleRecording(){
         myAudioUrl=URL.createObjectURL(new Blob(audioChunks,{type:"audio/webm"}));
         byId("audioControls").classList.add("active");
       }
+
       if(activeStream){
         activeStream.getTracks().forEach(track=>track.stop());
         activeStream=null;
@@ -3268,18 +3249,27 @@ function stopRecording(){
   }
 
   if(recognition){
-    try{recognition.onend=null; recognition.stop();}catch(e){}
+    try{
+      recognition.onend=null;
+      recognition.stop();
+    }catch(e){}
   }
 }
 
 function stopAllRecording(){
   if(isRecording) stopRecording();
-  if("speechSynthesis" in window) speechSynthesis.cancel();
-  byId("liveAvatar")?.classList.remove("speaking");
+
+  if("speechSynthesis" in window){
+    speechSynthesis.cancel();
+  }
+
+  const avatar=byId("liveAvatar");
+  if(avatar) avatar.classList.remove("speaking");
 }
 
 function startSpeechText(){
   const SR=window.SpeechRecognition || window.webkitSpeechRecognition;
+
   if(!SR){
     showRecordStatus("Audio recording works. Speech-to-text is not supported on this device/browser.");
     return;
@@ -3293,14 +3283,17 @@ function startSpeechText(){
 
   recognition.onresult=function(e){
     let interim="";
+
     for(let i=e.resultIndex;i<e.results.length;i++){
       const transcript=e.results[i][0].transcript;
+
       if(e.results[i].isFinal){
         finalSpeechText += transcript + " ";
       }else{
         interim += transcript;
       }
     }
+
     byId("userAnswer").value=(finalSpeechText + interim).trim();
   };
 
@@ -3313,7 +3306,9 @@ function startSpeechText(){
   recognition.onend=function(){
     if(isRecording){
       setTimeout(()=>{
-        try{recognition.start();}catch(e){}
+        try{
+          recognition.start();
+        }catch(e){}
       },350);
     }
   };
@@ -3352,13 +3347,13 @@ function finishInterview(){
   const totalWords=answers.join(" ").trim().split(/\s+/).filter(Boolean).length;
   let score=5.4 + count*.55 + Math.min(totalWords/90,2.2);
   score=Math.max(4.8,Math.min(9.4,score));
+
   byId("scoreNum").textContent=score.toFixed(1);
 
   const lang=byId("interviewLang").value;
   const partial=count<3;
-  byId("feedbackTitle").textContent=partial
-    ? (lang==="Українська" ? "Partial Feedback" : "Partial Feedback")
-    : (lang==="Українська" ? "Interview Feedback" : "Interview Feedback");
+
+  byId("feedbackTitle").textContent=partial ? "Partial Feedback" : "Interview Feedback";
 
   let feedback="";
 
@@ -3400,8 +3395,8 @@ function finishInterview(){
 
 function init(){
   setTheme(theme);
-  buildLangs();
   buildContentSelects();
+  buildLangs();
   loadProfile();
   updateDefaultAvatar();
   renderExperience();
