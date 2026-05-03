@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,12 +9,11 @@
 :root{
   --bg:#f6eddf;
   --bg2:#fffaf1;
-  --card:rgba(255,255,255,.88);
+  --card:rgba(255,255,255,.9);
   --card2:#fff;
   --text:#21170d;
   --muted:#76654f;
   --accent:#b1843d;
-  --accent2:#8a632b;
   --button:#d9b36a;
   --buttonText:#21170d;
   --line:rgba(84,57,22,.15);
@@ -33,7 +31,6 @@ body.dark{
   --text:#fbf3df;
   --muted:#d6ccb2;
   --accent:#b7bc72;
-  --accent2:#8e9551;
   --button:#aeb562;
   --buttonText:#1f2118;
   --line:rgba(248,240,212,.16);
@@ -54,9 +51,9 @@ html,body{
   font-family:Arial,Helvetica,sans-serif;
   color:var(--text);
   background:
-  radial-gradient(circle at 15% 0%,rgba(217,179,106,.16),transparent 30%),
-  radial-gradient(circle at 88% 16%,rgba(142,149,81,.11),transparent 36%),
-  linear-gradient(180deg,var(--bg),var(--bg2));
+    radial-gradient(circle at 15% 0%,rgba(217,179,106,.16),transparent 30%),
+    radial-gradient(circle at 88% 16%,rgba(142,149,81,.11),transparent 36%),
+    linear-gradient(180deg,var(--bg),var(--bg2));
 }
 
 button,input,textarea,select{
@@ -114,21 +111,13 @@ button{
 }
 
 .logo-img{
-  width:92px;
-  height:92px;
+  width:90px;
+  height:90px;
   border-radius:26px;
   object-fit:cover;
   display:block;
   margin:20px auto 14px;
   box-shadow:0 14px 34px rgba(100,70,25,.22);
-}
-
-.logo-home{
-  width:72px;
-  height:72px;
-  border-radius:22px;
-  margin-top:2px;
-  margin-bottom:12px;
 }
 
 h1{
@@ -211,16 +200,6 @@ p{
   cursor:not-allowed;
 }
 
-.theme-btn.light.active{
-  background:linear-gradient(135deg,#f2dfbd,#d9b36a);
-  color:#21170d;
-}
-
-.theme-btn.dark.active{
-  background:linear-gradient(135deg,#aeb562,#6f7739);
-  color:#1f2118;
-}
-
 input,textarea,select{
   width:100%;
   padding:13px;
@@ -242,6 +221,10 @@ textarea{
   resize:vertical;
 }
 
+textarea.compact{
+  min-height:62px;
+}
+
 label{
   display:block;
   font-size:12px;
@@ -259,58 +242,6 @@ label{
   display:grid;
   grid-template-columns:repeat(3,1fr);
   gap:8px;
-}
-
-.hero{
-  border-radius:26px;
-  padding:18px;
-  background:var(--card);
-  border:1px solid var(--line);
-  box-shadow:var(--shadow);
-}
-
-.badge{
-  display:inline-flex;
-  padding:7px 10px;
-  border-radius:999px;
-  border:1px solid var(--line);
-  color:var(--muted);
-  background:var(--card2);
-  font-size:12px;
-  font-weight:700;
-  margin:3px 4px 3px 0;
-}
-
-.action{
-  display:flex;
-  align-items:center;
-  gap:13px;
-  cursor:pointer;
-}
-
-.action-text{
-  flex:1;
-  min-width:0;
-}
-
-.square{
-  width:54px;
-  height:54px;
-  border-radius:17px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  flex:0 0 auto;
-  font-size:15px;
-  font-weight:900;
-  color:var(--buttonText);
-  background:linear-gradient(135deg,var(--button),#f1d398);
-  overflow:hidden;
-}
-
-.chev{
-  font-size:23px;
-  color:var(--accent);
 }
 
 .lang,.list-btn{
@@ -331,12 +262,29 @@ label{
   box-shadow:0 0 0 2px rgba(174,181,98,.16);
 }
 
+.profile-tabs{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:5px;
+  margin:10px 0 12px;
+}
+
+.profile-tabs .tab{
+  padding:8px 2px;
+  font-size:10.5px;
+  text-align:center;
+  min-height:38px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
 .tabs{
   display:flex;
   gap:7px;
-  overflow-x:auto;
   padding-bottom:4px;
   margin:10px 0 12px;
+  flex-wrap:wrap;
 }
 
 .tab{
@@ -345,7 +293,6 @@ label{
   border:1px solid var(--line);
   color:var(--muted);
   background:var(--card);
-  white-space:nowrap;
   cursor:pointer;
   font-size:13px;
   font-weight:800;
@@ -406,6 +353,35 @@ label{
   box-shadow:0 8px 18px rgba(0,0,0,.22);
 }
 
+.import-box{
+  background:linear-gradient(135deg,rgba(217,179,106,.22),rgba(174,181,98,.13));
+  border:1px solid rgba(177,132,61,.25);
+}
+
+.template-filters{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+  margin:10px 0 12px;
+}
+
+.filter-btn{
+  border:1px solid var(--line);
+  background:var(--card2);
+  color:var(--text);
+  border-radius:14px;
+  padding:10px 6px;
+  font-size:12px;
+  font-weight:900;
+  cursor:pointer;
+}
+
+.filter-btn.active{
+  background:var(--button);
+  color:var(--buttonText);
+  border-color:transparent;
+}
+
 .template-grid{
   display:grid;
   grid-template-columns:1fr 1fr;
@@ -458,18 +434,18 @@ label{
   font-weight:900;
 }
 
-.lock{
+.lock,.free{
   font-size:10px;
   padding:4px 7px;
   border-radius:999px;
+}
+
+.lock{
   background:#1f2937;
   color:white;
 }
 
 .free{
-  font-size:10px;
-  padding:4px 7px;
-  border-radius:999px;
   background:#e8d5aa;
   color:#2a1b0b;
 }
@@ -537,9 +513,9 @@ label{
 }
 
 .r-name{
-  font-size:32px;
+  font-size:31px;
   font-weight:900;
-  letter-spacing:.5px;
+  letter-spacing:.4px;
   line-height:1.05;
 }
 
@@ -550,7 +526,7 @@ label{
 }
 
 .r-section{
-  margin-top:18px;
+  margin-top:16px;
 }
 
 .r-title{
@@ -597,7 +573,7 @@ label{
 }
 
 .r-exp{
-  margin-bottom:10px;
+  margin-bottom:9px;
 }
 
 .r-exp b{
@@ -612,26 +588,21 @@ label{
 }
 
 .tpl-ats{
-  padding:48px 58px;
-}
-
-.tpl-ats .r-name{
-  font-size:34px;
+  padding:50px 58px;
 }
 
 .tpl-ats .r-title{
-  color:#111;
   border-bottom:1.5px solid #111;
   padding-bottom:4px;
 }
 
 .tpl-classic{
-  padding:40px 48px;
+  padding:38px 46px;
 }
 
 .tpl-classic .head{
   display:flex;
-  gap:20px;
+  gap:18px;
   align-items:center;
   border-bottom:3px solid #c69c51;
   padding-bottom:18px;
@@ -649,19 +620,15 @@ label{
 .tpl-exec .side{
   background:#1f2937;
   color:white;
-  padding:38px 26px;
+  padding:38px 25px;
 }
 
 .tpl-exec .main{
-  padding:42px 36px;
+  padding:42px 34px;
 }
 
 .tpl-exec .side .r-text,.tpl-exec .side .r-small{
   color:white;
-}
-
-.tpl-exec .r-title{
-  color:#1f2937;
 }
 
 .tpl-exec .side .r-title{
@@ -691,12 +658,13 @@ label{
 }
 
 .tpl-uk{
-  padding:50px 62px;
+  padding:52px 60px;
 }
 
 .tpl-uk .r-name{
   text-align:center;
-  font-size:30px;
+  font-size:29px;
+  letter-spacing:1px;
 }
 
 .tpl-uk .r-role{
@@ -731,11 +699,6 @@ label{
   color:#425aa8;
 }
 
-.tpl-student .skills .r-chip{
-  background:#dbe5ff;
-  color:#253a84;
-}
-
 .tpl-chef{
   display:grid;
   grid-template-columns:190px 1fr;
@@ -756,10 +719,6 @@ label{
   color:white;
 }
 
-.tpl-chef .r-title{
-  color:#8a4b24;
-}
-
 .tpl-chef .side .r-title{
   color:white;
 }
@@ -776,11 +735,6 @@ label{
 }
 
 .tpl-support .r-title{
-  color:#13758e;
-}
-
-.tpl-support .r-chip{
-  background:#e3f4f8;
   color:#13758e;
 }
 
@@ -804,10 +758,6 @@ label{
   color:#7a5b2e;
 }
 
-.tpl-care .r-photo{
-  border-color:#f0e6d6;
-}
-
 .tpl-creative{
   padding:0;
   background:#fff;
@@ -829,28 +779,6 @@ label{
 
 .tpl-creative .r-title{
   color:#b1843d;
-}
-
-.tpl-timeline{
-  padding:42px 48px;
-  background:#fbfaf6;
-}
-
-.tpl-timeline .r-section{
-  border-left:3px solid #b1843d;
-  padding-left:16px;
-  position:relative;
-}
-
-.tpl-timeline .r-section:before{
-  content:"";
-  position:absolute;
-  left:-7px;
-  top:2px;
-  width:11px;
-  height:11px;
-  border-radius:50%;
-  background:#b1843d;
 }
 
 .file-item{
@@ -901,7 +829,7 @@ label{
   white-space:pre-wrap;
   color:var(--text);
   font-size:14px;
-  line-height:1.48;
+  line-height:1.5;
 }
 
 .interviewer-grid{
@@ -944,13 +872,13 @@ label{
 }
 
 .live-face{
-  width:168px;
-  height:168px;
+  width:138px;
+  height:138px;
   border-radius:50%;
   overflow:hidden;
   background:var(--card);
   box-shadow:var(--shadow);
-  margin:4px auto 10px;
+  margin:4px auto 8px;
   border:3px solid rgba(174,181,98,.35);
 }
 
@@ -965,39 +893,24 @@ label{
 }
 
 @keyframes speakPulse{
-  from{
-    transform:translateY(0) scale(1);
-    filter:brightness(1);
-  }
-  to{
-    transform:translateY(-3px) scale(1.035);
-    filter:brightness(1.08);
-  }
-}
-
-.question-card{
-  text-align:left;
-  background:rgba(174,181,98,.12);
-  border:1px solid rgba(174,181,98,.28);
-  border-radius:18px;
-  padding:12px;
-  margin:12px 0;
+  from{transform:translateY(0) scale(1);filter:brightness(1);}
+  to{transform:translateY(-2px) scale(1.025);filter:brightness(1.08);}
 }
 
 .dialog{
-  padding:4px 0;
+  padding:2px 0;
   overflow:visible;
   max-height:none;
 }
 
 .bubble{
-  padding:10px 12px;
-  border-radius:16px;
-  margin:8px 0;
+  padding:8px 10px;
+  border-radius:15px;
+  margin:6px 0;
   max-width:92%;
   white-space:pre-wrap;
   font-size:13px;
-  line-height:1.36;
+  line-height:1.32;
   text-align:left;
 }
 
@@ -1016,7 +929,7 @@ label{
   display:flex;
   justify-content:flex-end;
   gap:6px;
-  margin-top:8px;
+  margin-top:6px;
 }
 
 .bubble-actions button{
@@ -1024,7 +937,7 @@ label{
   background:var(--card);
   color:var(--text);
   border-radius:10px;
-  padding:6px 8px;
+  padding:5px 8px;
   cursor:pointer;
   font-size:11px;
   font-weight:800;
@@ -1093,6 +1006,19 @@ label{
   display:none!important;
 }
 
+.menu-pop{
+  display:none;
+  padding:12px;
+  border-radius:18px;
+  border:1px solid var(--line);
+  background:var(--card2);
+  margin-top:10px;
+}
+
+.menu-pop.active{
+  display:block;
+}
+
 .toast{
   position:fixed;
   left:50%;
@@ -1152,10 +1078,7 @@ body.dark .bottom{
 }
 
 @media print{
-  @page{
-    size:A4;
-    margin:0;
-  }
+  @page{size:A4;margin:0;}
 
   html,body{
     background:white!important;
@@ -1206,78 +1129,19 @@ body.dark .bottom{
   <p data-i="subtitle">Premium AI tools to build your profile, resume, cover letter and interview confidence.</p>
   <div class="card">
     <h2 data-i="chooseAppLang">Choose app language</h2>
-    <p class="small" data-i="languageNote">You can change this later in Settings.</p>
+    <p class="small" data-i="languageNote">Tap your language to continue.</p>
     <div id="langs"></div>
-    <button class="btn" onclick="go('home')" data-i="continue">Continue</button>
   </div>
 </section>
 
 <section id="home" class="screen">
   <div class="top">
     <button class="icon" onclick="go('settings')">≡</button>
-    <button class="icon" onclick="go('premium')">♕</button>
-  </div>
-
-  <img src="logo.jpg" class="logo-img logo-home" alt="Job Success AI logo" onerror="this.style.display='none'">
-
-  <div class="hero">
-    <h1 data-i="homeTitle">Get hired <span class='gold'>faster</span></h1>
-    <p data-i="homeSub">Resume, cover letter, profile and AI interview practice in one app.</p>
-    <span class="badge" data-i="badgeCV">Resume</span>
-    <span class="badge" data-i="badgeCover">Cover Letter</span>
-    <span class="badge" data-i="badgeCoach">Interview Coach</span>
-
-    <div class="grid2" style="margin-top:13px">
-      <button class="btn" onclick="go('cv')" data-i="startCV">Start Resume</button>
-      <button class="btn secondary" onclick="go('interview')" data-i="practice">Practise</button>
-    </div>
-  </div>
-
-  <div class="card action" onclick="go('profile')">
-    <div class="square">P</div>
-    <div class="action-text">
-      <h3 data-i="profileTitle">My Professional Profile</h3>
-      <p data-i="profileSub">Fill once. Use everywhere.</p>
-    </div>
-    <div class="chev">›</div>
-  </div>
-
-  <div class="card action" onclick="go('cv')">
-    <div class="square" data-i="navCV">Resume</div>
-    <div class="action-text">
-      <h3 data-i="cvBuilder">Resume Builder</h3>
-      <p data-i="cvSub">10 useful templates. Preview and PDF match.</p>
-    </div>
-    <div class="chev">›</div>
-  </div>
-
-  <div class="card action" onclick="go('cover')">
-    <div class="square">CL</div>
-    <div class="action-text">
-      <h3 data-i="coverLetter">Cover Letter</h3>
-      <p data-i="coverSub">Generate job-specific letters.</p>
-    </div>
-    <div class="chev">›</div>
-  </div>
-
-  <div class="card action" onclick="go('interview')">
-    <div class="square">AI</div>
-    <div class="action-text">
-      <h3 data-i="coach">AI Interview Coach</h3>
-      <p data-i="coachSub">Practise with a virtual recruiter.</p>
-    </div>
-    <div class="chev">›</div>
-  </div>
-</section>
-
-<section id="profile" class="screen">
-  <div class="top">
-    <button class="icon" onclick="go('home')">‹</button>
     <h2 data-i="profile">Profile</h2>
     <button class="icon" onclick="saveProfile(true)">✓</button>
   </div>
 
-  <div class="tabs">
+  <div class="profile-tabs">
     <div class="tab active" onclick="setPanel(this,'profile-basic')" data-i="basic">Basic</div>
     <div class="tab" onclick="setPanel(this,'profile-work')" data-i="work">Work</div>
     <div class="tab" onclick="setPanel(this,'profile-education')" data-i="education">Education</div>
@@ -1286,6 +1150,17 @@ body.dark .bottom{
   </div>
 
   <div id="profile-basic" class="panel active">
+    <div class="card import-box">
+      <h2 data-i="uploadCVTitle">Upload my CV</h2>
+      <p data-i="uploadCVText">Upload your old CV and AI will help fill this profile automatically.</p>
+      <input id="cvUploadInput" type="file" accept=".pdf,.doc,.docx,.txt" style="display:none" onchange="handleCVUpload(event)">
+      <div class="grid2">
+        <button class="btn" onclick="cvUploadInput.click()" data-i="uploadCVBtn">Upload CV</button>
+        <button class="btn secondary" onclick="analyseUploadedCV()" data-i="analyseCVBtn">Analyse CV</button>
+      </div>
+      <div id="cvImportStatus" class="status hidden"></div>
+    </div>
+
     <div class="card">
       <div class="avatar-wrap">
         <div class="avatar" onclick="photoInput.click()" id="profileAvatar"></div>
@@ -1333,7 +1208,7 @@ body.dark .bottom{
     <div class="card">
       <h2 data-i="workExp">Work Experience</h2>
       <div id="experienceCards"></div>
-      <button class="btn secondary" onclick="addExperienceCard()" data-i="addExperience">+ Add New Experience</button>
+      <button class="btn secondary" onclick="addExperienceCard()" data-i="addExperience">+ Add Experience</button>
     </div>
 
     <div class="card">
@@ -1363,10 +1238,19 @@ body.dark .bottom{
 
       <label data-i="professionalSkills">Professional skills</label>
       <textarea id="skills" oninput="saveProfile(false);renderResume();">Customer service, communication, organisation, teamwork, problem solving</textarea>
+      <div class="grid2">
+        <button class="btn secondary mini" onclick="improveField('skills','improve')" data-i="improveAI">Improve with AI</button>
+        <button class="btn secondary mini" onclick="improveField('skills','grammar')" data-i="fixGrammar">Fix grammar</button>
+      </div>
 
       <label data-i="softSkills">Soft skills</label>
       <textarea id="softSkills" oninput="saveProfile(false);renderResume();">Reliability, empathy, attention to detail, adaptability</textarea>
+      <div class="grid2">
+        <button class="btn secondary mini" onclick="improveField('softSkills','improve')" data-i="improveAI">Improve with AI</button>
+        <button class="btn secondary mini" onclick="improveField('softSkills','grammar')" data-i="fixGrammar">Fix grammar</button>
+      </div>
 
+      <br>
       <button class="btn" onclick="saveProfile(true)" data-i="saveProfile">Save Profile</button>
     </div>
   </div>
@@ -1392,7 +1276,7 @@ body.dark .bottom{
   <div class="top">
     <button class="icon" onclick="go('home')">‹</button>
     <h2 data-i="cvBuilder">Resume Builder</h2>
-    <button class="icon" onclick="go('profile')">P</button>
+    <span></span>
   </div>
 
   <div class="tabs">
@@ -1403,14 +1287,18 @@ body.dark .bottom{
 
   <div id="cv-templates" class="panel active">
     <div class="card">
+      <div class="template-filters">
+        <button id="filterAll" class="filter-btn active" onclick="setTemplateFilter('all')" data-i="filterAll">All</button>
+        <button id="filterFree" class="filter-btn" onclick="setTemplateFilter('free')" data-i="filterFree">Free</button>
+        <button id="filterPremium" class="filter-btn" onclick="setTemplateFilter('premium')" data-i="filterPremium">Premium</button>
+      </div>
+
       <label data-i="contentLanguage">Content language</label>
       <select id="cvContentLang" onchange="savePrefs();renderResume();"></select>
 
-      <h2 data-i="chooseTemplate">Choose resume template</h2>
-      <p class="small" data-i="templateNote">2 Free + 8 Premium. Premium opens for testing now.</p>
+      <p class="small" data-i="templateNote">Tap a template to open preview.</p>
 
       <div id="templateGrid" class="template-grid"></div>
-      <button class="btn" onclick="setPanelById('cv-preview');renderResume();" data-i="useTemplate">Use Selected Template</button>
     </div>
   </div>
 
@@ -1427,7 +1315,7 @@ body.dark .bottom{
       <div class="grid2">
         <button class="btn secondary mini" onclick="selectPreviousTemplate()">‹ Template</button>
         <button class="btn secondary mini" onclick="selectNextTemplate()">Template ›</button>
-        <button class="btn secondary mini" onclick="go('profile')" data-i="editProfile">Edit Profile</button>
+        <button class="btn secondary mini" onclick="go('home')" data-i="editProfile">Edit Profile</button>
         <button class="btn secondary mini" onclick="savePDF()" data-i="savePDF">Save PDF</button>
       </div>
     </div>
@@ -1437,14 +1325,30 @@ body.dark .bottom{
     <div class="card">
       <h2 data-i="export">Export</h2>
       <p class="small" data-i="exportNote">Save your resume as PDF or share your professional summary.</p>
+
       <div class="grid2">
-        <button class="btn" onclick="savePDF()" data-i="savePDF">Save as PDF</button>
-        <button class="btn secondary" onclick="shareNative()" data-i="share">Share</button>
-        <button class="btn secondary" onclick="shareEmail()">Email</button>
-        <button class="btn secondary" onclick="shareTelegram()">Telegram</button>
-        <button class="btn secondary" onclick="shareWhatsApp()">WhatsApp</button>
-        <button class="btn secondary" onclick="shareMessenger()">Messenger</button>
-        <button class="btn secondary" onclick="copyCV()" data-i="copyText">Copy Text</button>
+        <button class="btn" onclick="savePDF()" data-i="savePDF">Save PDF</button>
+        <button class="btn secondary" onclick="shareResume()" data-i="share">Share</button>
+        <button class="btn secondary" onclick="toggleEmailMenu()" data-i="emailBtn">Email</button>
+        <button class="btn secondary" onclick="copyCV()" data-i="copyText">Copy text</button>
+      </div>
+
+      <div id="shareMenu" class="menu-pop">
+        <div class="grid2">
+          <button class="btn secondary mini" onclick="shareWhatsApp()">WhatsApp</button>
+          <button class="btn secondary mini" onclick="shareTelegram()">Telegram</button>
+          <button class="btn secondary mini" onclick="shareMessenger()">Messenger</button>
+          <button class="btn secondary mini" onclick="shareViber()">Viber</button>
+          <button class="btn secondary mini" onclick="copyCV()" data-i="copyText">Copy text</button>
+        </div>
+      </div>
+
+      <div id="emailMenu" class="menu-pop">
+        <div class="grid2">
+          <button class="btn secondary mini" onclick="openGmail()">Gmail</button>
+          <button class="btn secondary mini" onclick="openDefaultEmail()" data-i="defaultEmail">Default email</button>
+          <button class="btn secondary mini" onclick="copyCV()" data-i="copyText">Copy text</button>
+        </div>
       </div>
     </div>
   </div>
@@ -1462,32 +1366,34 @@ body.dark .bottom{
     <select id="coverLang"></select>
 
     <label data-i="jobTitle">Job title</label>
-    <input id="coverJob" value="Chef">
+    <input id="coverJob" value="Cleaner">
 
     <label data-i="company">Company</label>
-    <input id="coverCompany" value="The Ritz London">
+    <input id="coverCompany" value="Company name">
 
-    <label data-i="pasteJob">Paste Job Description</label>
+    <label data-i="pasteJob">Job description</label>
     <textarea id="coverText">Paste the job advert here.</textarea>
 
-    <div class="tabs">
-      <div class="tab active" onclick="setTone(this,'formal')" data-i="formal">Formal</div>
-      <div class="tab" onclick="setTone(this,'confident')" data-i="confident">Confident</div>
-      <div class="tab" onclick="setTone(this,'short')" data-i="shortTone">Short</div>
-      <div class="tab" onclick="setTone(this,'uk')" data-i="ukStyle">UK Style</div>
-    </div>
+    <button class="btn" onclick="generateCover()" data-i="generateCover">Create cover letter</button>
+  </div>
+</section>
 
-    <button class="btn" onclick="generateCover()" data-i="generateCover">Generate Cover Letter</button>
+<section id="coverResultScreen" class="screen">
+  <div class="top">
+    <button class="icon" onclick="go('cover')">‹</button>
+    <h2 data-i="coverResultTitle">Your Letter</h2>
+    <span></span>
   </div>
 
-  <div id="coverResult" class="card hidden">
-    <h2 data-i="result">Result</h2>
+  <div class="card">
     <div id="coverOutput" class="cover-output"></div>
     <br>
     <div class="grid2">
       <button class="btn secondary" onclick="copyCover()" data-i="copyText">Copy</button>
-      <button class="btn secondary" onclick="downloadCover()" data-i="downloadTXT">Download TXT</button>
+      <button class="btn secondary" onclick="downloadCoverWord()" data-i="downloadWord">Download Word</button>
     </div>
+    <br>
+    <button class="btn" onclick="generateCover()" data-i="regenerate">Regenerate</button>
   </div>
 </section>
 
@@ -1536,10 +1442,10 @@ body.dark .bottom{
     </div>
 
     <label data-i="position">Position</label>
-    <input id="jobPosition" value="Head Chef">
+    <input id="jobPosition" value="Cleaner">
 
     <label data-i="companyCountry">Company / Country</label>
-    <input id="jobCompany" value="The Ritz London">
+    <input id="jobCompany" value="Company name">
 
     <label data-i="vacancyDesc">Vacancy description</label>
     <textarea id="jobDescription">Paste job description here.</textarea>
@@ -1561,15 +1467,10 @@ body.dark .bottom{
     <h3 id="recruiterName">Naomi</h3>
     <p class="small" data-i="aiRecruiter">AI Recruiter</p>
 
-    <div class="question-card">
-      <b id="questionSpeaker">Naomi:</b>
-      <div id="currentQuestion"></div>
-    </div>
-
     <div id="dialog" class="dialog"></div>
 
     <label data-i="yourAnswer" style="text-align:left">Your answer</label>
-    <textarea id="userAnswer" placeholder="Speak or type your answer here..."></textarea>
+    <textarea id="userAnswer" class="compact" placeholder="Speak or type your answer here..."></textarea>
 
     <div class="grid2">
       <button id="recordBtn" class="btn secondary" onclick="toggleRecording()" data-i="startRecording">Start Recording</button>
@@ -1612,7 +1513,7 @@ body.dark .bottom{
 
 <section id="premium" class="screen">
   <div class="top">
-    <button class="icon" onclick="go('home')">‹</button>
+    <button class="icon" onclick="go('settings')">‹</button>
     <h2>Premium</h2>
     <span></span>
   </div>
@@ -1641,8 +1542,8 @@ body.dark .bottom{
   <div class="card">
     <h2 data-i="theme">Theme</h2>
     <div class="grid2">
-      <button id="lightThemeBtn" class="btn secondary mini theme-btn light" onclick="setTheme('light')" data-i="lightTheme">Light</button>
-      <button id="darkThemeBtn" class="btn secondary mini theme-btn dark" onclick="setTheme('dark')" data-i="darkTheme">Dark</button>
+      <button id="lightThemeBtn" class="btn secondary mini" onclick="setTheme('light')" data-i="lightTheme">Light</button>
+      <button id="darkThemeBtn" class="btn secondary mini" onclick="setTheme('dark')" data-i="darkTheme">Dark</button>
     </div>
   </div>
 
@@ -1681,13 +1582,13 @@ body.dark .bottom{
     <div>▣</div>
     <span data-i="navCV">Resume</span>
   </div>
+  <div class="nav" onclick="go('cover')">
+    <div>✉</div>
+    <span data-i="navLetter">Letter</span>
+  </div>
   <div class="nav" onclick="go('interview')">
     <div>●</div>
     <span data-i="navCoach">Coach</span>
-  </div>
-  <div class="nav" onclick="go('profile')">
-    <div>◉</div>
-    <span data-i="navProfile">Profile</span>
   </div>
   <div class="nav" onclick="go('settings')">
     <div>☰</div>
@@ -1716,40 +1617,24 @@ const languages=[
   ["日本語","ja","ja-JP"],
   ["한국어","ko","ko-KR"],
   ["हिन्दी","hi","hi-IN"],
-  ["עברית","he","he-IL"],
-  ["Svenska","sv","sv-SE"],
-  ["Norsk","no","nb-NO"],
-  ["Dansk","da","da-DK"],
-  ["Suomi","fi","fi-FI"],
-  ["Ελληνικά","el","el-GR"],
-  ["Bahasa Indonesia","id","id-ID"],
-  ["Tiếng Việt","vi","vi-VN"],
-  ["ไทย","th","th-TH"]
+  ["עברית","he","he-IL"]
 ];
 
 const core={
   en:{
     subtitle:"Premium AI tools to build your profile, resume, cover letter and interview confidence.",
     chooseAppLang:"Choose app language",
-    languageNote:"You can change this later in Settings.",
-    continue:"Continue",
-    homeTitle:"Get hired <span class='gold'>faster</span>",
-    homeSub:"Resume, cover letter, profile and AI interview practice in one app.",
-    badgeCover:"Cover Letter",
-    badgeCoach:"Interview Coach",
-    practice:"Practise",
-    profileTitle:"My Professional Profile",
-    profileSub:"Fill once. Use everywhere.",
-    cvBuilder:"Resume Builder",
-    cvSub:"10 useful templates. Preview and PDF match.",
-    coverLetter:"Cover Letter",
-    coverSub:"Generate job-specific letters.",
-    coach:"AI Interview Coach",
-    coachSub:"Practise with a virtual recruiter.",
+    languageNote:"Tap your language to continue.",
     profile:"Profile",
     basic:"Basic",
     work:"Work",
-    files:"Files",
+    education:"Education",
+    skills:"Skills",
+    coursesShort:"Courses",
+    uploadCVTitle:"Upload my CV",
+    uploadCVText:"Upload your old CV and AI will help fill this profile automatically.",
+    uploadCVBtn:"Upload CV",
+    analyseCVBtn:"Analyse CV",
     gender:"Gender",
     fullName:"Full name",
     phone:"Phone",
@@ -1761,19 +1646,18 @@ const core={
     saveProfile:"Save Profile",
     saved:"Profile saved",
     workExp:"Work Experience",
-    addExperience:"+ Add New Experience",
+    addExperience:"+ Add Experience",
     volunteer:"Volunteering",
     addVolunteer:"+ Add Volunteering",
-    education:"Education",
     institution:"University / Institution",
     speciality:"Speciality",
     courses:"Courses & Certificates",
-    coursesShort:"Courses",
     addManualCourse:"+ Add course manually",
     addDiploma:"+ Add certificate / diploma file",
-    skills:"Skills",
     professionalSkills:"Professional skills",
     softSkills:"Soft skills",
+    improveAI:"Improve with AI",
+    fixGrammar:"Fix grammar",
     company:"Company",
     position:"Position",
     responsibilities:"Responsibilities",
@@ -1789,27 +1673,30 @@ const core={
     open:"Open",
     delete:"Delete",
     edit:"Edit",
+    cvBuilder:"Resume Builder",
     contentLanguage:"Content language",
     templates:"Templates",
     preview:"Preview",
     export:"Export",
     exportNote:"Save your resume as PDF or share your professional summary.",
-    templateNote:"2 Free + 8 Premium. Premium opens for testing now.",
-    chooseTemplate:"Choose resume template",
-    useTemplate:"Use Selected Template",
+    templateNote:"Tap a template to open preview.",
+    filterAll:"All",
+    filterFree:"Free",
+    filterPremium:"Premium",
     editProfile:"Edit Profile",
-    savePDF:"Save as PDF",
-    downloadTXT:"Download TXT",
-    copyText:"Copy Text",
+    savePDF:"Save PDF",
+    copyText:"Copy text",
     share:"Share",
+    emailBtn:"Email",
+    defaultEmail:"Default email",
+    coverLetter:"Cover Letter",
     jobTitle:"Job title",
-    pasteJob:"Paste Job Description",
-    formal:"Formal",
-    confident:"Confident",
-    shortTone:"Short",
-    ukStyle:"UK Style",
-    generateCover:"Generate Cover Letter",
-    result:"Result",
+    pasteJob:"Job description",
+    generateCover:"Create cover letter",
+    coverResultTitle:"Your Letter",
+    downloadWord:"Download Word",
+    regenerate:"Regenerate",
+    coach:"AI Interview Coach",
     chooseRecruiter:"Choose your AI recruiter",
     coachDesc:"Voice interview practice with a virtual recruiter.",
     startSetup:"Start Setup",
@@ -1857,34 +1744,24 @@ const core={
     restoreSoon:"Restore Purchase will work after billing connection.",
     navHome:"Home",
     navCV:"Resume",
-    badgeCV:"Resume",
-    startCV:"Start Resume",
+    navLetter:"Letter",
     navCoach:"Coach",
-    navProfile:"Profile",
     navMore:"More"
   },
   uk:{
     subtitle:"Преміум AI-інструменти для профілю, резюме, супровідного листа та підготовки до співбесіди.",
     chooseAppLang:"Оберіть мову",
-    languageNote:"Пізніше можна змінити в налаштуваннях.",
-    continue:"Продовжити",
-    homeTitle:"Отримай роботу <span class='gold'>швидше</span>",
-    homeSub:"Резюме, лист, профіль і AI-підготовка до співбесіди в одному застосунку.",
-    badgeCover:"Супровідний лист",
-    badgeCoach:"Коуч співбесіди",
-    practice:"Тренуватися",
-    profileTitle:"Мій професійний профіль",
-    profileSub:"Заповни один раз. Використовуй всюди.",
-    cvBuilder:"Конструктор резюме",
-    cvSub:"10 корисних шаблонів. Перегляд і PDF збігаються.",
-    coverLetter:"Супровідний лист",
-    coverSub:"Створення листів під вакансію.",
-    coach:"AI-коуч співбесіди",
-    coachSub:"Практика з віртуальним рекрутером.",
+    languageNote:"Натисніть на мову, щоб продовжити.",
     profile:"Профіль",
     basic:"Основне",
     work:"Досвід",
-    files:"Файли",
+    education:"Освіта",
+    skills:"Навички",
+    coursesShort:"Курси",
+    uploadCVTitle:"Завантажити моє резюме",
+    uploadCVText:"Завантажте старе CV, і AI допоможе заповнити профіль автоматично.",
+    uploadCVBtn:"Завантажити CV",
+    analyseCVBtn:"Аналізувати CV",
     gender:"Стать",
     fullName:"Повне ім’я",
     phone:"Телефон",
@@ -1899,16 +1776,15 @@ const core={
     addExperience:"+ Додати досвід",
     volunteer:"Волонтерство",
     addVolunteer:"+ Додати волонтерство",
-    education:"Освіта",
     institution:"Університет / навчальний заклад",
     speciality:"Спеціальність",
     courses:"Курси / сертифікати",
-    coursesShort:"Курси",
     addManualCourse:"+ Додати курс вручну",
     addDiploma:"+ Додати файл сертифіката / диплому",
-    skills:"Навички",
     professionalSkills:"Професійні навички",
     softSkills:"Особисті якості",
+    improveAI:"Покращити з AI",
+    fixGrammar:"Виправити помилки",
     company:"Компанія",
     position:"Посада",
     responsibilities:"Обов’язки",
@@ -1924,27 +1800,30 @@ const core={
     open:"Відкрити",
     delete:"Видалити",
     edit:"Редагувати",
+    cvBuilder:"Конструктор резюме",
     contentLanguage:"Мова контенту",
     templates:"Шаблони",
     preview:"Перегляд",
     export:"Експорт",
     exportNote:"Збережіть резюме як PDF або поділіться професійним описом.",
-    templateNote:"2 безкоштовні + 8 Premium. Premium відкрито для тестування.",
-    chooseTemplate:"Оберіть шаблон резюме",
-    useTemplate:"Використати шаблон",
+    templateNote:"Натисніть на шаблон, щоб відкрити перегляд.",
+    filterAll:"Усі",
+    filterFree:"Безкоштовні",
+    filterPremium:"Premium",
     editProfile:"Редагувати профіль",
     savePDF:"Зберегти PDF",
-    downloadTXT:"Завантажити TXT",
     copyText:"Копіювати текст",
     share:"Поділитися",
+    emailBtn:"Email",
+    defaultEmail:"Пошта за замовчуванням",
+    coverLetter:"Супровідний лист",
     jobTitle:"Посада",
     pasteJob:"Опис вакансії",
-    formal:"Формально",
-    confident:"Впевнено",
-    shortTone:"Коротко",
-    ukStyle:"UK стиль",
     generateCover:"Створити лист",
-    result:"Результат",
+    coverResultTitle:"Ваш лист",
+    downloadWord:"Завантажити Word",
+    regenerate:"Створити ще раз",
+    coach:"AI-коуч співбесіди",
     chooseRecruiter:"Оберіть AI-рекрутера",
     coachDesc:"Голосова практика з віртуальним рекрутером.",
     startSetup:"Почати",
@@ -1991,42 +1870,35 @@ const core={
     restoreSoon:"Відновлення покупки запрацює після підключення оплати.",
     navHome:"Головна",
     navCV:"Резюме",
-    badgeCV:"Резюме",
-    startCV:"Почати резюме",
+    navLetter:"Лист",
     navCoach:"Коуч",
-    navProfile:"Профіль",
     navMore:"Ще"
   }
 };
 
 const navWords={
-  pl:["Start","CV","Coach","Profil","Więcej"],
-  de:["Home","Lebenslauf","Coach","Profil","Mehr"],
-  fr:["Accueil","CV","Coach","Profil","Plus"],
-  es:["Inicio","Currículum","Coach","Perfil","Más"],
-  it:["Home","Curriculum","Coach","Profilo","Altro"],
-  pt:["Início","Currículo","Coach","Perfil","Mais"],
-  nl:["Home","CV","Coach","Profiel","Meer"],
-  tr:["Ana sayfa","Özgeçmiş","Koç","Profil","Daha"],
-  cs:["Domů","Životopis","Kouč","Profil","Více"],
-  sk:["Domov","Životopis","Kouč","Profil","Viac"],
-  ka:["მთავარი","რეზიუმე","ქოუჩი","პროფილი","მეტი"],
-  ar:["الرئيسية","السيرة الذاتية","مدرب","الملف","المزيد"],
-  zh:["首页","简历","教练","资料","更多"],
-  ja:["ホーム","履歴書","コーチ","プロフィール","その他"],
-  ko:["홈","이력서","코치","프로필","더보기"],
-  hi:["होम","रिज्यूमे","कोच","प्रोफ़ाइल","और"],
-  he:["בית","קורות חיים","מאמן","פרופיל","עוד"]
+  pl:["Start","CV","List","Coach","Więcej"],
+  de:["Home","Lebenslauf","Brief","Coach","Mehr"],
+  fr:["Accueil","CV","Lettre","Coach","Plus"],
+  es:["Inicio","CV","Carta","Coach","Más"],
+  it:["Home","CV","Lettera","Coach","Altro"],
+  pt:["Início","CV","Carta","Coach","Mais"],
+  nl:["Home","CV","Brief","Coach","Meer"],
+  tr:["Ana sayfa","CV","Mektup","Koç","Daha"],
+  cs:["Domů","CV","Dopis","Kouč","Více"],
+  sk:["Domov","CV","List","Kouč","Viac"],
+  ar:["الرئيسية","السيرة","خطاب","مدرب","المزيد"],
+  zh:["首页","简历","求职信","教练","更多"],
+  ja:["ホーム","履歴書","手紙","コーチ","その他"],
+  ko:["홈","이력서","편지","코치","더보기"]
 };
 
 Object.keys(navWords).forEach(k=>{
   core[k]=Object.assign({},core.en,{
     navHome:navWords[k][0],
     navCV:navWords[k][1],
-    badgeCV:navWords[k][1],
-    startCV:navWords[k][1],
-    navCoach:navWords[k][2],
-    navProfile:navWords[k][3],
+    navLetter:navWords[k][2],
+    navCoach:navWords[k][3],
     navMore:navWords[k][4]
   });
 });
@@ -2038,9 +1910,10 @@ if(theme==="day")theme="light";
 if(theme==="night")theme="dark";
 
 let currentTpl=Number(localStorage.getItem("jsai_tpl")||0);
-let tone="formal";
+let templateFilter=localStorage.getItem("jsai_templateFilter")||"all";
 let currentRecruiter=1;
 let questionLimit=Number(localStorage.getItem("jsai_questionLimit")||10);
+let uploadedCVFile=null;
 
 let diplomas=[];
 let manualCourses=[];
@@ -2062,11 +1935,9 @@ let vols=[
   }
 ];
 
+let messages=[];
 let answers=[];
-let questions=[];
-let comments=[];
-let currentQuestionText="";
-let currentCommentText="";
+let questionsAsked=[];
 let lastAudioBlob=null;
 let lastAudioUrl=null;
 let mediaRecorder=null;
@@ -2075,7 +1946,7 @@ let audioChunks=[];
 let isRecording=false;
 let aiAudio=null;
 let isAISpeaking=false;
-let isBusy=false;
+let currentQuestionText="";
 
 const recruiters=[
   ["Emma","HR Recruiter","interview-woman1.jpg","female"],
@@ -2089,7 +1960,7 @@ const templates=[
   {id:"classic",name:"Classic Photo",access:"free",cls:"tpl-classic",photo:true},
   {id:"exec",name:"Executive Sidebar",access:"premium",cls:"tpl-exec",photo:true},
   {id:"beige",name:"Modern Beige",access:"premium",cls:"tpl-beige",photo:true},
-  {id:"uk",name:"UK No Photo",access:"premium",cls:"tpl-uk",photo:false},
+  {id:"uk",name:"Elegant UK",access:"premium",cls:"tpl-uk",photo:false},
   {id:"student",name:"Student / Entry",access:"premium",cls:"tpl-student",photo:true},
   {id:"chef",name:"Hospitality / Chef",access:"premium",cls:"tpl-chef",photo:true},
   {id:"support",name:"Customer Support",access:"premium",cls:"tpl-support",photo:false},
@@ -2128,11 +1999,12 @@ function applyTranslations(){
   document.querySelectorAll("[data-i]").forEach(el=>{
     el.innerHTML=t(el.dataset.i);
   });
-  updateThemeButtons();
   renderExperience();
   renderVolunteers();
   renderDiplomas();
   renderManualCourses();
+  updateThemeButtons();
+  updateFilterButtons();
 }
 
 function buildLangs(){
@@ -2155,6 +2027,7 @@ function selectLang(name,code){
   buildLangs();
   applyTranslations();
   renderResume();
+  go("home");
 }
 
 function buildSelects(){
@@ -2170,11 +2043,11 @@ function buildSelects(){
 function go(id){
   stopAllRecording();
   stopAI();
+  closeMenus();
   document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
   $(id).classList.add("active");
   updateNav(id);
   if(id==="cv")renderResume();
-  if(id==="cv-preview")renderResume();
   if(id==="interviewer")renderInterviewers();
   window.scrollTo(0,0);
 }
@@ -2183,12 +2056,13 @@ function updateNav(id){
   const map={
     home:0,
     cv:1,
-    interview:2,
-    interviewer:2,
-    setup:2,
-    live:2,
-    feedback:2,
-    profile:3,
+    cover:2,
+    coverResultScreen:2,
+    interview:3,
+    interviewer:3,
+    setup:3,
+    live:3,
+    feedback:3,
     settings:4,
     premium:4,
     language:4
@@ -2305,6 +2179,58 @@ function loadProfile(){
   }catch(e){}
 }
 
+function handleCVUpload(e){
+  uploadedCVFile=e.target.files[0]||null;
+  if(uploadedCVFile){
+    cvImportStatus.classList.remove("hidden");
+    cvImportStatus.textContent=uploadedCVFile.name;
+  }
+}
+
+async function analyseUploadedCV(){
+  if(!uploadedCVFile){
+    showToast(appLang==="uk"?"Спочатку завантажте CV":"Upload CV first");
+    return;
+  }
+
+  cvImportStatus.classList.remove("hidden");
+  cvImportStatus.textContent=appLang==="uk"?"Функцію AI-аналізу CV підключимо через backend API /api/parse-cv.":"CV AI analysis will be connected through backend API /api/parse-cv.";
+}
+
+async function improveField(id,mode){
+  const field=$(id);
+  if(!field || !field.value.trim()){
+    showToast(appLang==="uk"?"Поле порожнє":"Field is empty");
+    return;
+  }
+
+  const old=field.value;
+  showToast(mode==="grammar"?t("fixGrammar"):t("improveAI"));
+
+  try{
+    const res=await fetch("/api/interview",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        mode:"improve_text",
+        language:langName,
+        task:mode,
+        text:old,
+        rule:"Do not invent experience. Only improve the text that user provided."
+      })
+    });
+
+    if(!res.ok)throw new Error("API failed");
+    const data=await res.json();
+    field.value=data.text || data.result || old;
+    saveProfile(false);
+    renderResume();
+  }catch(e){
+    field.value=old;
+    showToast(appLang==="uk"?"AI-покращення підключимо пізніше":"AI improvement will be connected later");
+  }
+}
+
 function renderExperience(){
   experienceCards.innerHTML=exp.map((x,i)=>x.saved?`
     <div class="card">
@@ -2327,9 +2253,45 @@ function renderExperience(){
       <label>${t("responsibilities")}</label>
       <textarea oninput="exp[${i}].desc=this.value">${esc(x.desc)}</textarea>
 
+      <div class="grid2">
+        <button class="btn secondary mini" onclick="improveExperience(${i},'improve')">${t("improveAI")}</button>
+        <button class="btn secondary mini" onclick="improveExperience(${i},'grammar')">${t("fixGrammar")}</button>
+      </div>
+      <br>
       <button class="btn secondary" onclick="saveExperience(${i})">${t("saveExperience")}</button>
     </div>
   `).join("");
+}
+
+async function improveExperience(i,mode){
+  const old=exp[i].desc;
+  if(!old.trim()){
+    showToast(appLang==="uk"?"Поле порожнє":"Field is empty");
+    return;
+  }
+
+  try{
+    const res=await fetch("/api/interview",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        mode:"improve_text",
+        language:langName,
+        task:mode,
+        text:old,
+        rule:"Do not invent experience. Only improve the text that user provided."
+      })
+    });
+
+    if(!res.ok)throw new Error("API failed");
+    const data=await res.json();
+    exp[i].desc=data.text || data.result || old;
+    renderExperience();
+    saveProfile(false);
+    renderResume();
+  }catch(e){
+    showToast(appLang==="uk"?"AI-покращення підключимо пізніше":"AI improvement will be connected later");
+  }
 }
 
 function addExperienceCard(){
@@ -2499,13 +2461,11 @@ function deleteDiploma(i){
 
 function labels(){
   let l=cvContentLang.value;
-
   if(l==="Українська")return["ПРОФІЛЬ","ДОСВІД","ВОЛОНТЕРСТВО","ОСВІТА","МОВИ","НАВИЧКИ","КОНТАКТИ","ХОБІ","КУРСИ","СПЕЦІАЛЬНІСТЬ"];
-  if(l==="Deutsch")return["PROFIL","ERFAHRUNG","EHRENAMT","BILDUNG","SPRACHEN","FÄHIGKEITEN","KONTAKT","INTERESSEN","KURSE","SPEZIALISIERUNG"];
-  if(l==="Español")return["PERFIL","EXPERIENCIA","VOLUNTARIADO","EDUCACIÓN","IDIOMAS","HABILIDADES","CONTACTO","INTERESES","CURSOS","ESPECIALIDAD"];
-  if(l==="Français")return["PROFIL","EXPÉRIENCE","BÉNÉVOLAT","FORMATION","LANGUES","COMPÉTENCES","CONTACT","INTÉRÊTS","COURS","SPÉCIALITÉ"];
   if(l==="Polski")return["PROFIL","DOŚWIADCZENIE","WOLONTARIAT","EDUKACJA","JĘZYKI","UMIEJĘTNOŚCI","KONTAKT","ZAINTERESOWANIA","KURSY","SPECJALNOŚĆ"];
-
+  if(l==="Deutsch")return["PROFIL","ERFAHRUNG","EHRENAMT","BILDUNG","SPRACHEN","FÄHIGKEITEN","KONTAKT","INTERESSEN","KURSE","SPEZIALISIERUNG"];
+  if(l==="Français")return["PROFIL","EXPÉRIENCE","BÉNÉVOLAT","FORMATION","LANGUES","COMPÉTENCES","CONTACT","INTÉRÊTS","COURS","SPÉCIALITÉ"];
+  if(l==="Español")return["PERFIL","EXPERIENCIA","VOLUNTARIADO","EDUCACIÓN","IDIOMAS","HABILIDADES","CONTACTO","INTERESES","CURSOS","ESPECIALIDAD"];
   return["PROFILE","EXPERIENCE","VOLUNTEERING","EDUCATION","LANGUAGES","SKILLS","CONTACT","INTERESTS","COURSES","SPECIALITY"];
 }
 
@@ -2518,7 +2478,6 @@ function summary(){
   if(cvContentLang.value==="Українська"){
     return `Мотивований фахівець, орієнтований на якісну роботу, комунікацію та розвиток у напрямку ${val("target","позиції")}.`;
   }
-
   return `Motivated professional with strong communication, organisation and customer-focused skills for a ${val("target","target role")} role.`;
 }
 
@@ -2555,7 +2514,7 @@ function skillsBlock(){
 }
 
 function resumeHtml(i){
-  let tpl=templates[i];
+  let tpl=templates[i]||templates[0];
   let L=labels();
   let showPhoto=tpl.photo;
   let img=`<img class="r-photo" src="${photo()}" onerror="this.style.display='none'">`;
@@ -2569,179 +2528,67 @@ function resumeHtml(i){
 
   let side=`
     ${showPhoto?img:""}
-    <div class="r-section">
-      <div class="r-title">${L[6]}</div>
-      <div class="r-small">${contact}</div>
-    </div>
-    <div class="r-section">
-      <div class="r-title">${L[4]}</div>
-      <div class="r-small">${esc(val("profileLanguages","English"))}</div>
-    </div>
-    <div class="r-section skills">
-      <div class="r-title">${L[5]}</div>
-      ${skills}
-    </div>
+    <div class="r-section"><div class="r-title">${L[6]}</div><div class="r-small">${contact}</div></div>
+    <div class="r-section"><div class="r-title">${L[4]}</div><div class="r-small">${esc(val("profileLanguages","English"))}</div></div>
+    <div class="r-section skills"><div class="r-title">${L[5]}</div>${skills}</div>
     ${hobbiesBlock}
   `;
 
   let main=`
-    <div class="r-section">
-      <div class="r-title">${L[0]}</div>
-      <p class="r-text">${esc(summary())}</p>
-    </div>
-    <div class="r-section">
-      <div class="r-title">${L[1]}</div>
-      ${expBlock()}
-    </div>
-    <div class="r-section">
-      <div class="r-title">${L[2]}</div>
-      ${volBlock()}
-    </div>
-    <div class="r-section">
-      <div class="r-title">${L[3]}</div>
-      <p class="r-text">${educationText}</p>
-    </div>
+    <div class="r-section"><div class="r-title">${L[0]}</div><p class="r-text">${esc(summary())}</p></div>
+    <div class="r-section"><div class="r-title">${L[1]}</div>${expBlock()}</div>
+    <div class="r-section"><div class="r-title">${L[2]}</div>${volBlock()}</div>
+    <div class="r-section"><div class="r-title">${L[3]}</div><p class="r-text">${educationText}</p></div>
     ${courseHtml?`<div class="r-section"><div class="r-title">${L[8]}</div>${courseHtml}</div>`:""}
   `;
 
   let head=`<h1 class="r-name">${nm}</h1><p class="r-role">${role}</p>`;
-  let body="";
 
   if(tpl.id==="ats"){
-    body=`
-      <div class="resume-page ${tpl.cls}">
-        ${head}
-        <p class="contact">${esc(val("email"))} | ${esc(val("phone"))} | ${esc(val("location"))}</p>
-        <div class="r-line"></div>
-        ${main}
-        <div class="r-section skills">
-          <div class="r-title">${L[5]}</div>
-          ${skills}
-        </div>
-        ${showHobbies.checked?hobbiesBlock:""}
-      </div>
-    `;
-  }else if(tpl.id==="classic"){
-    body=`
-      <div class="resume-page ${tpl.cls}">
-        <div class="head">
-          ${img}
-          <div>
-            ${head}
-            <p class="r-text">${esc(val("email"))} | ${esc(val("phone"))} | ${esc(val("location"))}</p>
-          </div>
-        </div>
-        ${main}
-        <div class="r-section skills">
-          <div class="r-title">${L[5]}</div>
-          ${skills}
-        </div>
-        ${showHobbies.checked?hobbiesBlock:""}
-      </div>
-    `;
-  }else if(["exec","chef","care"].includes(tpl.id)){
-    body=`
-      <div class="resume-page ${tpl.cls}">
-        <div class="side">${side}</div>
-        <div class="main">${head}${main}</div>
-      </div>
-    `;
-  }else if(tpl.id==="beige"){
-    body=`
-      <div class="resume-page ${tpl.cls}">
-        <div class="topbox">
-          ${img}
-          <div>
-            ${head}
-            <p class="r-text">${esc(val("email"))} | ${esc(val("phone"))} | ${esc(val("location"))}</p>
-          </div>
-        </div>
-        ${main}
-        <div class="r-section skills">
-          <div class="r-title">${L[5]}</div>
-          ${skills}
-        </div>
-        ${showHobbies.checked?hobbiesBlock:""}
-      </div>
-    `;
-  }else if(tpl.id==="uk"){
-    body=`
-      <div class="resume-page ${tpl.cls}">
-        ${head}
-        <p class="contact">${esc(val("email"))} | ${esc(val("phone"))} | ${esc(val("location"))}</p>
-        ${main}
-        <div class="r-section skills">
-          <div class="r-title">${L[5]}</div>
-          ${skills}
-        </div>
-      </div>
-    `;
-  }else if(tpl.id==="student"){
-    body=`
-      <div class="resume-page ${tpl.cls}">
-        <div class="head">
-          ${showPhoto?img:""}
-          ${head}
-          <p class="r-text">${esc(val("email"))} | ${esc(val("phone"))} | ${esc(val("location"))}</p>
-        </div>
-        <div class="r-section skills">
-          <div class="r-title">${L[5]}</div>
-          ${skills}
-        </div>
-        ${main}
-        ${showHobbies.checked?hobbiesBlock:""}
-      </div>
-    `;
-  }else if(tpl.id==="support"){
-    body=`
-      <div class="resume-page ${tpl.cls}">
-        <div class="head">
-          ${head}
-          <p class="r-text">${esc(val("email"))} | ${esc(val("phone"))} | ${esc(val("location"))}</p>
-        </div>
-        <div class="r-section skills"><div class="r-title">${L[5]}</div>${skills}</div>
-        ${main}
-      </div>
-    `;
-  }else if(tpl.id==="creative"){
-    body=`
-      <div class="resume-page ${tpl.cls}">
-        <div class="creative-top">
-          ${showPhoto?img:""}
-          ${head}
-          <p class="r-text" style="color:white">${esc(val("email"))} | ${esc(val("phone"))} | ${esc(val("location"))}</p>
-        </div>
-        <div class="creative-body">
-          <div>
-            <div class="r-section"><div class="r-title">${L[0]}</div><p class="r-text">${esc(summary())}</p></div>
-            <div class="r-section skills"><div class="r-title">${L[5]}</div>${skills}</div>
-            ${courseHtml?`<div class="r-section"><div class="r-title">${L[8]}</div>${courseHtml}</div>`:""}
-          </div>
-          <div>
-            <div class="r-section"><div class="r-title">${L[1]}</div>${expBlock()}</div>
-            <div class="r-section"><div class="r-title">${L[3]}</div><p class="r-text">${educationText}</p></div>
-          </div>
-        </div>
-      </div>
-    `;
-  }else{
-    body=`
-      <div class="resume-page tpl-timeline">
-        ${head}
-        <p class="r-text">${esc(val("email"))} | ${esc(val("phone"))} | ${esc(val("location"))}</p>
-        ${main}
-        <div class="r-section skills"><div class="r-title">${L[5]}</div>${skills}</div>
-      </div>
-    `;
+    return `<div class="resume-page ${tpl.cls}">${head}<p class="contact">${esc(val("email"))} | ${esc(val("phone"))} | ${esc(val("location"))}</p><div class="r-line"></div>${main}<div class="r-section skills"><div class="r-title">${L[5]}</div>${skills}</div>${showHobbies.checked?hobbiesBlock:""}</div>`;
   }
 
-  return body;
+  if(tpl.id==="classic"){
+    return `<div class="resume-page ${tpl.cls}"><div class="head">${img}<div>${head}<p class="r-text">${esc(val("email"))} | ${esc(val("phone"))} | ${esc(val("location"))}</p></div></div>${main}<div class="r-section skills"><div class="r-title">${L[5]}</div>${skills}</div>${showHobbies.checked?hobbiesBlock:""}</div>`;
+  }
+
+  if(["exec","chef","care"].includes(tpl.id)){
+    return `<div class="resume-page ${tpl.cls}"><div class="side">${side}</div><div class="main">${head}${main}</div></div>`;
+  }
+
+  if(tpl.id==="beige"){
+    return `<div class="resume-page ${tpl.cls}"><div class="topbox">${img}<div>${head}<p class="r-text">${esc(val("email"))} | ${esc(val("phone"))} | ${esc(val("location"))}</p></div></div>${main}<div class="r-section skills"><div class="r-title">${L[5]}</div>${skills}</div>${showHobbies.checked?hobbiesBlock:""}</div>`;
+  }
+
+  if(tpl.id==="uk"){
+    return `<div class="resume-page ${tpl.cls}">${head}<p class="contact">${esc(val("email"))} | ${esc(val("phone"))} | ${esc(val("location"))}</p><div class="r-section"><div class="r-title">${L[0]}</div><p class="r-text">${esc(summary())}</p></div><div class="r-section"><div class="r-title">${L[1]}</div>${expBlock()}</div><div class="r-section"><div class="r-title">${L[3]}</div><p class="r-text">${educationText}</p></div><div class="r-section skills"><div class="r-title">${L[5]}</div>${skills}</div></div>`;
+  }
+
+  if(tpl.id==="student"){
+    return `<div class="resume-page ${tpl.cls}"><div class="head">${showPhoto?img:""}${head}<p class="r-text">${esc(val("email"))} | ${esc(val("phone"))} | ${esc(val("location"))}</p></div><div class="r-section skills"><div class="r-title">${L[5]}</div>${skills}</div>${main}${showHobbies.checked?hobbiesBlock:""}</div>`;
+  }
+
+  if(tpl.id==="support"){
+    return `<div class="resume-page ${tpl.cls}"><div class="head">${head}<p class="r-text">${esc(val("email"))} | ${esc(val("phone"))} | ${esc(val("location"))}</p></div><div class="r-section skills"><div class="r-title">${L[5]}</div>${skills}</div>${main}</div>`;
+  }
+
+  if(tpl.id==="creative"){
+    return `<div class="resume-page ${tpl.cls}"><div class="creative-top">${showPhoto?img:""}${head}<p class="r-text" style="color:white">${esc(val("email"))} | ${esc(val("phone"))} | ${esc(val("location"))}</p></div><div class="creative-body"><div><div class="r-section"><div class="r-title">${L[0]}</div><p class="r-text">${esc(summary())}</p></div><div class="r-section skills"><div class="r-title">${L[5]}</div>${skills}</div>${courseHtml?`<div class="r-section"><div class="r-title">${L[8]}</div>${courseHtml}</div>`:""}</div><div><div class="r-section"><div class="r-title">${L[1]}</div>${expBlock()}</div><div class="r-section"><div class="r-title">${L[3]}</div><p class="r-text">${educationText}</p></div></div></div></div>`;
+  }
+
+  return `<div class="resume-page tpl-ats">${head}${main}</div>`;
+}
+
+function filteredTemplates(){
+  if(templateFilter==="all")return templates.map((t,i)=>({tpl:t,index:i}));
+  return templates.map((t,i)=>({tpl:t,index:i})).filter(x=>x.tpl.access===templateFilter);
 }
 
 function renderTemplateGrid(){
-  templateGrid.innerHTML=templates.map((tpl,i)=>`
-    <div class="tpl-card ${i===currentTpl?'active':''}" onclick="selectTemplate(${i})">
-      <div class="mini-stage">${resumeHtml(i)}</div>
+  const list=filteredTemplates();
+  templateGrid.innerHTML=list.map(({tpl,index})=>`
+    <div class="tpl-card ${index===currentTpl?'active':''}" onclick="selectTemplate(${index})">
+      <div class="mini-stage">${resumeHtml(index)}</div>
       <div class="tpl-label">
         <span>${tpl.name}</span>
         <b class="${tpl.access==='free'?'free':'lock'}">${tpl.access==='free'?'FREE':'PREMIUM'}</b>
@@ -2750,20 +2597,39 @@ function renderTemplateGrid(){
   `).join("");
 }
 
+function setTemplateFilter(f){
+  templateFilter=f;
+  localStorage.setItem("jsai_templateFilter",f);
+  updateFilterButtons();
+  renderTemplateGrid();
+}
+
+function updateFilterButtons(){
+  if(!filterAll)return;
+  filterAll.classList.toggle("active",templateFilter==="all");
+  filterFree.classList.toggle("active",templateFilter==="free");
+  filterPremium.classList.toggle("active",templateFilter==="premium");
+}
+
 function selectTemplate(i){
   currentTpl=i;
   savePrefs();
   if(templates[i].access==="premium")showToast("Premium template. Open for testing now.");
   renderTemplateGrid();
   renderResume();
+  setPanelById("cv-preview");
 }
 
 function selectNextTemplate(){
-  selectTemplate((currentTpl+1)%templates.length);
+  currentTpl=(currentTpl+1)%templates.length;
+  savePrefs();
+  renderResume();
 }
 
 function selectPreviousTemplate(){
-  selectTemplate((currentTpl-1+templates.length)%templates.length);
+  currentTpl=(currentTpl-1+templates.length)%templates.length;
+  savePrefs();
+  renderResume();
 }
 
 function renderResume(){
@@ -2809,79 +2675,145 @@ ${val("skills")}
 ${val("softSkills")}`;
 }
 
-function downloadFile(n,txt){
-  let a=document.createElement("a");
-  a.href=URL.createObjectURL(new Blob([txt],{type:"text/plain"}));
-  a.download=n;
-  a.click();
-}
-
 function copyCV(){
   navigator.clipboard.writeText(cvText()).then(()=>showToast("Copied"));
 }
 
-function shareNative(){
-  navigator.share?navigator.share({title:"Resume",text:cvText()}):copyCV();
-}
-
-function encodedShare(){
+function encodedCV(){
   return encodeURIComponent(cvText());
 }
 
-function shareEmail(){
-  location.href=`mailto:?subject=${encodeURIComponent("Resume - "+val("name"))}&body=${encodedShare()}`;
+function closeMenus(){
+  if(shareMenu)shareMenu.classList.remove("active");
+  if(emailMenu)emailMenu.classList.remove("active");
 }
 
-function shareTelegram(){
-  window.open(`https://t.me/share/url?url=&text=${encodedShare()}`,"_blank");
+function toggleEmailMenu(){
+  shareMenu.classList.remove("active");
+  emailMenu.classList.toggle("active");
+}
+
+function shareResume(){
+  emailMenu.classList.remove("active");
+
+  if(navigator.share){
+    navigator.share({title:"Resume",text:cvText()}).catch(()=>{
+      shareMenu.classList.add("active");
+    });
+  }else{
+    shareMenu.classList.toggle("active");
+  }
 }
 
 function shareWhatsApp(){
-  window.open(`https://wa.me/?text=${encodedShare()}`,"_blank");
+  window.open(`https://wa.me/?text=${encodedCV()}`,"_blank");
+}
+
+function shareTelegram(){
+  window.open(`https://t.me/share/url?url=&text=${encodedCV()}`,"_blank");
 }
 
 function shareMessenger(){
-  window.open(`https://www.facebook.com/dialog/send?link=${encodeURIComponent(location.href)}&app_id=123456789&redirect_uri=${encodeURIComponent(location.href)}`,"_blank");
+  window.open(`https://www.messenger.com/`,"_blank");
+  copyCV();
 }
 
-function setTone(el,x){
-  tone=x;
-  document.querySelectorAll("#cover .tab").forEach(t=>t.classList.remove("active"));
-  el.classList.add("active");
+function shareViber(){
+  window.open(`viber://forward?text=${encodedCV()}`,"_blank");
 }
 
-function generateCover(){
-  let job=val("coverJob","the role");
-  let comp=val("coverCompany","the company");
-  let n=val("name","Candidate");
-  let out="";
+function openGmail(){
+  const subject=encodeURIComponent("Resume - "+val("name","Candidate"));
+  const body=encodedCV();
+  window.open(`https://mail.google.com/mail/?view=cm&fs=1&su=${subject}&body=${body}`,"_blank");
+}
+
+function openDefaultEmail(){
+  const subject=encodeURIComponent("Resume - "+val("name","Candidate"));
+  const body=encodedCV();
+  location.href=`mailto:?subject=${subject}&body=${body}`;
+}
+
+async function generateCover(){
+  const job=val("coverJob","the role");
+  const companyName=val("coverCompany","the company");
+  const advert=val("coverText","");
+  const language=coverLang.value || langName;
+
+  coverOutput.textContent=appLang==="uk"?"Створюю лист...":"Creating letter...";
+  go("coverResultScreen");
+
+  try{
+    const res=await fetch("/api/interview",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        mode:"cover_letter",
+        language,
+        job,
+        company:companyName,
+        vacancy:advert,
+        instruction:"Write a complete, professional cover letter. Do not make it too short. Use profile data. Same language as selected content language.",
+        profile:{
+          name:val("name"),
+          target:val("target"),
+          experience:exp,
+          education:val("education"),
+          speciality:val("speciality"),
+          skills:val("skills"),
+          languages:val("profileLanguages")
+        }
+      })
+    });
+
+    if(!res.ok)throw new Error("API failed");
+    const data=await res.json();
+    coverOutput.textContent=data.letter || data.text || makeCoverFallback(job,companyName,advert);
+  }catch(e){
+    coverOutput.textContent=makeCoverFallback(job,companyName,advert);
+  }
+}
+
+function makeCoverFallback(job,companyName,advert){
+  const n=val("name","Candidate");
+  const skillsText=val("skills","communication, responsibility and organisation");
+  const experienceText=exp.map(x=>`${x.position} at ${x.company}`).join(", ");
 
   if(coverLang.value==="Українська"){
-    out=`Шановний менеджере з найму,
+    return `Шановний менеджере з найму,
 
-Хочу подати свою кандидатуру на позицію ${job} у ${comp}. Мій досвід і навички можуть бути корисними вашій команді.
+Хочу подати свою кандидатуру на позицію ${job} у ${companyName}. Мене зацікавила ця вакансія, тому що я хочу працювати в команді, де важливі відповідальність, уважність до деталей і якісне виконання роботи.
+
+Мій досвід включає: ${experienceText || "практичний досвід роботи з людьми та щоденними робочими завданнями"}. Я вмію організовувати свою роботу, дотримуватися інструкцій, працювати уважно та відповідально. Серед моїх сильних сторін: ${skillsText}.
+
+Я готова швидко навчатися, виконувати завдання якісно та бути корисною вашій команді. Буду рада можливості обговорити, як мій досвід і мотивація можуть відповідати потребам вашої компанії.
 
 З повагою,
 ${n}`;
-  }else{
-    out=`Dear Hiring Manager,
+  }
 
-I am writing to apply for the ${job} position at ${comp}. My experience, reliability and motivation would allow me to contribute positively to your team.
+  return `Dear Hiring Manager,
+
+I would like to apply for the ${job} position at ${companyName}. I am interested in this vacancy because I would like to work in a team where reliability, attention to detail and high-quality work are important.
+
+My experience includes: ${experienceText || "practical experience working with people and daily work tasks"}. I am able to organise my work, follow instructions, stay attentive and take responsibility for the quality of my tasks. My key strengths include ${skillsText}.
+
+I am ready to learn quickly, work carefully and contribute positively to your team. I would be glad to discuss how my experience and motivation can match the needs of your company.
 
 Kind regards,
 ${n}`;
-  }
-
-  coverOutput.textContent=out;
-  coverResult.classList.remove("hidden");
 }
 
 function copyCover(){
   navigator.clipboard.writeText(coverOutput.textContent).then(()=>showToast("Copied"));
 }
 
-function downloadCover(){
-  downloadFile("Cover-Letter.txt",coverOutput.textContent);
+function downloadCoverWord(){
+  const html=`<html><head><meta charset="utf-8"></head><body><pre style="font-family:Arial;white-space:pre-wrap;font-size:14px;">${esc(coverOutput.textContent)}</pre></body></html>`;
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(new Blob([html],{type:"application/msword"}));
+  a.download="Cover-Letter.doc";
+  a.click();
 }
 
 function renderInterviewers(){
@@ -2899,8 +2831,7 @@ function selectedRecruiter(){
 }
 
 function selectedVoice(){
-  const r=selectedRecruiter();
-  return r[3]==="male" ? "onyx" : "nova";
+  return selectedRecruiter()[3]==="male" ? "onyx" : "nova";
 }
 
 function setQuestionLimit(n){
@@ -2911,7 +2842,6 @@ function setQuestionLimit(n){
 }
 
 function setBusy(state,msg=""){
-  isBusy=state;
   if(startInterviewBtn)startInterviewBtn.disabled=state;
   if(sendBtn)sendBtn.disabled=state;
   if(recordBtn)recordBtn.disabled=state;
@@ -2924,16 +2854,27 @@ function setBusy(state,msg=""){
   if(recordStatus&&msg)recordStatus.textContent=msg;
 }
 
-function makeGreetingFallback(){
+function greetingText(){
   const r=selectedRecruiter()[0];
   const pos=val("jobPosition","the position");
-  if(interviewLang.value==="Українська"){
-    return `Добрий день, мене звати ${r}. Сьогодні ми проведемо коротку співбесіду на позицію ${pos}. Для початку розкажіть, будь ласка, трохи про себе та свій досвід.`;
+  const lang=interviewLang.value;
+
+  if(lang==="Українська"){
+    return `Добрий день, мене звати ${r}. Сьогодні ми проведемо коротку співбесіду на позицію ${pos}. Для початку розкажіть, будь ласка, трохи про себе.`;
   }
-  return `Hello, my name is ${r}. Today we will have a short interview for the ${pos} position. To start, please tell me briefly about yourself and your experience.`;
+
+  if(lang==="Polski"){
+    return `Dzień dobry, mam na imię ${r}. Dzisiaj przeprowadzimy krótką rozmowę na stanowisko ${pos}. Na początek proszę krótko opowiedzieć o sobie.`;
+  }
+
+  return `Hello, my name is ${r}. Today we will have a short interview for the ${pos} position. To start, please tell me briefly about yourself.`;
 }
 
-async function callInterviewAPI({first=false,feedback=false}={}){
+function buildQuestionInstruction(){
+  return `Return only one short interview question. No comments, no explanations, no empathy phrases. The question must fit the exact job title. Use simple everyday language for practical jobs. Do not ask manager-style questions unless the role is managerial.`;
+}
+
+async function callInterviewAPI({feedback=false}={}){
   const r=selectedRecruiter();
 
   const payload={
@@ -2944,12 +2885,13 @@ async function callInterviewAPI({first=false,feedback=false}={}){
     company:val("jobCompany","Company"),
     vacancy:val("jobDescription",""),
     answers:answers,
-    questions:questions,
-    askedQuestions:questions,
-    lastQuestion:currentQuestionText,
-    first,
+    questions:questionsAsked,
+    askedQuestions:questionsAsked,
     feedback,
-    questionLimit
+    questionLimit,
+    instruction: feedback
+      ? "Analyse the candidate's real answers. Do not give generic advice. Give specific feedback based only on what the candidate said. If answers are short, explain exactly why. Provide improved example answers in the same language. Return detailed feedback in sections."
+      : buildQuestionInstruction()
   };
 
   const response=await fetch("/api/interview",{
@@ -2988,8 +2930,7 @@ async function speakAI(text){
     });
 
     if(!response.ok){
-      const err=await response.text();
-      throw new Error(err || "TTS failed");
+      throw new Error("TTS failed");
     }
 
     const blob=await response.blob();
@@ -3015,7 +2956,6 @@ async function speakAI(text){
     liveAvatar.classList.remove("speaking");
     repeatBtn.textContent=t("repeatQuestion");
     showToast("Voice error");
-    console.error(error);
   }
 }
 
@@ -3029,17 +2969,13 @@ function stopAI(){
   }
 
   isAISpeaking=false;
-
   if(liveAvatar)liveAvatar.classList.remove("speaking");
   if(repeatBtn)repeatBtn.textContent=t("repeatQuestion");
 }
 
 function toggleAIQuestion(){
-  if(isAISpeaking){
-    stopAI();
-  }else{
-    speakAI(currentQuestionText);
-  }
+  if(isAISpeaking)stopAI();
+  else speakAI(currentQuestionText);
 }
 
 async function startInterview(){
@@ -3049,74 +2985,66 @@ async function startInterview(){
   const r=selectedRecruiter();
   liveAvatar.innerHTML=`<img src="${r[2]}" onerror="this.style.display='none'">`;
   recruiterName.textContent=r[0];
-  questionSpeaker.textContent=r[0]+":";
 
+  messages=[];
   answers=[];
-  questions=[];
-  comments=[];
+  questionsAsked=[];
   currentQuestionText="";
-  currentCommentText="";
   dialog.innerHTML="";
   userAnswer.value="";
   clearMyAnswer(true);
 
-  setBusy(true,"Preparing interview...");
+  currentQuestionText=greetingText();
+  messages.push({role:"ai",text:currentQuestionText,greeting:true});
 
-  try{
-    const data=await callInterviewAPI({first:true});
-    currentQuestionText=data.question || makeGreetingFallback();
-    currentCommentText=data.comment || "";
-    questions.push(currentQuestionText);
-    comments.push(currentCommentText);
-
-    go("live");
-    renderDialog();
-    await speakAI(currentQuestionText);
-  }catch(error){
-    console.error(error);
-    currentQuestionText=makeGreetingFallback();
-    questions.push(currentQuestionText);
-    comments.push("");
-    go("live");
-    renderDialog();
-    await speakAI(currentQuestionText);
-  }finally{
-    setBusy(false);
-  }
+  go("live");
+  renderDialog();
+  await speakAI(currentQuestionText);
 }
 
 function renderDialog(){
   const r=selectedRecruiter();
-  currentQuestion.textContent=currentQuestionText || questions[questions.length-1] || "";
-  dialog.innerHTML=questions.map((q,i)=>`
-    <div class="bubble ai">
-      <b>${r[0]}:</b><br>
-      ${comments[i]?`<span>${esc(comments[i])}</span><br><br>`:""}
-      ${esc(q)}
-    </div>
-    ${answers[i]?`
-      <div class="bubble me">
-        <b>You:</b><br>
-        ${esc(answers[i])}
-        <div class="bubble-actions">
-          <button onclick="deleteAnswer(${i})">${t("delete")}</button>
-        </div>
+  dialog.innerHTML=messages.map((m,i)=>{
+    if(m.role==="ai"){
+      return `<div class="bubble ai"><b>${r[0]}:</b><br>${esc(m.text)}</div>`;
+    }
+
+    return `<div class="bubble me"><b>You:</b><br>${esc(m.text)}
+      <div class="bubble-actions">
+        <button onclick="deleteAnswer(${m.answerIndex})">${t("delete")}</button>
       </div>
-    `:""}
-  `).join("");
+    </div>`;
+  }).join("");
 }
 
 function addMe(x){
+  const answerIndex=answers.length;
   answers.push(x);
+  messages.push({role:"me",text:x,answerIndex});
   renderDialog();
 }
 
 function deleteAnswer(i){
   answers=answers.slice(0,i);
-  questions=questions.slice(0,i+1);
-  comments=comments.slice(0,i+1);
-  currentQuestionText=questions[questions.length-1]||"";
-  currentCommentText=comments[comments.length-1]||"";
+  const keepMessages=[];
+  let seenAnswers=0;
+
+  for(const m of messages){
+    if(m.role==="me"){
+      if(seenAnswers<i){
+        keepMessages.push(m);
+      }
+      seenAnswers++;
+    }else{
+      if(seenAnswers<=i){
+        keepMessages.push(m);
+      }
+    }
+  }
+
+  messages=keepMessages;
+  questionsAsked=messages.filter(m=>m.role==="ai"&&!m.greeting).map(m=>m.text);
+  currentQuestionText=messages.filter(m=>m.role==="ai").slice(-1)[0]?.text || "";
   userAnswer.value="";
   clearMyAnswer(true);
   renderDialog();
@@ -3137,7 +3065,9 @@ async function sendAnswer(){
   userAnswer.value="";
   clearMyAnswer(true);
 
-  if(answers.length>=questionLimit){
+  const realQuestionCount=questionsAsked.length;
+
+  if(realQuestionCount>=questionLimit){
     await finishInterview();
     return;
   }
@@ -3146,50 +3076,84 @@ async function sendAnswer(){
 
   try{
     const data=await callInterviewAPI();
-    currentCommentText=data.comment || "";
-    currentQuestionText=data.question || fallbackNextQuestion();
-    questions.push(currentQuestionText);
-    comments.push(currentCommentText);
-    renderDialog();
-    await speakAI(currentQuestionText);
+    currentQuestionText=(data.question || data.text || "").trim();
+    if(!currentQuestionText || currentQuestionText.length>220){
+      currentQuestionText=fallbackNextQuestion();
+    }
   }catch(error){
-    console.error(error);
     currentQuestionText=fallbackNextQuestion();
-    currentCommentText="";
-    questions.push(currentQuestionText);
-    comments.push("");
-    renderDialog();
-    showToast("Interview API error");
-  }finally{
-    setBusy(false);
   }
+
+  questionsAsked.push(currentQuestionText);
+  messages.push({role:"ai",text:currentQuestionText,greeting:false});
+  renderDialog();
+  await speakAI(currentQuestionText);
+  setBusy(false);
 }
 
 function fallbackNextQuestion(){
-  if(interviewLang.value==="Українська"){
-    const list=[
-      "Який ваш найважливіший досвід для цієї посади?",
-      "З якими складними ситуаціями ви стикалися на роботі?",
-      "Чому вас зацікавила саме ця вакансія?",
-      "Які ваші сильні сторони для цієї ролі?",
-      "Який приклад з попередньої роботи найкраще показує ваші навички?"
-    ];
-    return list[answers.length%list.length];
-  }
+  const role=val("jobPosition","").toLowerCase();
+  const lang=interviewLang.value;
 
-  const list=[
-    "What experience is most relevant to this role?",
-    "Tell me about a difficult situation you handled at work.",
-    "Why are you interested in this vacancy?",
-    "What are your strongest skills for this position?",
-    "Can you give an example that shows your professional strengths?"
+  const cleanerUk=[
+    "Чи маєте ви досвід прибирання?",
+    "Які приміщення ви прибирали раніше?",
+    "Чи вмієте ви користуватися мийними засобами?",
+    "Чи можете ви працювати вранці або ввечері?",
+    "Що ви робите, якщо клієнт незадоволений прибиранням?"
   ];
-  return list[answers.length%list.length];
+
+  const cleanerEn=[
+    "Do you have cleaning experience?",
+    "What places have you cleaned before?",
+    "Can you use cleaning products safely?",
+    "Can you work mornings or evenings?",
+    "What would you do if a client was not happy with the cleaning?"
+  ];
+
+  const chefUk=[
+    "Який у вас досвід роботи на кухні?",
+    "З якими стравами або заготовками ви працювали?",
+    "Як ви дотримуєтеся чистоти на кухні?",
+    "Чи можете ви працювати у швидкому темпі?",
+    "Як ви працюєте в команді на кухні?"
+  ];
+
+  const chefEn=[
+    "What kitchen experience do you have?",
+    "What dishes or preparation tasks have you worked with?",
+    "How do you keep the kitchen clean?",
+    "Can you work at a fast pace?",
+    "How do you work in a kitchen team?"
+  ];
+
+  const generalUk=[
+    "Який ваш досвід найбільше підходить для цієї посади?",
+    "Чому вас зацікавила ця вакансія?",
+    "Які ваші сильні сторони для цієї роботи?",
+    "З якою складною ситуацією ви стикалися на роботі?",
+    "Коли ви можете почати працювати?"
+  ];
+
+  const generalEn=[
+    "What experience is most relevant to this role?",
+    "Why are you interested in this vacancy?",
+    "What are your strongest skills for this job?",
+    "Tell me about a difficult work situation you handled.",
+    "When can you start working?"
+  ];
+
+  let list;
+  if(role.includes("clean")||role.includes("приб")||role.includes("убор"))list=lang==="Українська"?cleanerUk:cleanerEn;
+  else if(role.includes("chef")||role.includes("cook")||role.includes("кухар")||role.includes("повар"))list=lang==="Українська"?chefUk:chefEn;
+  else list=lang==="Українська"?generalUk:generalEn;
+
+  return list[questionsAsked.length%list.length];
 }
 
 async function toggleRecording(){
   if(isRecording){
-    await stopRecording(true);
+    await stopRecording();
     return;
   }
 
@@ -3227,7 +3191,6 @@ async function toggleRecording(){
 
     mediaRecorder.start();
   }catch(error){
-    console.error(error);
     isRecording=false;
     recordBtn.textContent=t("startRecording");
     recordStatus.textContent="Microphone access failed.";
@@ -3238,7 +3201,7 @@ async function toggleRecording(){
   }
 }
 
-async function stopRecording(shouldTranscribe=false){
+async function stopRecording(){
   if(!isRecording)return;
 
   isRecording=false;
@@ -3278,15 +3241,12 @@ async function transcribeLastAnswer(){
   try{
     const response=await fetch("/api/transcribe",{
       method:"POST",
-      headers:{
-        "Content-Type":"audio/webm"
-      },
+      headers:{"Content-Type":"audio/webm"},
       body:lastAudioBlob
     });
 
     if(!response.ok){
-      const text=await response.text();
-      throw new Error(text || "Transcription failed");
+      throw new Error("Transcription failed");
     }
 
     const data=await response.json();
@@ -3299,7 +3259,6 @@ async function transcribeLastAnswer(){
       recordStatus.textContent="Could not recognise speech.";
     }
   }catch(error){
-    console.error(error);
     recordStatus.textContent="Transcription error.";
     showToast("Transcription error");
   }finally{
@@ -3308,15 +3267,11 @@ async function transcribeLastAnswer(){
 }
 
 function playMyAnswer(){
-  if(lastAudioUrl){
-    new Audio(lastAudioUrl).play();
-  }
+  if(lastAudioUrl)new Audio(lastAudioUrl).play();
 }
 
 function clearMyAnswer(clearText=false){
-  if(lastAudioUrl){
-    URL.revokeObjectURL(lastAudioUrl);
-  }
+  if(lastAudioUrl)URL.revokeObjectURL(lastAudioUrl);
   lastAudioUrl=null;
   lastAudioBlob=null;
   if(audioControls)audioControls.classList.remove("active");
@@ -3334,8 +3289,8 @@ async function finishInterview(){
     scoreNum.textContent="—";
     feedbackTitle.textContent=interviewLang.value==="Українська"?"Недостатньо відповідей":"Not enough answers";
     feedbackText.innerHTML=interviewLang.value==="Українська"
-      ? `<p>Ви ще не дали відповідей, тому повну оцінку сформувати неможливо.</p><p>Почніть співбесіду ще раз і дайте хоча б 2–3 відповіді, щоб отримати корисний фідбек.</p>`
-      : `<p>You have not answered any questions yet, so a full assessment is not possible.</p><p>Start again and answer at least 2–3 questions to get useful feedback.</p>`;
+      ? `<p>Ви ще не дали відповідей, тому повну оцінку сформувати неможливо.</p><p>Почніть співбесіду ще раз і дайте хоча б 2–3 відповіді.</p>`
+      : `<p>You have not answered any questions yet, so a full assessment is not possible.</p><p>Start again and answer at least 2–3 questions.</p>`;
     return;
   }
 
@@ -3345,51 +3300,59 @@ async function finishInterview(){
 
   try{
     const data=await callInterviewAPI({feedback:true});
-    const score=data.score || data.rating || Math.min(9,Math.max(4,5+answers.length*.5)).toFixed(1);
+    const score=data.score || data.rating || Math.min(9,Math.max(4,4.8+answers.length*.45)).toFixed(1);
     const feedback=data.feedback || data.tips || data.comment || fallbackFeedback();
 
     scoreNum.textContent=String(score).replace("/10","");
     feedbackTitle.textContent=interviewLang.value==="Українська"?"Фідбек співбесіди":"Interview Feedback";
     feedbackText.innerHTML=`<div class="cover-output">${esc(feedback)}</div>`;
   }catch(e){
-    console.error(e);
-    const score=Math.min(8.5,Math.max(4.5,5+answers.length*.45)).toFixed(1);
-    scoreNum.textContent=score;
+    scoreNum.textContent=Math.min(8.5,Math.max(4.5,4.8+answers.length*.45)).toFixed(1);
     feedbackTitle.textContent=interviewLang.value==="Українська"?"Попередній фідбек":"Preliminary Feedback";
     feedbackText.innerHTML=`<div class="cover-output">${esc(fallbackFeedback())}</div>`;
   }
 }
 
 function fallbackFeedback(){
+  const shortCount=answers.filter(a=>a.split(/\s+/).length<8).length;
+
   if(interviewLang.value==="Українська"){
-    return `Ви відповіли на ${answers.length} питань.
+    return `ЗАГАЛЬНА ОЦІНКА
+Ви відповіли на ${answers.length} питань. ${shortCount?`Деякі відповіді були дуже короткими, тому рекрутеру може бути важко оцінити ваш досвід.`:""}
 
-Що вже добре:
-- Ви почали формувати відповіді для співбесіди.
-- У відповідях є основа, яку можна розвинути.
+ЩО БУЛО ДОБРЕ
+- Ви дали відповіді й почали формувати свою позицію.
+- У вас є базова мотивація для роботи.
 
-Що покращити:
-- Додайте конкретний приклад із роботи.
-- Пояснюйте не лише що ви робили, а й який був результат.
-- Відповідь краще будувати коротко: ситуація → дія → результат.
+ЩО ПОКРАЩИТИ
+- Додайте конкретний приклад із роботи або життя.
+- Пояснюйте не лише “хочу працювати”, а чому ви підходите саме для цієї роботи.
+- Відповідайте просто: досвід → що робили → чому це корисно роботодавцю.
 
-Приклад сильнішої відповіді:
-“На попередній роботі я відповідала за конкретне завдання, організувала процес і допомогла команді отримати кращий результат. Це показує мою відповідальність і вміння працювати в реальних умовах.”`;
+ПРИКЛАД КРАЩОЇ ВІДПОВІДІ
+“Я зацікавлена в цій роботі, тому що маю відповідальне ставлення до завдань, готова дотримуватися правил і працювати якісно. Раніше я виконувала подібні обов’язки, тому розумію, що важливі пунктуальність, уважність і стабільність.”
+
+ПОРАДА
+Перед наступною співбесідою підготуйте 3 короткі приклади: ваш досвід, ваша сильна сторона і ситуація, де ви добре впоралися із завданням.`;
   }
 
-  return `You answered ${answers.length} questions.
+  return `GENERAL ASSESSMENT
+You answered ${answers.length} questions. ${shortCount?`Some answers were very short, so the recruiter may not see enough evidence of your experience.`:""}
 
-What is already good:
-- You started building interview answers.
-- Your answers have a base that can be improved.
+WHAT WAS GOOD
+- You answered the questions and started building your interview response.
+- You showed basic motivation for the job.
 
-What to improve:
-- Add a specific work example.
-- Explain not only what you did, but what result you achieved.
-- Use a clear structure: situation → action → result.
+WHAT TO IMPROVE
+- Add one specific example from work or life.
+- Do not only say that you want the job; explain why you are suitable.
+- Keep answers simple: experience → what you did → why it helps the employer.
 
-Stronger answer example:
-“In my previous role, I was responsible for a specific task, organised the process and helped the team achieve a better result. This shows my reliability and ability to work in real situations.”`;
+BETTER ANSWER EXAMPLE
+“I am interested in this job because I am responsible, ready to follow instructions and able to work carefully. I have done similar tasks before, so I understand that punctuality, attention to detail and reliability are important.”
+
+ADVICE
+Before the next interview, prepare three short examples: your experience, your strongest quality and one situation where you handled a task well.`;
 }
 
 function init(){
@@ -3404,6 +3367,7 @@ function init(){
   renderManualCourses();
   renderInterviewers();
   setQuestionLimit(questionLimit);
+  updateFilterButtons();
   applyTranslations();
   renderResume();
 }
@@ -3412,4 +3376,3 @@ init();
 </script>
 </body>
 </html>
-```
