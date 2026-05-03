@@ -4,6 +4,8 @@ export default async function handler(req, res) {
   }
 
   try {
+    const body = req.body || {};
+
     const {
       mode = "question",
       language = "English",
@@ -18,8 +20,9 @@ export default async function handler(req, res) {
       feedback = false,
       job = "",
       profile = {},
-      instruction = ""
-    } = req.body || {};
+      instruction = "",
+      qaPairs = []
+    } = body;
 
     if (!process.env.OPENAI_API_KEY) {
       return res.status(500).json({
@@ -28,7 +31,7 @@ export default async function handler(req, res) {
     }
 
     if (mode === "cover_letter") {
-      return await createCoverLetter(req, res, {
+      return await createCoverLetter(res, {
         language,
         job,
         company,
@@ -38,18 +41,19 @@ export default async function handler(req, res) {
     }
 
     if (mode === "feedback" || feedback === true) {
-      return await createInterviewFeedback(req, res, {
+      return await createInterviewFeedback(res, {
         language,
         recruiter,
         position,
         company,
         vacancy,
         answers,
-        questions
+        questions,
+        qaPairs
       });
     }
 
-    return await createNextQuestion(req, res, {
+    return await createNextQuestion(res, {
       language,
       recruiter,
       position,
@@ -61,7 +65,6 @@ export default async function handler(req, res) {
       questionLimit,
       instruction
     });
-
   } catch (error) {
     return res.status(500).json({
       error: "Server error",
@@ -70,7 +73,7 @@ export default async function handler(req, res) {
   }
 }
 
-async function callOpenAI(messages, temperature = 0.45) {
+async function callOpenAI(messages, temperature = 0.35) {
   const openaiResponse = await fetch("https://api.openai.com/v1/chat/completions", {
     method: "POST",
     headers: {
@@ -100,7 +103,7 @@ async function callOpenAI(messages, temperature = 0.45) {
   }
 }
 
-async function createNextQuestion(req, res, data) {
+async function createNextQuestion(res, data) {
   const {
     language,
     recruiter,
@@ -114,10 +117,8 @@ async function createNextQuestion(req, res, data) {
     instruction = ""
   } = data;
 
-  const allAsked = [...questions, ...askedQuestions].filter(Boolean);
-  const lastAnswer = answers[answers.length - 1] || "";
   const role = String(position || "").toLowerCase();
-
+  const allAsked = [...questions, ...askedQuestions].filter(Boolean);
   const fallback = getFallbackQuestion(role, language, allAsked.length);
 
   const systemPrompt = `
@@ -125,22 +126,23 @@ You are ${recruiter}, a professional AI recruiter.
 
 Speak only in this language: ${language}.
 
-You must ask ONE short, realistic interview question.
+Your task is to ask ONE next interview question.
 
-Rules:
+Important rules:
 - Return JSON only.
-- Do not write long comments.
+- Ask one short, clear, practical question.
+- Do not write comments before the question.
 - Do not ask abstract questions for practical jobs.
-- Do not ask about "methods", "approaches", "strategies", "optimisation" unless the job is managerial.
-- For cleaner / cleaning / прибиральниця / уборщица, ask about real cleaning experience, places cleaned, cleaning products, schedule, client comments, physical work, reliability and start date.
-- For cook / chef / kitchen jobs, ask about kitchen tasks, speed, cleanliness, teamwork, food preparation.
-- For customer support / chat operator, ask about clients, complaints, typing, tone, difficult messages.
-- For care / social worker, ask about helping people, empathy, responsibility, difficult situations.
-- Avoid repeating previous questions.
-- Keep the question simple and concrete.
-- The question must match the vacancy and position.
+- Do not use words like "methods", "approaches", "strategies", "optimisation", "process improvement" unless the role is managerial.
+- Do not repeat previous questions.
+- Adapt to the position and vacancy.
+- For cleaner / cleaning / прибиральниця / уборщица: ask about real cleaning experience, places cleaned, products used, schedule, client comments, physical work, reliability, start date.
+- For cook / chef / kitchen: ask about kitchen tasks, food preparation, cleanliness, speed, teamwork.
+- For customer support / chat operator: ask about customer messages, complaints, polite tone, fast typing, unclear questions.
+- For care / social worker: ask about helping people, patience, responsibility, difficult situations.
+- If the candidate gave a short answer, ask a follow-up that helps them give a better concrete answer.
 
-Return JSON:
+Return JSON exactly like:
 {
   "question": "one interview question only"
 }
@@ -153,22 +155,23 @@ Vacancy description:
 ${vacancy || "Not provided"}
 
 Previous questions:
-${allAsked.join("\n") || "None"}
+${allAsked.length ? allAsked.map((q, i) => `${i + 1}. ${q}`).join("\n") : "None"}
 
 Candidate answers:
-${answers.join("\n") || "None"}
+${answers.length ? answers.map((a, i) => `${i + 1}. ${a}`).join("\n") : "None"}
 
-Extra instruction:
+Question number to ask now: ${allAsked.length + 1}
+Maximum questions: ${questionLimit}
+
+Extra instruction from frontend:
 ${instruction || "Ask the next practical interview question."}
-
-Ask question number ${allAsked.length + 1} of ${questionLimit}.
 `;
 
   try {
     const parsed = await callOpenAI([
       { role: "system", content: systemPrompt },
       { role: "user", content: userPrompt }
-    ], 0.35);
+    ], 0.28);
 
     let question = cleanQuestion(parsed.question || parsed.text || "");
 
@@ -180,7 +183,6 @@ Ask question number ${allAsked.length + 1} of ${questionLimit}.
       question,
       text: question
     });
-
   } catch (error) {
     return res.status(200).json({
       question: fallback,
@@ -189,7 +191,7 @@ Ask question number ${allAsked.length + 1} of ${questionLimit}.
   }
 }
 
-async function createInterviewFeedback(req, res, data) {
+async function createInterviewFeedback(res, data) {
   const {
     language,
     recruiter,
@@ -197,10 +199,13 @@ async function createInterviewFeedback(req, res, data) {
     company,
     vacancy,
     answers = [],
-    questions = []
+    questions = [],
+    qaPairs = []
   } = data;
 
-  if (!answers || answers.length === 0) {
+  const pairs = buildPairs(questions, answers, qaPairs);
+
+  if (!pairs.length) {
     return res.status(200).json({
       score: "—",
       feedback: language === "Українська"
@@ -210,28 +215,40 @@ async function createInterviewFeedback(req, res, data) {
   }
 
   const systemPrompt = `
-You are ${recruiter}, an interview coach.
+You are ${recruiter}, a professional interview coach.
 
 Speak only in this language: ${language}.
 
-Analyse only the candidate's real answers.
-Do not invent experience.
-Do not give generic feedback.
+You must analyse the candidate's interview answers based on the exact question-answer pairs.
 
 Return JSON only:
 {
   "score": "number from 1 to 10",
-  "feedback": "detailed feedback with sections"
+  "feedback": "full feedback text"
 }
 
-Feedback must include:
-- score;
-- what was good;
-- what to improve;
-- one concrete improved answer example;
-- practical advice for the next interview.
+Very important:
+- Do NOT give generic feedback.
+- Do NOT use the same template for every candidate.
+- Analyse each answer according to the exact question that was asked.
+- If the question was about schedule, give advice about schedule.
+- If the question was about cleaning products, give advice about naming products and safe use.
+- If the question was about client comments, give advice about calm communication and fixing the issue.
+- If the question was about places cleaned, give advice about naming places and tasks.
+- Do NOT say "add a work example" unless the exact question needed a work example.
+- If an answer is already enough for that question, say it was enough and why.
+- If an answer is too short, say exactly what one sentence could be added.
+- Give one improved answer example based on the weakest real answer.
+- The improved answer must match one actual question from the interview.
+- Mention the strongest answer and the weakest answer.
+- Be useful and specific.
 
-Make it useful, specific and not too short.
+Feedback structure:
+1. Score.
+2. What was good.
+3. What to improve by specific question.
+4. Improved answer example.
+5. Short advice for the next interview.
 `;
 
   const userPrompt = `
@@ -240,26 +257,26 @@ Company / Country: ${company}
 Vacancy description:
 ${vacancy || "Not provided"}
 
-Questions:
-${questions.join("\n") || "Not provided"}
+Interview question-answer pairs:
+${pairs.map((p, i) => `Pair ${i + 1}
+Question: ${p.question}
+Answer: ${p.answer}`).join("\n\n")}
 
-Candidate answers:
-${answers.map((a, i) => `${i + 1}. ${a}`).join("\n")}
-
-Create detailed interview feedback.
+Create feedback that is specific to these answers.
+Do not give advice that does not match the questions.
 `;
 
   try {
     const parsed = await callOpenAI([
       { role: "system", content: systemPrompt },
       { role: "user", content: userPrompt }
-    ], 0.35);
+    ], 0.25);
 
-    let score = parsed.score || parsed.rating || estimateScore(answers);
-    let feedback = parsed.feedback || parsed.comment || parsed.tips || "";
+    const score = normaliseScore(parsed.score || parsed.rating || estimateScore(pairs));
+    let feedback = String(parsed.feedback || parsed.comment || parsed.tips || "").trim();
 
-    if (!feedback || feedback.length < 180) {
-      feedback = fallbackFeedback(language, answers, score);
+    if (!feedback || feedback.length < 220 || looksGeneric(feedback)) {
+      feedback = buildSpecificFallbackFeedback(language, pairs, score);
     }
 
     return res.status(200).json({
@@ -268,20 +285,20 @@ Create detailed interview feedback.
       feedback,
       tips: feedback
     });
-
   } catch (error) {
-    const score = estimateScore(answers);
+    const score = estimateScore(pairs);
+    const feedback = buildSpecificFallbackFeedback(language, pairs, score);
 
     return res.status(200).json({
       score,
       rating: score,
-      feedback: fallbackFeedback(language, answers, score),
-      tips: fallbackFeedback(language, answers, score)
+      feedback,
+      tips: feedback
     });
   }
 }
 
-async function createCoverLetter(req, res, data) {
+async function createCoverLetter(res, data) {
   const {
     language,
     job,
@@ -336,13 +353,35 @@ Write the cover letter.
       letter,
       text: letter
     });
-
   } catch (error) {
     return res.status(500).json({
       error: "Cover letter generation failed",
       details: error.message
     });
   }
+}
+
+function buildPairs(questions, answers, qaPairs) {
+  if (Array.isArray(qaPairs) && qaPairs.length) {
+    return qaPairs
+      .map(p => ({
+        question: String(p.question || "").trim(),
+        answer: String(p.answer || "").trim()
+      }))
+      .filter(p => p.answer);
+  }
+
+  const cleanQuestions = Array.isArray(questions) ? questions.filter(Boolean) : [];
+  const cleanAnswers = Array.isArray(answers) ? answers.filter(Boolean) : [];
+
+  return cleanAnswers.map((answer, i) => {
+    let question = cleanQuestions[i] || cleanQuestions[i + 1] || "";
+
+    return {
+      question: String(question || "Question not provided").trim(),
+      answer: String(answer || "").trim()
+    };
+  });
 }
 
 function cleanQuestion(q) {
@@ -475,61 +514,194 @@ function getFallbackQuestion(role, language, index) {
   return list[index % list.length];
 }
 
-function estimateScore(answers) {
-  const count = answers.length;
-  const avgLength = answers.reduce((sum, a) => sum + String(a || "").split(/\s+/).length, 0) / Math.max(1, count);
-
-  let score = 5.5;
-
-  if (count >= 3) score += 0.8;
-  if (count >= 5) score += 0.7;
-  if (avgLength >= 15) score += 0.8;
-  if (avgLength >= 30) score += 0.5;
-
-  return Math.min(9, Math.max(4, score)).toFixed(1);
+function normaliseScore(score) {
+  const n = parseFloat(String(score).replace(",", "."));
+  if (Number.isFinite(n)) {
+    return Math.min(10, Math.max(1, n)).toFixed(1).replace(".0", "");
+  }
+  return String(score || "7");
 }
 
-function fallbackFeedback(language, answers, score) {
+function estimateScore(pairs) {
+  const count = pairs.length;
+  const avgLength = pairs.reduce((sum, p) => {
+    return sum + String(p.answer || "").split(/\s+/).filter(Boolean).length;
+  }, 0) / Math.max(1, count);
+
+  let score = 5.2;
+
+  if (count >= 3) score += 0.5;
+  if (count >= 5) score += 0.5;
+  if (avgLength >= 12) score += 0.6;
+  if (avgLength >= 25) score += 0.6;
+
+  return Math.min(8.8, Math.max(4.5, score)).toFixed(1);
+}
+
+function looksGeneric(text) {
+  const s = String(text || "").toLowerCase();
+
+  const genericPhrases = [
+    "додавайте конкретний приклад",
+    "відповідайте структуровано",
+    "не обмежуйтеся однією фразою",
+    "add one specific example",
+    "use this structure",
+    "do not answer with only one phrase"
+  ];
+
+  let hits = 0;
+  for (const phrase of genericPhrases) {
+    if (s.includes(phrase)) hits++;
+  }
+
+  return hits >= 2;
+}
+
+function buildSpecificFallbackFeedback(language, pairs, score) {
   const uk = language === "Українська";
-  const shortCount = answers.filter(a => String(a || "").split(/\s+/).length < 8).length;
+  const weakest = findWeakestPair(pairs);
+  const strongest = findStrongestPair(pairs);
 
   if (uk) {
     return `ОЦІНКА
 ${score} / 10
 
 ЩО БУЛО ДОБРЕ
-- Ви відповіли на ${answers.length} питань.
-- Ви почали показувати свій досвід і мотивацію.
-${shortCount ? "- Частина відповідей була короткою або погано розпізнаною, тому варто відповідати трохи детальніше." : ""}
+- Ви відповіли на ${pairs.length} питань.
+- Найсильніша відповідь була на питання: “${strongest.question}”
+- У цій відповіді було видно конкретику: “${shorten(strongest.answer, 120)}”
 
 ЩО ПОКРАЩИТИ
-- Додавайте конкретний приклад із роботи або життя.
-- Відповідайте за схемою: досвід → що саме робили → чому це корисно роботодавцю.
-- Не відповідайте однією фразою, якщо питання важливе.
+- Найслабше місце було у відповіді на питання: “${weakest.question}”
+- Ваша відповідь: “${shorten(weakest.answer, 140)}”
+${adviceForQuestion(weakest.question, uk)}
 
 ПРИКЛАД КРАЩОЇ ВІДПОВІДІ
-“Я маю досвід роботи на подібній посаді. Я уважно виконую завдання, дотримуюся інструкцій, можу працювати стабільно й відповідально. Для мене важливо виконувати роботу якісно та бути пунктуальною.”
+${improvedAnswerForQuestion(weakest.question, weakest.answer, uk)}
 
-ПОРАДА
-Перед наступною співбесідою підготуйте 3 короткі приклади: ваш досвід, ваша сильна сторона і ситуація, де ви добре впоралися із завданням.`;
+КОРОТКА ПОРАДА
+На наступній співбесіді відповідайте так: 1) коротко по суті питання, 2) одна конкретна деталь, 3) чому це корисно роботодавцю.`;
   }
 
   return `SCORE
 ${score} / 10
 
 WHAT WAS GOOD
-- You answered ${answers.length} questions.
-- You started showing your experience and motivation.
-${shortCount ? "- Some answers were short or poorly recognised, so it would be better to answer with more detail." : ""}
+- You answered ${pairs.length} questions.
+- Your strongest answer was for this question: “${strongest.question}”
+- This answer had useful detail: “${shorten(strongest.answer, 120)}”
 
 WHAT TO IMPROVE
-- Add one specific example from work or life.
-- Use this structure: experience → what you did → why it helps the employer.
-- Do not answer with only one phrase when the question is important.
+- The weakest answer was for this question: “${weakest.question}”
+- Your answer was: “${shorten(weakest.answer, 140)}”
+${adviceForQuestion(weakest.question, uk)}
 
 BETTER ANSWER EXAMPLE
-“I have experience in a similar role. I follow instructions carefully, work responsibly and pay attention to detail. I understand that reliability and punctuality are important for this job.”
+${improvedAnswerForQuestion(weakest.question, weakest.answer, uk)}
 
-ADVICE
-Before the next interview, prepare three short examples: your experience, your strongest quality and one situation where you handled a task well.`;
+SHORT ADVICE
+In the next interview, answer like this: 1) answer the exact question, 2) add one concrete detail, 3) explain why it helps the employer.`;
+}
+
+function findWeakestPair(pairs) {
+  return pairs
+    .slice()
+    .sort((a, b) => {
+      const al = String(a.answer || "").split(/\s+/).filter(Boolean).length;
+      const bl = String(b.answer || "").split(/\s+/).filter(Boolean).length;
+      return al - bl;
+    })[0] || pairs[0];
+}
+
+function findStrongestPair(pairs) {
+  return pairs
+    .slice()
+    .sort((a, b) => {
+      const al = String(a.answer || "").split(/\s+/).filter(Boolean).length;
+      const bl = String(b.answer || "").split(/\s+/).filter(Boolean).length;
+      return bl - al;
+    })[0] || pairs[0];
+}
+
+function adviceForQuestion(question, uk) {
+  const q = String(question || "").toLowerCase();
+
+  if (q.includes("мий") || q.includes("cleaning product") || q.includes("засоб")) {
+    return uk
+      ? "- Тут краще назвати 1–2 засоби, з якими ви працювали, і сказати, що використовуєте їх безпечно та за інструкцією."
+      : "- It would be better to name 1–2 cleaning products you used and say that you use them safely and according to instructions.";
+  }
+
+  if (q.includes("клієнт") || q.includes("зауваж") || q.includes("complaint") || q.includes("comment")) {
+    return uk
+      ? "- Тут важливо показати спокійну реакцію: вислухати, не сперечатися, виправити проблему."
+      : "- Here it is important to show a calm reaction: listen, do not argue, and fix the problem.";
+  }
+
+  if (q.includes("граф") || q.includes("schedule")) {
+    return uk
+      ? "- Тут краще чітко сказати, які дні або години вам підходять, і чи готові ви до змінного графіка."
+      : "- Here it is better to clearly say which days or hours suit you and whether you can work a flexible schedule.";
+  }
+
+  if (q.includes("коли") || q.includes("start")) {
+    return uk
+      ? "- Тут достатньо чітко сказати дату або період, коли ви можете почати."
+      : "- Here it is enough to clearly say the date or period when you can start.";
+  }
+
+  if (q.includes("приміщ") || q.includes("places") || q.includes("cleaned")) {
+    return uk
+      ? "- Тут краще назвати конкретні місця: квартира, будинок, офіс, кафе, готель, і що саме ви там прибирали."
+      : "- Here it is better to name specific places: home, office, café, hotel, and what exactly you cleaned there.";
+  }
+
+  return uk
+    ? "- Тут можна додати одну конкретну деталь, яка прямо відповідає на питання."
+    : "- Here you can add one concrete detail that directly answers the question.";
+}
+
+function improvedAnswerForQuestion(question, answer, uk) {
+  const q = String(question || "").toLowerCase();
+
+  if (q.includes("мий") || q.includes("cleaning product") || q.includes("засоб")) {
+    return uk
+      ? "“Я працювала з різними мийними засобами для кухні, ванної кімнати та підлоги. Завжди читала інструкцію, використовувала рукавички і стежила, щоб засіб не пошкодив поверхню.”"
+      : "“I have worked with different cleaning products for kitchens, bathrooms and floors. I always read the instructions, use gloves and make sure the product does not damage the surface.”";
+  }
+
+  if (q.includes("клієнт") || q.includes("зауваж") || q.includes("complaint") || q.includes("comment")) {
+    return uk
+      ? "“Якщо клієнт робить зауваження, я спокійно вислухаю, уточню, що саме потрібно виправити, і одразу перероблю роботу. Для мене важливо, щоб клієнт був задоволений.”"
+      : "“If a client gives a comment, I listen calmly, ask what exactly needs to be fixed, and correct it straight away. It is important to me that the client is satisfied.”";
+  }
+
+  if (q.includes("приміщ") || q.includes("places") || q.includes("cleaned")) {
+    return uk
+      ? "“Я прибирала приватні будинки: кухню, ванну кімнату, кімнати та підлогу. Також протирала пил, мила поверхні і стежила, щоб усе виглядало чисто та акуратно.”"
+      : "“I cleaned private homes, including kitchens, bathrooms, rooms and floors. I also dusted, cleaned surfaces and made sure everything looked clean and tidy.”";
+  }
+
+  if (q.includes("граф") || q.includes("schedule")) {
+    return uk
+      ? "“Я готова працювати за графіком роботодавця. Мені підходять будні дні, і я можу обговорити години роботи заздалегідь.”"
+      : "“I can work according to the employer’s schedule. Weekdays suit me, and I can discuss the working hours in advance.”";
+  }
+
+  if (q.includes("коли") || q.includes("start")) {
+    return uk
+      ? "“Я можу почати працювати найближчим часом. Якщо потрібно, я готова вийти на пробний день або співбесіду.”"
+      : "“I can start soon. If needed, I am ready to come for a trial day or an interview.”";
+  }
+
+  return uk
+    ? "“Я маю відповідний досвід і готова виконувати цю роботу уважно та відповідально. Для мене важливо працювати якісно, дотримуватися інструкцій і бути пунктуальною.”"
+    : "“I have relevant experience and I am ready to do this work carefully and responsibly. It is important to me to work well, follow instructions and be punctual.”";
+}
+
+function shorten(text, max) {
+  const s = String(text || "").trim();
+  if (s.length <= max) return s;
+  return s.slice(0, max).trim() + "...";
 }
