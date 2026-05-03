@@ -107,6 +107,23 @@ button{
   justify-content:center;
   cursor:pointer;
   font-size:18px;
+  font-weight:900;
+  box-shadow:var(--shadow);
+}
+
+.lang-chip{
+  width:46px;
+  height:42px;
+  border-radius:16px;
+  border:1px solid var(--line);
+  background:var(--card);
+  color:var(--accent);
+  font-size:13px;
+  font-weight:900;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
   box-shadow:var(--shadow);
 }
 
@@ -196,7 +213,7 @@ p{
 }
 
 .btn:disabled{
-  opacity:.55;
+  opacity:.48;
   cursor:not-allowed;
 }
 
@@ -222,7 +239,7 @@ textarea{
 }
 
 textarea.compact{
-  min-height:62px;
+  min-height:58px;
 }
 
 label{
@@ -356,6 +373,40 @@ label{
 .import-box{
   background:linear-gradient(135deg,rgba(217,179,106,.22),rgba(174,181,98,.13));
   border:1px solid rgba(177,132,61,.25);
+}
+
+.file-attached{
+  display:none;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  margin-top:10px;
+  padding:10px 12px;
+  border-radius:14px;
+  border:1px solid var(--line);
+  background:var(--card2);
+  font-size:12px;
+}
+
+.file-attached.active{
+  display:flex;
+}
+
+.file-attached span{
+  min-width:0;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.file-attached button{
+  border:0;
+  border-radius:10px;
+  background:var(--danger);
+  color:white;
+  padding:6px 9px;
+  cursor:pointer;
+  font-weight:900;
 }
 
 .template-filters{
@@ -587,6 +638,7 @@ label{
   margin-top:4px;
 }
 
+/* 1 Free ATS */
 .tpl-ats{
   padding:50px 58px;
 }
@@ -596,6 +648,7 @@ label{
   padding-bottom:4px;
 }
 
+/* 2 Free Classic Photo */
 .tpl-classic{
   padding:38px 46px;
 }
@@ -612,6 +665,7 @@ label{
   color:#9a6a20;
 }
 
+/* 3 Executive Sidebar */
 .tpl-exec{
   display:grid;
   grid-template-columns:190px 1fr;
@@ -637,107 +691,7 @@ label{
   padding-bottom:6px;
 }
 
-.tpl-beige{
-  background:#fff8ec;
-  padding:42px 48px;
-}
-
-.tpl-beige .topbox{
-  background:#f2dfbd;
-  border-radius:18px;
-  padding:22px;
-  display:flex;
-  gap:18px;
-  align-items:center;
-}
-
-.tpl-beige .r-title{
-  color:#9d6b1f;
-  border-bottom:2px solid #d9b36a;
-  padding-bottom:5px;
-}
-
-.tpl-uk{
-  padding:52px 60px;
-}
-
-.tpl-uk .r-name{
-  text-align:center;
-  font-size:29px;
-  letter-spacing:1px;
-}
-
-.tpl-uk .r-role{
-  text-align:center;
-}
-
-.tpl-uk .contact{
-  text-align:center;
-  font-size:10.5px;
-  color:#444;
-  margin-top:12px;
-}
-
-.tpl-uk .r-title{
-  border-bottom:1px solid #111;
-  padding-bottom:5px;
-}
-
-.tpl-student{
-  background:#fbfbfb;
-  padding:38px 44px;
-}
-
-.tpl-student .head{
-  background:#edf2ff;
-  border-left:12px solid #5b7bd5;
-  padding:18px;
-  border-radius:14px;
-}
-
-.tpl-student .r-title{
-  color:#425aa8;
-}
-
-.tpl-chef{
-  display:grid;
-  grid-template-columns:190px 1fr;
-  background:#fffaf4;
-}
-
-.tpl-chef .side{
-  background:#8a4b24;
-  color:white;
-  padding:36px 24px;
-}
-
-.tpl-chef .main{
-  padding:40px 34px;
-}
-
-.tpl-chef .side .r-text,.tpl-chef .side .r-small{
-  color:white;
-}
-
-.tpl-chef .side .r-title{
-  color:white;
-}
-
-.tpl-support{
-  padding:42px 48px;
-}
-
-.tpl-support .head{
-  border-radius:18px;
-  padding:20px;
-  background:#eff8fb;
-  border:1px solid #c7e6ef;
-}
-
-.tpl-support .r-title{
-  color:#13758e;
-}
-
+/* 4 Care Sidebar */
 .tpl-care{
   display:grid;
   grid-template-columns:195px 1fr;
@@ -758,6 +712,28 @@ label{
   color:#7a5b2e;
 }
 
+/* 5 Modern Beige */
+.tpl-beige{
+  background:#fff8ec;
+  padding:42px 48px;
+}
+
+.tpl-beige .topbox{
+  background:#f2dfbd;
+  border-radius:18px;
+  padding:22px;
+  display:flex;
+  gap:18px;
+  align-items:center;
+}
+
+.tpl-beige .r-title{
+  color:#9d6b1f;
+  border-bottom:2px solid #d9b36a;
+  padding-bottom:5px;
+}
+
+/* 6 Creative */
 .tpl-creative{
   padding:0;
   background:#fff;
@@ -779,6 +755,146 @@ label{
 
 .tpl-creative .r-title{
   color:#b1843d;
+}
+
+/* 7 Blue Professional */
+.tpl-blue{
+  display:grid;
+  grid-template-columns:190px 1fr;
+  background:#fff;
+}
+
+.tpl-blue .blue-head{
+  grid-column:1 / 3;
+  height:150px;
+  padding:28px 42px;
+  display:grid;
+  grid-template-columns:110px 1fr 150px;
+  gap:22px;
+  align-items:center;
+  border-top:18px solid #1f5fae;
+  border-bottom:2px solid #1f5fae;
+}
+
+.tpl-blue .blue-side{
+  background:#eaf2fb;
+  padding:28px 24px;
+}
+
+.tpl-blue .blue-main{
+  padding:30px 34px;
+}
+
+.tpl-blue .r-title{
+  color:#1f5fae;
+  border-bottom:1px solid #9bc2e6;
+  padding-bottom:5px;
+}
+
+.tpl-blue .r-photo{
+  width:92px;
+  height:92px;
+  border-radius:50%;
+  border:4px solid #1f5fae;
+}
+
+/* 8 Elegant Gold */
+.tpl-gold{
+  display:grid;
+  grid-template-columns:205px 1fr;
+  background:#fff;
+}
+
+.tpl-gold .gold-head{
+  grid-column:1 / 3;
+  padding:36px 48px 24px;
+  display:grid;
+  grid-template-columns:105px 1fr;
+  gap:24px;
+  align-items:center;
+  border-bottom:3px solid #c9a45c;
+}
+
+.tpl-gold .gold-side{
+  padding:30px 28px;
+  background:#f8f4ec;
+}
+
+.tpl-gold .gold-main{
+  padding:30px 34px;
+}
+
+.tpl-gold .r-title{
+  color:#9f7a2e;
+  border-bottom:1px solid #c9a45c;
+  padding-bottom:5px;
+}
+
+.tpl-gold .r-photo{
+  width:96px;
+  height:96px;
+  border-radius:50%;
+  border:4px solid #c9a45c;
+}
+
+/* 9 Executive No Photo */
+.tpl-nophoto{
+  padding:50px 58px;
+  background:#fff;
+}
+
+.tpl-nophoto .head{
+  border-bottom:3px solid #1d2635;
+  padding-bottom:16px;
+}
+
+.tpl-nophoto .body{
+  display:grid;
+  grid-template-columns:180px 1fr;
+  gap:30px;
+  margin-top:22px;
+}
+
+.tpl-nophoto .r-title{
+  color:#1d2635;
+  border-bottom:1px solid #c9a45c;
+  padding-bottom:5px;
+}
+
+.tpl-nophoto .contact{
+  font-size:10.5px;
+  color:#555;
+  margin-top:10px;
+}
+
+/* 10 Recruiter Classic */
+.tpl-global{
+  padding:48px 54px;
+  background:#fff;
+}
+
+.tpl-global .head{
+  border-bottom:2px solid #1f4e79;
+  padding-bottom:14px;
+}
+
+.tpl-global .body{
+  display:grid;
+  grid-template-columns:170px 1fr;
+  gap:28px;
+  margin-top:22px;
+}
+
+.tpl-global .r-title{
+  color:#1f4e79;
+  border-bottom:1px solid #b8cbe0;
+  padding-bottom:5px;
+}
+
+.tpl-global .contact{
+  font-size:10.5px;
+  color:#444;
+  margin-top:10px;
 }
 
 .file-item{
@@ -872,8 +988,8 @@ label{
 }
 
 .live-face{
-  width:138px;
-  height:138px;
+  width:128px;
+  height:128px;
   border-radius:50%;
   overflow:hidden;
   background:var(--card);
@@ -1019,6 +1135,14 @@ label{
   display:block;
 }
 
+.history-item{
+  border:1px solid var(--line);
+  background:var(--card2);
+  border-radius:16px;
+  padding:12px;
+  margin:8px 0;
+}
+
 .toast{
   position:fixed;
   left:50%;
@@ -1058,7 +1182,7 @@ body.dark .bottom{
 
 .nav{
   text-align:center;
-  font-size:11px;
+  font-size:10.5px;
   color:var(--muted);
   cursor:pointer;
   font-weight:700;
@@ -1138,7 +1262,7 @@ body.dark .bottom{
   <div class="top">
     <button class="icon" onclick="go('settings')">≡</button>
     <h2 data-i="profile">Profile</h2>
-    <button class="icon" onclick="saveProfile(true)">✓</button>
+    <button class="lang-chip" onclick="go('language')" id="langChip">EN</button>
   </div>
 
   <div class="profile-tabs">
@@ -1153,11 +1277,18 @@ body.dark .bottom{
     <div class="card import-box">
       <h2 data-i="uploadCVTitle">Upload my CV</h2>
       <p data-i="uploadCVText">Upload your old CV and AI will help fill this profile automatically.</p>
+
       <input id="cvUploadInput" type="file" accept=".pdf,.doc,.docx,.txt" style="display:none" onchange="handleCVUpload(event)">
       <div class="grid2">
         <button class="btn" onclick="cvUploadInput.click()" data-i="uploadCVBtn">Upload CV</button>
-        <button class="btn secondary" onclick="analyseUploadedCV()" data-i="analyseCVBtn">Analyse CV</button>
+        <button id="analyseCVBtn" class="btn secondary" onclick="analyseUploadedCV()" data-i="analyseCVBtn" disabled>Analyse CV</button>
       </div>
+
+      <div id="attachedCVBox" class="file-attached">
+        <span id="attachedCVName"></span>
+        <button onclick="removeUploadedCV()">×</button>
+      </div>
+
       <div id="cvImportStatus" class="status hidden"></div>
     </div>
 
@@ -1175,28 +1306,28 @@ body.dark .bottom{
       </select>
 
       <label data-i="fullName">Full name</label>
-      <input id="name" value="Yulia Shevchenko" oninput="saveProfile(false);renderResume();">
+      <input id="name" oninput="markUserEdited();saveProfile(false);renderResume();">
 
       <label>Email</label>
-      <input id="email" value="your@email.com" oninput="saveProfile(false);renderResume();">
+      <input id="email" oninput="markUserEdited();saveProfile(false);renderResume();">
 
       <label data-i="phone">Phone</label>
-      <input id="phone" value="+44 0000 000000" oninput="saveProfile(false);renderResume();">
+      <input id="phone" oninput="markUserEdited();saveProfile(false);renderResume();">
 
       <label data-i="location">Location</label>
-      <input id="location" value="London, UK" oninput="saveProfile(false);renderResume();">
+      <input id="location" oninput="markUserEdited();saveProfile(false);renderResume();">
 
       <label data-i="targetJob">Target job</label>
-      <input id="target" value="Marketing Manager" oninput="saveProfile(false);renderResume();">
+      <input id="target" oninput="markUserEdited();saveProfile(false);renderResume();">
 
       <label data-i="languagesField">Languages</label>
-      <input id="profileLanguages" value="English B1, Ukrainian native" oninput="saveProfile(false);renderResume();">
+      <input id="profileLanguages" oninput="markUserEdited();saveProfile(false);renderResume();">
 
       <label data-i="hobbies">Hobbies / Interests</label>
-      <input id="hobbies" value="Volunteering, languages, cooking, reading" oninput="saveProfile(false);renderResume();">
+      <input id="hobbies" oninput="markUserEdited();saveProfile(false);renderResume();">
 
       <label>
-        <input id="showHobbies" type="checkbox" onchange="saveProfile(false);renderResume();" style="width:auto;margin-right:8px">
+        <input id="showHobbies" type="checkbox" onchange="markUserEdited();saveProfile(false);renderResume();" style="width:auto;margin-right:8px">
         <span data-i="showHobbies">Show hobbies in resume</span>
       </label>
 
@@ -1223,10 +1354,10 @@ body.dark .bottom{
       <h2 data-i="education">Education</h2>
 
       <label data-i="institution">University / Institution</label>
-      <textarea id="education" oninput="saveProfile(false);renderResume();">University degree / college / school</textarea>
+      <textarea id="education" oninput="markUserEdited();saveProfile(false);renderResume();"></textarea>
 
       <label data-i="speciality">Speciality</label>
-      <input id="speciality" value="Teaching Ukrainian language and literature" oninput="saveProfile(false);renderResume();">
+      <input id="speciality" oninput="markUserEdited();saveProfile(false);renderResume();">
 
       <button class="btn" onclick="saveProfile(true)" data-i="saveProfile">Save Profile</button>
     </div>
@@ -1237,14 +1368,14 @@ body.dark .bottom{
       <h2 data-i="skills">Skills</h2>
 
       <label data-i="professionalSkills">Professional skills</label>
-      <textarea id="skills" oninput="saveProfile(false);renderResume();">Customer service, communication, organisation, teamwork, problem solving</textarea>
+      <textarea id="skills" oninput="markUserEdited();saveProfile(false);renderResume();"></textarea>
       <div class="grid2">
         <button class="btn secondary mini" onclick="improveField('skills','improve')" data-i="improveAI">Improve with AI</button>
         <button class="btn secondary mini" onclick="improveField('skills','grammar')" data-i="fixGrammar">Fix grammar</button>
       </div>
 
       <label data-i="softSkills">Soft skills</label>
-      <textarea id="softSkills" oninput="saveProfile(false);renderResume();">Reliability, empathy, attention to detail, adaptability</textarea>
+      <textarea id="softSkills" oninput="markUserEdited();saveProfile(false);renderResume();"></textarea>
       <div class="grid2">
         <button class="btn secondary mini" onclick="improveField('softSkills','improve')" data-i="improveAI">Improve with AI</button>
         <button class="btn secondary mini" onclick="improveField('softSkills','grammar')" data-i="fixGrammar">Fix grammar</button>
@@ -1261,7 +1392,7 @@ body.dark .bottom{
 
       <div id="manualCoursesBox"></div>
 
-      <button class="btn secondary" onclick="addManualCourse()" data-i="addManualCourse">+ Add course manually</button>
+      <button class="btn secondary" onclick="addManualCourse()" data-i="addManualCourse">+ Add course</button>
 
       <br><br>
 
@@ -1293,8 +1424,14 @@ body.dark .bottom{
         <button id="filterPremium" class="filter-btn" onclick="setTemplateFilter('premium')" data-i="filterPremium">Premium</button>
       </div>
 
-      <label data-i="contentLanguage">Content language</label>
-      <select id="cvContentLang" onchange="savePrefs();renderResume();"></select>
+      <label data-i="templateType">Template type</label>
+      <select id="templateTypeFilter" onchange="setTemplateType(this.value)">
+        <option value="all" data-i="typeAll">All types</option>
+        <option value="photo" data-i="typePhoto">With photo</option>
+        <option value="noPhoto" data-i="typeNoPhoto">No photo</option>
+        <option value="color" data-i="typeColor">Colour</option>
+        <option value="bw" data-i="typeBW">Black & white</option>
+      </select>
 
       <p class="small" data-i="templateNote">Tap a template to open preview.</p>
 
@@ -1304,6 +1441,9 @@ body.dark .bottom{
 
   <div id="cv-preview" class="panel">
     <div class="card">
+      <label data-i="contentLanguage">Resume language</label>
+      <select id="cvContentLang" onchange="savePrefs();renderResume();"></select>
+
       <div class="resume-wrap">
         <div class="resume-scale" id="resumeScale">
           <div id="resumeFull"></div>
@@ -1366,13 +1506,13 @@ body.dark .bottom{
     <select id="coverLang"></select>
 
     <label data-i="jobTitle">Job title</label>
-    <input id="coverJob" value="Cleaner">
+    <input id="coverJob">
 
     <label data-i="company">Company</label>
-    <input id="coverCompany" value="Company name">
+    <input id="coverCompany">
 
     <label data-i="pasteJob">Job description</label>
-    <textarea id="coverText">Paste the job advert here.</textarea>
+    <textarea id="coverText"></textarea>
 
     <button class="btn" onclick="generateCover()" data-i="generateCover">Create cover letter</button>
   </div>
@@ -1442,13 +1582,13 @@ body.dark .bottom{
     </div>
 
     <label data-i="position">Position</label>
-    <input id="jobPosition" value="Cleaner">
+    <input id="jobPosition">
 
     <label data-i="companyCountry">Company / Country</label>
-    <input id="jobCompany" value="Company name">
+    <input id="jobCompany">
 
     <label data-i="vacancyDesc">Vacancy description</label>
-    <textarea id="jobDescription">Paste job description here.</textarea>
+    <textarea id="jobDescription"></textarea>
 
     <button id="startInterviewBtn" class="btn" onclick="startInterview()" data-i="startInterview">Start Interview</button>
     <div id="setupStatus" class="status hidden"></div>
@@ -1470,7 +1610,7 @@ body.dark .bottom{
     <div id="dialog" class="dialog"></div>
 
     <label data-i="yourAnswer" style="text-align:left">Your answer</label>
-    <textarea id="userAnswer" class="compact" placeholder="Speak or type your answer here..."></textarea>
+    <textarea id="userAnswer" class="compact"></textarea>
 
     <div class="grid2">
       <button id="recordBtn" class="btn secondary" onclick="toggleRecording()" data-i="startRecording">Start Recording</button>
@@ -1547,11 +1687,6 @@ body.dark .bottom{
     </div>
   </div>
 
-  <div class="list-btn" onclick="go('language')">
-    <span data-i="changeLanguage">Change Language</span>
-    <b>›</b>
-  </div>
-
   <div class="list-btn" onclick="go('premium')">
     <span data-i="subscriptionBilling">Subscription & Billing</span>
     <b>›</b>
@@ -1565,6 +1700,37 @@ body.dark .bottom{
   <div class="list-btn" onclick="showToast(t('comingSoon'))">
     <span data-i="privacyTerms">Privacy Policy / Terms</span>
     <b data-i="comingSoonShort">Soon</b>
+  </div>
+
+  <div class="list-btn" onclick="go('history')">
+    <span data-i="history">History</span>
+    <b>›</b>
+  </div>
+</section>
+
+<section id="history" class="screen">
+  <div class="top">
+    <button class="icon" onclick="go('settings')">‹</button>
+    <h2 data-i="history">History</h2>
+    <span></span>
+  </div>
+
+  <div class="tabs">
+    <div class="tab active" onclick="setPanel(this,'history-resume')" data-i="navCV">Resume</div>
+    <div class="tab" onclick="setPanel(this,'history-cover')" data-i="navCoverShort">Cover</div>
+    <div class="tab" onclick="setPanel(this,'history-interview')" data-i="navCoach">Coach</div>
+  </div>
+
+  <div id="history-resume" class="panel active">
+    <div class="card" id="historyResumeBox"></div>
+  </div>
+
+  <div id="history-cover" class="panel">
+    <div class="card" id="historyCoverBox"></div>
+  </div>
+
+  <div id="history-interview" class="panel">
+    <div class="card" id="historyInterviewBox"></div>
   </div>
 </section>
 
@@ -1584,7 +1750,7 @@ body.dark .bottom{
   </div>
   <div class="nav" onclick="go('cover')">
     <div>✉</div>
-    <span data-i="navLetter">Letter</span>
+    <span data-i="navCoverShort">Cover</span>
   </div>
   <div class="nav" onclick="go('interview')">
     <div>●</div>
@@ -1598,26 +1764,26 @@ body.dark .bottom{
 
 <script>
 const languages=[
-  ["English","en","en-GB"],
-  ["Українська","uk","uk-UA"],
-  ["Polski","pl","pl-PL"],
-  ["Deutsch","de","de-DE"],
-  ["Français","fr","fr-FR"],
-  ["Español","es","es-ES"],
-  ["Italiano","it","it-IT"],
-  ["Português","pt","pt-PT"],
-  ["Nederlands","nl","nl-NL"],
-  ["Türkçe","tr","tr-TR"],
-  ["Română","ro","ro-RO"],
-  ["Čeština","cs","cs-CZ"],
-  ["Slovenčina","sk","sk-SK"],
-  ["ქართული","ka","ka-GE"],
-  ["العربية","ar","ar-SA"],
-  ["中文","zh","zh-CN"],
-  ["日本語","ja","ja-JP"],
-  ["한국어","ko","ko-KR"],
-  ["हिन्दी","hi","hi-IN"],
-  ["עברית","he","he-IL"]
+  ["English","en","en-GB","EN"],
+  ["Українська","uk","uk-UA","UA"],
+  ["Polski","pl","pl-PL","PL"],
+  ["Deutsch","de","de-DE","DE"],
+  ["Français","fr","fr-FR","FR"],
+  ["Español","es","es-ES","ES"],
+  ["Italiano","it","it-IT","IT"],
+  ["Português","pt","pt-PT","PT"],
+  ["Nederlands","nl","nl-NL","NL"],
+  ["Türkçe","tr","tr-TR","TR"],
+  ["Română","ro","ro-RO","RO"],
+  ["Čeština","cs","cs-CZ","CS"],
+  ["Slovenčina","sk","sk-SK","SK"],
+  ["ქართული","ka","ka-GE","KA"],
+  ["العربية","ar","ar-SA","AR"],
+  ["中文","zh","zh-CN","ZH"],
+  ["日本語","ja","ja-JP","JA"],
+  ["한국어","ko","ko-KR","KO"],
+  ["हिन्दी","hi","hi-IN","HI"],
+  ["עברית","he","he-IL","HE"]
 ];
 
 const core={
@@ -1635,6 +1801,9 @@ const core={
     uploadCVText:"Upload your old CV and AI will help fill this profile automatically.",
     uploadCVBtn:"Upload CV",
     analyseCVBtn:"Analyse CV",
+    attached:"Attached",
+    analysing:"AI is analysing your CV...",
+    profileFilled:"Profile filled. Please check the details.",
     gender:"Gender",
     fullName:"Full name",
     phone:"Phone",
@@ -1652,7 +1821,7 @@ const core={
     institution:"University / Institution",
     speciality:"Speciality",
     courses:"Courses & Certificates",
-    addManualCourse:"+ Add course manually",
+    addManualCourse:"+ Add course",
     addDiploma:"+ Add certificate / diploma file",
     professionalSkills:"Professional skills",
     softSkills:"Soft skills",
@@ -1674,7 +1843,7 @@ const core={
     delete:"Delete",
     edit:"Edit",
     cvBuilder:"Resume Builder",
-    contentLanguage:"Content language",
+    contentLanguage:"Resume language",
     templates:"Templates",
     preview:"Preview",
     export:"Export",
@@ -1683,6 +1852,12 @@ const core={
     filterAll:"All",
     filterFree:"Free",
     filterPremium:"Premium",
+    templateType:"Template type",
+    typeAll:"All types",
+    typePhoto:"With photo",
+    typeNoPhoto:"No photo",
+    typeColor:"Colour",
+    typeBW:"Black & white",
     editProfile:"Edit Profile",
     savePDF:"Save PDF",
     copyText:"Copy text",
@@ -1690,6 +1865,7 @@ const core={
     emailBtn:"Email",
     defaultEmail:"Default email",
     coverLetter:"Cover Letter",
+    navCoverShort:"Cover",
     jobTitle:"Job title",
     pasteJob:"Job description",
     generateCover:"Create cover letter",
@@ -1712,6 +1888,8 @@ const core={
     endSmall:"End",
     aiRecruiter:"AI Recruiter",
     yourAnswer:"Your answer",
+    answerPlaceholder:"Speak or type your answer here...",
+    meLabel:"You",
     micOff:"Microphone off",
     recording:"Recording. Press Stop to finish.",
     transcribing:"Transcribing your answer...",
@@ -1729,7 +1907,6 @@ const core={
     theme:"Theme",
     lightTheme:"Light",
     darkTheme:"Dark",
-    changeLanguage:"Change Language",
     subscriptionBilling:"Subscription & Billing",
     contactSupport:"Contact Support",
     supportSoon:"Support email will be added later.",
@@ -1742,11 +1919,12 @@ const core={
     restorePurchase:"Restore Purchase",
     billingSoon:"Google Play Billing will be connected later.",
     restoreSoon:"Restore Purchase will work after billing connection.",
+    history:"History",
     navHome:"Home",
     navCV:"Resume",
-    navLetter:"Letter",
     navCoach:"Coach",
-    navMore:"More"
+    navMore:"More",
+    noHistory:"No saved history yet."
   },
   uk:{
     subtitle:"Преміум AI-інструменти для профілю, резюме, супровідного листа та підготовки до співбесіди.",
@@ -1762,6 +1940,9 @@ const core={
     uploadCVText:"Завантажте старе CV, і AI допоможе заповнити профіль автоматично.",
     uploadCVBtn:"Завантажити CV",
     analyseCVBtn:"Аналізувати CV",
+    attached:"Прикріплено",
+    analysing:"AI аналізує ваше CV...",
+    profileFilled:"Профіль заповнено. Перевірте дані.",
     gender:"Стать",
     fullName:"Повне ім’я",
     phone:"Телефон",
@@ -1779,7 +1960,7 @@ const core={
     institution:"Університет / навчальний заклад",
     speciality:"Спеціальність",
     courses:"Курси / сертифікати",
-    addManualCourse:"+ Додати курс вручну",
+    addManualCourse:"+ Додати курс",
     addDiploma:"+ Додати файл сертифіката / диплому",
     professionalSkills:"Професійні навички",
     softSkills:"Особисті якості",
@@ -1801,7 +1982,7 @@ const core={
     delete:"Видалити",
     edit:"Редагувати",
     cvBuilder:"Конструктор резюме",
-    contentLanguage:"Мова контенту",
+    contentLanguage:"Мова резюме",
     templates:"Шаблони",
     preview:"Перегляд",
     export:"Експорт",
@@ -1810,6 +1991,12 @@ const core={
     filterAll:"Усі",
     filterFree:"Безкоштовні",
     filterPremium:"Premium",
+    templateType:"Тип шаблону",
+    typeAll:"Усі типи",
+    typePhoto:"З фото",
+    typeNoPhoto:"Без фото",
+    typeColor:"Кольорові",
+    typeBW:"Чорно-білі",
     editProfile:"Редагувати профіль",
     savePDF:"Зберегти PDF",
     copyText:"Копіювати текст",
@@ -1817,6 +2004,7 @@ const core={
     emailBtn:"Email",
     defaultEmail:"Пошта за замовчуванням",
     coverLetter:"Супровідний лист",
+    navCoverShort:"Супровідний",
     jobTitle:"Посада",
     pasteJob:"Опис вакансії",
     generateCover:"Створити лист",
@@ -1839,6 +2027,8 @@ const core={
     endSmall:"Кінець",
     aiRecruiter:"AI-рекрутер",
     yourAnswer:"Ваша відповідь",
+    answerPlaceholder:"Скажіть або напишіть вашу відповідь...",
+    meLabel:"Ви",
     micOff:"Мікрофон вимкнено",
     recording:"Запис іде. Натисніть Stop.",
     transcribing:"Розпізнаю вашу відповідь...",
@@ -1856,7 +2046,6 @@ const core={
     theme:"Тема",
     lightTheme:"Світла",
     darkTheme:"Темна",
-    changeLanguage:"Змінити мову",
     subscriptionBilling:"Підписка та оплата",
     contactSupport:"Підтримка",
     privacyTerms:"Privacy Policy / Terms",
@@ -1868,40 +2057,95 @@ const core={
     restorePurchase:"Відновити покупку",
     billingSoon:"Google Play Billing підключимо пізніше.",
     restoreSoon:"Відновлення покупки запрацює після підключення оплати.",
+    history:"Історія",
     navHome:"Головна",
     navCV:"Резюме",
-    navLetter:"Лист",
     navCoach:"Коуч",
-    navMore:"Ще"
+    navMore:"Ще",
+    noHistory:"Історії ще немає."
   }
 };
 
 const navWords={
-  pl:["Start","CV","List","Coach","Więcej"],
-  de:["Home","Lebenslauf","Brief","Coach","Mehr"],
-  fr:["Accueil","CV","Lettre","Coach","Plus"],
-  es:["Inicio","CV","Carta","Coach","Más"],
-  it:["Home","CV","Lettera","Coach","Altro"],
-  pt:["Início","CV","Carta","Coach","Mais"],
-  nl:["Home","CV","Brief","Coach","Meer"],
-  tr:["Ana sayfa","CV","Mektup","Koç","Daha"],
-  cs:["Domů","CV","Dopis","Kouč","Více"],
-  sk:["Domov","CV","List","Kouč","Viac"],
-  ar:["الرئيسية","السيرة","خطاب","مدرب","المزيد"],
-  zh:["首页","简历","求职信","教练","更多"],
-  ja:["ホーム","履歴書","手紙","コーチ","その他"],
-  ko:["홈","이력서","편지","코치","더보기"]
+  pl:["Start","CV","List mot.","Coach","Więcej","Historia"],
+  de:["Home","CV","Brief","Coach","Mehr","Verlauf"],
+  fr:["Accueil","CV","Lettre","Coach","Plus","Historique"],
+  es:["Inicio","CV","Carta","Coach","Más","Historial"],
+  it:["Home","CV","Lettera","Coach","Altro","Cronologia"],
+  pt:["Início","CV","Carta","Coach","Mais","Histórico"],
+  nl:["Home","CV","Brief","Coach","Meer","Geschiedenis"],
+  tr:["Ana sayfa","CV","Mektup","Koç","Daha","Geçmiş"],
+  cs:["Domů","CV","Dopis","Kouč","Více","Historie"],
+  sk:["Domov","CV","List","Kouč","Viac","História"],
+  ar:["الرئيسية","السيرة","خطاب","مدرب","المزيد","السجل"],
+  zh:["首页","简历","求职信","教练","更多","历史"],
+  ja:["ホーム","履歴書","手紙","コーチ","その他","履歴"],
+  ko:["홈","이력서","편지","코치","더보기","기록"]
 };
 
 Object.keys(navWords).forEach(k=>{
   core[k]=Object.assign({},core.en,{
     navHome:navWords[k][0],
     navCV:navWords[k][1],
-    navLetter:navWords[k][2],
+    navCoverShort:navWords[k][2],
     navCoach:navWords[k][3],
-    navMore:navWords[k][4]
+    navMore:navWords[k][4],
+    history:navWords[k][5]
   });
 });
+
+const defaults={
+  en:{
+    name:"Your Name",
+    email:"your@email.com",
+    phone:"+44 0000 000000",
+    location:"London, UK",
+    target:"Cleaner",
+    languages:"English B1, Ukrainian native",
+    hobbies:"Volunteering, languages, cooking",
+    education:"University / college / school",
+    speciality:"Speciality or profession",
+    skills:"cleaning rooms, using cleaning products, maintaining order, customer service",
+    softSkills:"responsibility, punctuality, attention to detail, friendliness",
+    expCompany:"Company name",
+    expPosition:"Cleaner",
+    expDesc:"Cleaned rooms, maintained order, followed instructions and supported a safe working environment.",
+    volOrg:"Organisation name",
+    volRole:"Volunteer",
+    volDesc:"Helped with community activities, supported people and completed assigned tasks.",
+    coverJob:"Cleaner",
+    coverCompany:"Company name",
+    coverText:"Paste the job advert here.",
+    interviewJob:"Cleaner",
+    interviewCompany:"Company name",
+    interviewDesc:"Paste job description here."
+  },
+  uk:{
+    name:"Ваше ім’я",
+    email:"your@email.com",
+    phone:"+380 00 000 0000",
+    location:"Одеса, Україна",
+    target:"Прибиральниця",
+    languages:"Українська рідна, англійська B1",
+    hobbies:"Волонтерство, мови, кулінарія",
+    education:"Університет / коледж / школа",
+    speciality:"Спеціальність або професія",
+    skills:"прибирання приміщень, робота з мийними засобами, підтримання чистоти, обслуговування клієнтів",
+    softSkills:"відповідальність, пунктуальність, уважність до деталей, доброзичливість",
+    expCompany:"Назва компанії",
+    expPosition:"Прибиральниця",
+    expDesc:"Виконувала прибирання приміщень, підтримувала чистоту, дотримувалася інструкцій та уважно виконувала щоденні завдання.",
+    volOrg:"Назва організації",
+    volRole:"Волонтер",
+    volDesc:"Допомагала з організацією заходів, підтримувала людей та виконувала доручені завдання.",
+    coverJob:"Прибиральниця",
+    coverCompany:"Назва компанії",
+    coverText:"Вставте опис вакансії тут.",
+    interviewJob:"Прибиральниця",
+    interviewCompany:"Назва компанії",
+    interviewDesc:"Вставте опис вакансії тут."
+  }
+};
 
 let appLang=localStorage.getItem("jsai_appLang")||"en";
 let langName=localStorage.getItem("jsai_langName")||"English";
@@ -1911,29 +2155,16 @@ if(theme==="night")theme="dark";
 
 let currentTpl=Number(localStorage.getItem("jsai_tpl")||0);
 let templateFilter=localStorage.getItem("jsai_templateFilter")||"all";
+let templateType=localStorage.getItem("jsai_templateType")||"all";
 let currentRecruiter=1;
 let questionLimit=Number(localStorage.getItem("jsai_questionLimit")||10);
 let uploadedCVFile=null;
+let userEdited=localStorage.getItem("jsai_userEdited")==="true";
 
 let diplomas=[];
 let manualCourses=[];
-let exp=[
-  {
-    company:"Company Name",
-    position:"Marketing Assistant",
-    desc:"Managed client communication, supported campaigns and prepared reports.",
-    saved:true
-  }
-];
-
-let vols=[
-  {
-    org:"Volunteer Organisation",
-    role:"Volunteer",
-    desc:"Supported community activities and helped people in need.",
-    saved:true
-  }
-];
+let exp=[];
+let vols=[];
 
 let messages=[];
 let answers=[];
@@ -1956,22 +2187,26 @@ const recruiters=[
 ];
 
 const templates=[
-  {id:"ats",name:"Simple ATS",access:"free",cls:"tpl-ats",photo:false},
-  {id:"classic",name:"Classic Photo",access:"free",cls:"tpl-classic",photo:true},
-  {id:"exec",name:"Executive Sidebar",access:"premium",cls:"tpl-exec",photo:true},
-  {id:"beige",name:"Modern Beige",access:"premium",cls:"tpl-beige",photo:true},
-  {id:"uk",name:"Elegant UK",access:"premium",cls:"tpl-uk",photo:false},
-  {id:"student",name:"Student / Entry",access:"premium",cls:"tpl-student",photo:true},
-  {id:"chef",name:"Hospitality / Chef",access:"premium",cls:"tpl-chef",photo:true},
-  {id:"support",name:"Customer Support",access:"premium",cls:"tpl-support",photo:false},
-  {id:"care",name:"Social Worker / Care",access:"premium",cls:"tpl-care",photo:true},
-  {id:"creative",name:"Creative / Portfolio",access:"premium",cls:"tpl-creative",photo:true}
+  {id:"ats",name:"Simple ATS",access:"free",cls:"tpl-ats",photo:false,type:["noPhoto","bw"]},
+  {id:"classic",name:"Classic Photo",access:"free",cls:"tpl-classic",photo:true,type:["photo","color"]},
+  {id:"exec",name:"Executive Sidebar",access:"premium",cls:"tpl-exec",photo:true,type:["photo","color"]},
+  {id:"care",name:"Social Worker / Care",access:"premium",cls:"tpl-care",photo:true,type:["photo","color"]},
+  {id:"beige",name:"Modern Beige",access:"premium",cls:"tpl-beige",photo:true,type:["photo","color"]},
+  {id:"creative",name:"Creative / Portfolio",access:"premium",cls:"tpl-creative",photo:true,type:["photo","color"]},
+  {id:"blue",name:"Blue Professional",access:"premium",cls:"tpl-blue",photo:true,type:["photo","color"]},
+  {id:"gold",name:"Elegant Gold Photo",access:"premium",cls:"tpl-gold",photo:true,type:["photo","color"]},
+  {id:"nophoto",name:"Executive No Photo",access:"premium",cls:"tpl-nophoto",photo:false,type:["noPhoto","bw"]},
+  {id:"global",name:"Recruiter Classic",access:"premium",cls:"tpl-global",photo:false,type:["noPhoto","color"]}
 ];
 
 const $=id=>document.getElementById(id);
 
 function t(k){
   return (core[appLang]&&core[appLang][k])||core.en[k]||k;
+}
+
+function d(){
+  return defaults[appLang] || defaults.en;
 }
 
 function esc(s){
@@ -1988,6 +2223,11 @@ function val(id,fb=""){
   return ($(id)&&$(id).value.trim())||fb;
 }
 
+function markUserEdited(){
+  userEdited=true;
+  localStorage.setItem("jsai_userEdited","true");
+}
+
 function showToast(x){
   toast.textContent=x;
   toast.style.display="block";
@@ -1995,14 +2235,28 @@ function showToast(x){
   window.tt=setTimeout(()=>toast.style.display="none",1800);
 }
 
+function languageShort(){
+  const found=languages.find(l=>l[1]===appLang || l[0]===langName);
+  return found ? found[3] : "EN";
+}
+
 function applyTranslations(){
   document.querySelectorAll("[data-i]").forEach(el=>{
     el.innerHTML=t(el.dataset.i);
   });
+
+  document.querySelectorAll("select option[data-i]").forEach(opt=>{
+    opt.textContent=t(opt.dataset.i);
+  });
+
+  if(langChip)langChip.textContent=languageShort();
+  if(userAnswer)userAnswer.placeholder=t("answerPlaceholder");
+
   renderExperience();
   renderVolunteers();
   renderDiplomas();
   renderManualCourses();
+  renderHistory();
   updateThemeButtons();
   updateFilterButtons();
 }
@@ -2021,9 +2275,15 @@ function selectLang(name,code){
   appLang=code;
   localStorage.setItem("jsai_langName",name);
   localStorage.setItem("jsai_appLang",code);
+
   ["cvContentLang","coverLang","interviewLang"].forEach(id=>{
     if($(id))$(id).value=name;
   });
+
+  if(!userEdited){
+    setDefaultProfile();
+  }
+
   buildLangs();
   applyTranslations();
   renderResume();
@@ -2049,6 +2309,7 @@ function go(id){
   updateNav(id);
   if(id==="cv")renderResume();
   if(id==="interviewer")renderInterviewers();
+  if(id==="history")renderHistory();
   window.scrollTo(0,0);
 }
 
@@ -2065,7 +2326,8 @@ function updateNav(id){
     feedback:3,
     settings:4,
     premium:4,
-    language:4
+    language:4,
+    history:4
   };
   document.querySelectorAll(".nav").forEach(n=>n.classList.remove("active"));
   document.querySelectorAll(".nav")[map[id]??0].classList.add("active");
@@ -2106,6 +2368,44 @@ function setPanelById(id){
 
 function savePrefs(){
   localStorage.setItem("jsai_tpl",currentTpl);
+}
+
+function setDefaultProfile(){
+  const x=d();
+  name.value=x.name;
+  email.value=x.email;
+  phone.value=x.phone;
+  location.value=x.location;
+  target.value=x.target;
+  profileLanguages.value=x.languages;
+  hobbies.value=x.hobbies;
+  education.value=x.education;
+  speciality.value=x.speciality;
+  skills.value=x.skills;
+  softSkills.value=x.softSkills;
+  coverJob.value=x.coverJob;
+  coverCompany.value=x.coverCompany;
+  coverText.value=x.coverText;
+  jobPosition.value=x.interviewJob;
+  jobCompany.value=x.interviewCompany;
+  jobDescription.value=x.interviewDesc;
+
+  exp=[{
+    company:x.expCompany,
+    position:x.expPosition,
+    desc:x.expDesc,
+    saved:true
+  }];
+
+  vols=[{
+    org:x.volOrg,
+    role:x.volRole,
+    desc:x.volDesc,
+    saved:true
+  }];
+
+  manualCourses=[];
+  diplomas=[];
 }
 
 function updateDefaultAvatar(){
@@ -2167,24 +2467,46 @@ function saveProfile(show){
 
 function loadProfile(){
   try{
-    let d=JSON.parse(localStorage.getItem("jsai_profile")||"{}");
+    let raw=localStorage.getItem("jsai_profile");
+    if(!raw){
+      setDefaultProfile();
+      return;
+    }
+
+    let data=JSON.parse(raw);
+
     ["gender","name","email","phone","location","target","profileLanguages","education","speciality","skills","softSkills","hobbies"].forEach(k=>{
-      if(d[k]!==undefined&&$(k))$(k).value=d[k];
+      if(data[k]!==undefined&&$(k))$(k).value=data[k];
     });
-    if(showHobbies)showHobbies.checked=!!d.showHobbies;
-    if(Array.isArray(d.exp))exp=d.exp;
-    if(Array.isArray(d.vols))vols=d.vols;
-    if(Array.isArray(d.diplomas))diplomas=d.diplomas;
-    if(Array.isArray(d.manualCourses))manualCourses=d.manualCourses;
-  }catch(e){}
+
+    if(showHobbies)showHobbies.checked=!!data.showHobbies;
+    if(Array.isArray(data.exp))exp=data.exp;
+    if(Array.isArray(data.vols))vols=data.vols;
+    if(Array.isArray(data.diplomas))diplomas=data.diplomas;
+    if(Array.isArray(data.manualCourses))manualCourses=data.manualCourses;
+  }catch(e){
+    setDefaultProfile();
+  }
 }
 
 function handleCVUpload(e){
   uploadedCVFile=e.target.files[0]||null;
+
   if(uploadedCVFile){
-    cvImportStatus.classList.remove("hidden");
-    cvImportStatus.textContent=uploadedCVFile.name;
+    attachedCVBox.classList.add("active");
+    attachedCVName.textContent=`${t("attached")}: ${uploadedCVFile.name}`;
+    analyseCVBtn.disabled=false;
+    cvImportStatus.classList.add("hidden");
   }
+}
+
+function removeUploadedCV(){
+  uploadedCVFile=null;
+  cvUploadInput.value="";
+  attachedCVBox.classList.remove("active");
+  attachedCVName.textContent="";
+  analyseCVBtn.disabled=true;
+  cvImportStatus.classList.add("hidden");
 }
 
 async function analyseUploadedCV(){
@@ -2194,11 +2516,88 @@ async function analyseUploadedCV(){
   }
 
   cvImportStatus.classList.remove("hidden");
-  cvImportStatus.textContent=appLang==="uk"?"Функцію AI-аналізу CV підключимо через backend API /api/parse-cv.":"CV AI analysis will be connected through backend API /api/parse-cv.";
+  cvImportStatus.textContent=t("analysing");
+  analyseCVBtn.disabled=true;
+
+  try{
+    const formData=new FormData();
+    formData.append("file",uploadedCVFile);
+    formData.append("language",langName);
+
+    const res=await fetch("/api/parse-cv",{
+      method:"POST",
+      body:formData
+    });
+
+    const data=await res.json();
+
+    if(!res.ok || !data.profile){
+      throw new Error(data.error || "CV analysis failed");
+    }
+
+    fillProfileFromParsed(data.profile);
+    markUserEdited();
+    saveProfile(false);
+    renderExperience();
+    renderVolunteers();
+    renderManualCourses();
+    renderResume();
+
+    cvImportStatus.textContent=t("profileFilled");
+    showToast(t("profileFilled"));
+  }catch(e){
+    cvImportStatus.textContent=e.message || "CV analysis error";
+    showToast("CV analysis error");
+  }finally{
+    analyseCVBtn.disabled=false;
+  }
+}
+
+function fillProfileFromParsed(p){
+  if(p.name)name.value=p.name;
+  if(p.email)email.value=p.email;
+  if(p.phone)phone.value=p.phone;
+  if(p.location)location.value=p.location;
+  if(p.target)target.value=p.target;
+  if(p.languages)profileLanguages.value=p.languages;
+  if(p.education)education.value=p.education;
+  if(p.speciality)speciality.value=p.speciality;
+  if(p.skills)skills.value=p.skills;
+  if(p.softSkills)softSkills.value=p.softSkills;
+  if(p.hobbies)hobbies.value=p.hobbies;
+
+  if(Array.isArray(p.experience)&&p.experience.length){
+    exp=p.experience.map(x=>({
+      company:x.company||"",
+      position:x.position||"",
+      desc:x.desc||"",
+      saved:true
+    }));
+  }
+
+  if(Array.isArray(p.volunteering)&&p.volunteering.length){
+    vols=p.volunteering.map(x=>({
+      org:x.org||"",
+      role:x.role||"",
+      desc:x.desc||"",
+      saved:true
+    }));
+  }
+
+  if(Array.isArray(p.courses)&&p.courses.length){
+    manualCourses=p.courses.map(x=>({
+      name:x.name||"",
+      place:x.place||"",
+      period:x.period||"",
+      desc:x.desc||"",
+      saved:true
+    }));
+  }
 }
 
 async function improveField(id,mode){
   const field=$(id);
+
   if(!field || !field.value.trim()){
     showToast(appLang==="uk"?"Поле порожнє":"Field is empty");
     return;
@@ -2208,26 +2607,28 @@ async function improveField(id,mode){
   showToast(mode==="grammar"?t("fixGrammar"):t("improveAI"));
 
   try{
-    const res=await fetch("/api/interview",{
+    const res=await fetch("/api/improve-text",{
       method:"POST",
       headers:{"Content-Type":"application/json"},
       body:JSON.stringify({
-        mode:"improve_text",
-        language:langName,
-        task:mode,
         text:old,
-        rule:"Do not invent experience. Only improve the text that user provided."
+        language:langName,
+        mode
       })
     });
 
-    if(!res.ok)throw new Error("API failed");
     const data=await res.json();
-    field.value=data.text || data.result || old;
+
+    if(!res.ok || !data.improvedText){
+      throw new Error(data.error || "AI improvement failed");
+    }
+
+    field.value=data.improvedText;
+    markUserEdited();
     saveProfile(false);
     renderResume();
   }catch(e){
-    field.value=old;
-    showToast(appLang==="uk"?"AI-покращення підключимо пізніше":"AI improvement will be connected later");
+    showToast(appLang==="uk"?"Потрібен файл api/improve-text.js":"api/improve-text.js is needed");
   }
 }
 
@@ -2245,13 +2646,13 @@ function renderExperience(){
   `:`
     <div class="card">
       <label>${t("company")}</label>
-      <input value="${esc(x.company)}" oninput="exp[${i}].company=this.value">
+      <input value="${esc(x.company)}" oninput="exp[${i}].company=this.value;markUserEdited();">
 
       <label>${t("position")}</label>
-      <input value="${esc(x.position)}" oninput="exp[${i}].position=this.value">
+      <input value="${esc(x.position)}" oninput="exp[${i}].position=this.value;markUserEdited();">
 
       <label>${t("responsibilities")}</label>
-      <textarea oninput="exp[${i}].desc=this.value">${esc(x.desc)}</textarea>
+      <textarea oninput="exp[${i}].desc=this.value;markUserEdited();">${esc(x.desc)}</textarea>
 
       <div class="grid2">
         <button class="btn secondary mini" onclick="improveExperience(${i},'improve')">${t("improveAI")}</button>
@@ -2265,42 +2666,48 @@ function renderExperience(){
 
 async function improveExperience(i,mode){
   const old=exp[i].desc;
+
   if(!old.trim()){
     showToast(appLang==="uk"?"Поле порожнє":"Field is empty");
     return;
   }
 
   try{
-    const res=await fetch("/api/interview",{
+    const res=await fetch("/api/improve-text",{
       method:"POST",
       headers:{"Content-Type":"application/json"},
       body:JSON.stringify({
-        mode:"improve_text",
-        language:langName,
-        task:mode,
         text:old,
-        rule:"Do not invent experience. Only improve the text that user provided."
+        language:langName,
+        mode
       })
     });
 
-    if(!res.ok)throw new Error("API failed");
     const data=await res.json();
-    exp[i].desc=data.text || data.result || old;
-    renderExperience();
+
+    if(!res.ok || !data.improvedText){
+      throw new Error(data.error || "AI improvement failed");
+    }
+
+    exp[i].desc=data.improvedText;
+    markUserEdited();
     saveProfile(false);
+    renderExperience();
     renderResume();
   }catch(e){
-    showToast(appLang==="uk"?"AI-покращення підключимо пізніше":"AI improvement will be connected later");
+    showToast(appLang==="uk"?"Потрібен файл api/improve-text.js":"api/improve-text.js is needed");
   }
 }
 
 function addExperienceCard(){
   exp.push({company:"",position:"",desc:"",saved:false});
+  markUserEdited();
   renderExperience();
 }
 
 function saveExperience(i){
   exp[i].saved=true;
+  markUserEdited();
   saveProfile(false);
   renderExperience();
   renderResume();
@@ -2313,6 +2720,7 @@ function editExperience(i){
 
 function deleteExperience(i){
   exp.splice(i,1);
+  markUserEdited();
   saveProfile(false);
   renderExperience();
   renderResume();
@@ -2332,13 +2740,13 @@ function renderVolunteers(){
   `:`
     <div class="card">
       <label>${t("organisation")}</label>
-      <input value="${esc(x.org)}" oninput="vols[${i}].org=this.value">
+      <input value="${esc(x.org)}" oninput="vols[${i}].org=this.value;markUserEdited();">
 
       <label>${t("role")}</label>
-      <input value="${esc(x.role)}" oninput="vols[${i}].role=this.value">
+      <input value="${esc(x.role)}" oninput="vols[${i}].role=this.value;markUserEdited();">
 
       <label>${t("responsibilities")}</label>
-      <textarea oninput="vols[${i}].desc=this.value">${esc(x.desc)}</textarea>
+      <textarea oninput="vols[${i}].desc=this.value;markUserEdited();">${esc(x.desc)}</textarea>
 
       <button class="btn secondary" onclick="saveVolunteer(${i})">${t("saveVolunteering")}</button>
     </div>
@@ -2347,11 +2755,13 @@ function renderVolunteers(){
 
 function addVolunteerCard(){
   vols.push({org:"",role:"",desc:"",saved:false});
+  markUserEdited();
   renderVolunteers();
 }
 
 function saveVolunteer(i){
   vols[i].saved=true;
+  markUserEdited();
   saveProfile(false);
   renderVolunteers();
   renderResume();
@@ -2364,6 +2774,7 @@ function editVolunteer(i){
 
 function deleteVolunteer(i){
   vols.splice(i,1);
+  markUserEdited();
   saveProfile(false);
   renderVolunteers();
   renderResume();
@@ -2371,6 +2782,7 @@ function deleteVolunteer(i){
 
 function addManualCourse(){
   manualCourses.push({name:"",place:"",period:"",desc:"",saved:false});
+  markUserEdited();
   renderManualCourses();
 }
 
@@ -2388,16 +2800,16 @@ function renderManualCourses(){
   `:`
     <div class="card">
       <label>${t("courseName")}</label>
-      <input value="${esc(c.name)}" oninput="manualCourses[${i}].name=this.value">
+      <input value="${esc(c.name)}" oninput="manualCourses[${i}].name=this.value;markUserEdited();">
 
       <label>${t("coursePlace")}</label>
-      <input value="${esc(c.place)}" oninput="manualCourses[${i}].place=this.value">
+      <input value="${esc(c.place)}" oninput="manualCourses[${i}].place=this.value;markUserEdited();">
 
       <label>${t("coursePeriod")}</label>
-      <input value="${esc(c.period)}" oninput="manualCourses[${i}].period=this.value">
+      <input value="${esc(c.period)}" oninput="manualCourses[${i}].period=this.value;markUserEdited();">
 
       <label>${t("courseDescription")}</label>
-      <textarea oninput="manualCourses[${i}].desc=this.value">${esc(c.desc)}</textarea>
+      <textarea oninput="manualCourses[${i}].desc=this.value;markUserEdited();">${esc(c.desc)}</textarea>
 
       <button class="btn secondary" onclick="saveManualCourse(${i})">${t("saveCourse")}</button>
     </div>
@@ -2406,6 +2818,7 @@ function renderManualCourses(){
 
 function saveManualCourse(i){
   manualCourses[i].saved=true;
+  markUserEdited();
   saveProfile(false);
   renderManualCourses();
   renderResume();
@@ -2418,6 +2831,7 @@ function editManualCourse(i){
 
 function deleteManualCourse(i){
   manualCourses.splice(i,1);
+  markUserEdited();
   saveProfile(false);
   renderManualCourses();
   renderResume();
@@ -2429,6 +2843,7 @@ function addDiplomaFile(e){
   let r=new FileReader();
   r.onload=()=>{
     diplomas.push({name:f.name,data:r.result});
+    markUserEdited();
     saveProfile(false);
     renderDiplomas();
     diplomaFile.value="";
@@ -2455,18 +2870,19 @@ function openDiploma(i){
 
 function deleteDiploma(i){
   diplomas.splice(i,1);
+  markUserEdited();
   saveProfile(false);
   renderDiplomas();
 }
 
 function labels(){
   let l=cvContentLang.value;
-  if(l==="Українська")return["ПРОФІЛЬ","ДОСВІД","ВОЛОНТЕРСТВО","ОСВІТА","МОВИ","НАВИЧКИ","КОНТАКТИ","ХОБІ","КУРСИ","СПЕЦІАЛЬНІСТЬ"];
-  if(l==="Polski")return["PROFIL","DOŚWIADCZENIE","WOLONTARIAT","EDUKACJA","JĘZYKI","UMIEJĘTNOŚCI","KONTAKT","ZAINTERESOWANIA","KURSY","SPECJALNOŚĆ"];
-  if(l==="Deutsch")return["PROFIL","ERFAHRUNG","EHRENAMT","BILDUNG","SPRACHEN","FÄHIGKEITEN","KONTAKT","INTERESSEN","KURSE","SPEZIALISIERUNG"];
-  if(l==="Français")return["PROFIL","EXPÉRIENCE","BÉNÉVOLAT","FORMATION","LANGUES","COMPÉTENCES","CONTACT","INTÉRÊTS","COURS","SPÉCIALITÉ"];
-  if(l==="Español")return["PERFIL","EXPERIENCIA","VOLUNTARIADO","EDUCACIÓN","IDIOMAS","HABILIDADES","CONTACTO","INTERESES","CURSOS","ESPECIALIDAD"];
-  return["PROFILE","EXPERIENCE","VOLUNTEERING","EDUCATION","LANGUAGES","SKILLS","CONTACT","INTERESTS","COURSES","SPECIALITY"];
+  if(l==="Українська")return["ПРОФІЛЬ","ДОСВІД","ВОЛОНТЕРСТВО","ОСВІТА","МОВИ","НАВИЧКИ","КОНТАКТИ","ХОБІ","КУРСИ","СПЕЦІАЛЬНІСТЬ","ДОДАТКОВО"];
+  if(l==="Polski")return["PROFIL","DOŚWIADCZENIE","WOLONTARIAT","EDUKACJA","JĘZYKI","UMIEJĘTNOŚCI","KONTAKT","ZAINTERESOWANIA","KURSY","SPECJALNOŚĆ","DODATKOWO"];
+  if(l==="Deutsch")return["PROFIL","ERFAHRUNG","EHRENAMT","BILDUNG","SPRACHEN","FÄHIGKEITEN","KONTAKT","INTERESSEN","KURSE","SPEZIALISIERUNG","ZUSÄTZLICH"];
+  if(l==="Français")return["PROFIL","EXPÉRIENCE","BÉNÉVOLAT","FORMATION","LANGUES","COMPÉTENCES","CONTACT","INTÉRÊTS","COURS","SPÉCIALITÉ","INFORMATIONS"];
+  if(l==="Español")return["PERFIL","EXPERIENCIA","VOLUNTARIADO","EDUCACIÓN","IDIOMAS","HABILIDADES","CONTACTO","INTERESES","CURSOS","ESPECIALIDAD","ADICIONAL"];
+  return["PROFILE","EXPERIENCE","VOLUNTEERING","EDUCATION","LANGUAGES","SKILLS","CONTACT","INTERESTS","COURSES","SPECIALITY","ADDITIONAL"];
 }
 
 function photo(){
@@ -2513,75 +2929,88 @@ function skillsBlock(){
   return esc(all||"Communication, teamwork").split(",").map(s=>`<span class="r-chip">${s.trim()}</span>`).join("");
 }
 
-function resumeHtml(i){
-  let tpl=templates[i]||templates[0];
-  let L=labels();
-  let showPhoto=tpl.photo;
-  let img=`<img class="r-photo" src="${photo()}" onerror="this.style.display='none'">`;
-  let nm=esc(val("name","Your Name")).toUpperCase();
-  let role=esc(val("target","Target Position"));
-  let contact=`${esc(val("email","email@example.com"))}<br>${esc(val("phone","+00 0000 000000"))}<br>${esc(val("location","Location"))}`;
-  let skills=skillsBlock();
-  let courseHtml=coursesBlock();
-  let hobbiesBlock=showHobbies.checked?`<div class="r-section"><div class="r-title">${L[7]}</div><p class="r-text">${esc(val("hobbies",""))}</p></div>`:"";
-  let educationText=`${esc(val("education","University / college / school"))}${val("speciality","")?`<br><b>${L[9]}:</b> ${esc(val("speciality",""))}`:""}`;
-
-  let side=`
-    ${showPhoto?img:""}
-    <div class="r-section"><div class="r-title">${L[6]}</div><div class="r-small">${contact}</div></div>
-    <div class="r-section"><div class="r-title">${L[4]}</div><div class="r-small">${esc(val("profileLanguages","English"))}</div></div>
-    <div class="r-section skills"><div class="r-title">${L[5]}</div>${skills}</div>
-    ${hobbiesBlock}
+function sideBlock(L,showPhoto=true){
+  return `
+    ${showPhoto?`<img class="r-photo" src="${photo()}" onerror="this.style.display='none'">`:""}
+    <div class="r-section"><div class="r-title">${L[6]}</div><div class="r-small">${esc(val("email"))}<br>${esc(val("phone"))}<br>${esc(val("location"))}</div></div>
+    <div class="r-section"><div class="r-title">${L[4]}</div><div class="r-small">${esc(val("profileLanguages"))}</div></div>
+    <div class="r-section skills"><div class="r-title">${L[5]}</div>${skillsBlock()}</div>
+    ${showHobbies.checked?`<div class="r-section"><div class="r-title">${L[7]}</div><p class="r-text">${esc(val("hobbies"))}</p></div>`:""}
   `;
+}
 
-  let main=`
+function mainBlock(L){
+  const courseHtml=coursesBlock();
+  const educationText=`${esc(val("education"))}${val("speciality")?`<br><b>${L[9]}:</b> ${esc(val("speciality"))}`:""}`;
+  return `
     <div class="r-section"><div class="r-title">${L[0]}</div><p class="r-text">${esc(summary())}</p></div>
     <div class="r-section"><div class="r-title">${L[1]}</div>${expBlock()}</div>
     <div class="r-section"><div class="r-title">${L[2]}</div>${volBlock()}</div>
     <div class="r-section"><div class="r-title">${L[3]}</div><p class="r-text">${educationText}</p></div>
     ${courseHtml?`<div class="r-section"><div class="r-title">${L[8]}</div>${courseHtml}</div>`:""}
   `;
+}
 
+function resumeHtml(i){
+  let tpl=templates[i]||templates[0];
+  let L=labels();
+  let img=`<img class="r-photo" src="${photo()}" onerror="this.style.display='none'">`;
+  let nm=esc(val("name","Your Name")).toUpperCase();
+  let role=esc(val("target","Target Position"));
+  let contactLine=`${esc(val("email"))} | ${esc(val("phone"))} | ${esc(val("location"))}`;
+  let educationText=`${esc(val("education"))}${val("speciality")?`<br><b>${L[9]}:</b> ${esc(val("speciality"))}`:""}`;
+  let courseHtml=coursesBlock();
   let head=`<h1 class="r-name">${nm}</h1><p class="r-role">${role}</p>`;
 
   if(tpl.id==="ats"){
-    return `<div class="resume-page ${tpl.cls}">${head}<p class="contact">${esc(val("email"))} | ${esc(val("phone"))} | ${esc(val("location"))}</p><div class="r-line"></div>${main}<div class="r-section skills"><div class="r-title">${L[5]}</div>${skills}</div>${showHobbies.checked?hobbiesBlock:""}</div>`;
+    return `<div class="resume-page ${tpl.cls}">${head}<p class="contact">${contactLine}</p><div class="r-line"></div>${mainBlock(L)}<div class="r-section skills"><div class="r-title">${L[5]}</div>${skillsBlock()}</div></div>`;
   }
 
   if(tpl.id==="classic"){
-    return `<div class="resume-page ${tpl.cls}"><div class="head">${img}<div>${head}<p class="r-text">${esc(val("email"))} | ${esc(val("phone"))} | ${esc(val("location"))}</p></div></div>${main}<div class="r-section skills"><div class="r-title">${L[5]}</div>${skills}</div>${showHobbies.checked?hobbiesBlock:""}</div>`;
+    return `<div class="resume-page ${tpl.cls}"><div class="head">${img}<div>${head}<p class="r-text">${contactLine}</p></div></div>${mainBlock(L)}<div class="r-section skills"><div class="r-title">${L[5]}</div>${skillsBlock()}</div></div>`;
   }
 
-  if(["exec","chef","care"].includes(tpl.id)){
-    return `<div class="resume-page ${tpl.cls}"><div class="side">${side}</div><div class="main">${head}${main}</div></div>`;
+  if(tpl.id==="exec"){
+    return `<div class="resume-page ${tpl.cls}"><div class="side">${sideBlock(L,true)}</div><div class="main">${head}${mainBlock(L)}</div></div>`;
+  }
+
+  if(tpl.id==="care"){
+    return `<div class="resume-page ${tpl.cls}"><div class="side">${sideBlock(L,true)}</div><div class="main">${head}${mainBlock(L)}</div></div>`;
   }
 
   if(tpl.id==="beige"){
-    return `<div class="resume-page ${tpl.cls}"><div class="topbox">${img}<div>${head}<p class="r-text">${esc(val("email"))} | ${esc(val("phone"))} | ${esc(val("location"))}</p></div></div>${main}<div class="r-section skills"><div class="r-title">${L[5]}</div>${skills}</div>${showHobbies.checked?hobbiesBlock:""}</div>`;
-  }
-
-  if(tpl.id==="uk"){
-    return `<div class="resume-page ${tpl.cls}">${head}<p class="contact">${esc(val("email"))} | ${esc(val("phone"))} | ${esc(val("location"))}</p><div class="r-section"><div class="r-title">${L[0]}</div><p class="r-text">${esc(summary())}</p></div><div class="r-section"><div class="r-title">${L[1]}</div>${expBlock()}</div><div class="r-section"><div class="r-title">${L[3]}</div><p class="r-text">${educationText}</p></div><div class="r-section skills"><div class="r-title">${L[5]}</div>${skills}</div></div>`;
-  }
-
-  if(tpl.id==="student"){
-    return `<div class="resume-page ${tpl.cls}"><div class="head">${showPhoto?img:""}${head}<p class="r-text">${esc(val("email"))} | ${esc(val("phone"))} | ${esc(val("location"))}</p></div><div class="r-section skills"><div class="r-title">${L[5]}</div>${skills}</div>${main}${showHobbies.checked?hobbiesBlock:""}</div>`;
-  }
-
-  if(tpl.id==="support"){
-    return `<div class="resume-page ${tpl.cls}"><div class="head">${head}<p class="r-text">${esc(val("email"))} | ${esc(val("phone"))} | ${esc(val("location"))}</p></div><div class="r-section skills"><div class="r-title">${L[5]}</div>${skills}</div>${main}</div>`;
+    return `<div class="resume-page ${tpl.cls}"><div class="topbox">${img}<div>${head}<p class="r-text">${contactLine}</p></div></div>${mainBlock(L)}<div class="r-section skills"><div class="r-title">${L[5]}</div>${skillsBlock()}</div></div>`;
   }
 
   if(tpl.id==="creative"){
-    return `<div class="resume-page ${tpl.cls}"><div class="creative-top">${showPhoto?img:""}${head}<p class="r-text" style="color:white">${esc(val("email"))} | ${esc(val("phone"))} | ${esc(val("location"))}</p></div><div class="creative-body"><div><div class="r-section"><div class="r-title">${L[0]}</div><p class="r-text">${esc(summary())}</p></div><div class="r-section skills"><div class="r-title">${L[5]}</div>${skills}</div>${courseHtml?`<div class="r-section"><div class="r-title">${L[8]}</div>${courseHtml}</div>`:""}</div><div><div class="r-section"><div class="r-title">${L[1]}</div>${expBlock()}</div><div class="r-section"><div class="r-title">${L[3]}</div><p class="r-text">${educationText}</p></div></div></div></div>`;
+    return `<div class="resume-page ${tpl.cls}"><div class="creative-top">${img}${head}<p class="r-text" style="color:white">${contactLine}</p></div><div class="creative-body"><div><div class="r-section"><div class="r-title">${L[0]}</div><p class="r-text">${esc(summary())}</p></div><div class="r-section skills"><div class="r-title">${L[5]}</div>${skillsBlock()}</div>${courseHtml?`<div class="r-section"><div class="r-title">${L[8]}</div>${courseHtml}</div>`:""}</div><div><div class="r-section"><div class="r-title">${L[1]}</div>${expBlock()}</div><div class="r-section"><div class="r-title">${L[3]}</div><p class="r-text">${educationText}</p></div></div></div></div>`;
   }
 
-  return `<div class="resume-page tpl-ats">${head}${main}</div>`;
+  if(tpl.id==="blue"){
+    return `<div class="resume-page ${tpl.cls}"><div class="blue-head">${img}<div>${head}</div><div class="r-small">${esc(val("email"))}<br>${esc(val("phone"))}<br>${esc(val("location"))}</div></div><div class="blue-side"><div class="r-section skills"><div class="r-title">${L[5]}</div>${skillsBlock()}</div><div class="r-section"><div class="r-title">${L[3]}</div><p class="r-text">${educationText}</p></div><div class="r-section"><div class="r-title">${L[4]}</div><p class="r-text">${esc(val("profileLanguages"))}</p></div></div><div class="blue-main"><div class="r-section"><div class="r-title">${L[0]}</div><p class="r-text">${esc(summary())}</p></div><div class="r-section"><div class="r-title">${L[1]}</div>${expBlock()}</div>${courseHtml?`<div class="r-section"><div class="r-title">${L[8]}</div>${courseHtml}</div>`:""}</div></div>`;
+  }
+
+  if(tpl.id==="gold"){
+    return `<div class="resume-page ${tpl.cls}"><div class="gold-head">${img}<div>${head}<p class="r-text">${contactLine}</p></div></div><div class="gold-side"><div class="r-section"><div class="r-title">${L[0]}</div><p class="r-text">${esc(summary())}</p></div><div class="r-section skills"><div class="r-title">${L[5]}</div>${skillsBlock()}</div><div class="r-section"><div class="r-title">${L[4]}</div><p class="r-text">${esc(val("profileLanguages"))}</p></div></div><div class="gold-main"><div class="r-section"><div class="r-title">${L[1]}</div>${expBlock()}</div><div class="r-section"><div class="r-title">${L[3]}</div><p class="r-text">${educationText}</p></div>${courseHtml?`<div class="r-section"><div class="r-title">${L[8]}</div>${courseHtml}</div>`:""}</div></div>`;
+  }
+
+  if(tpl.id==="nophoto"){
+    return `<div class="resume-page ${tpl.cls}"><div class="head">${head}<p class="contact">${contactLine}</p></div><div class="body"><div><div class="r-section skills"><div class="r-title">${L[5]}</div>${skillsBlock()}</div><div class="r-section"><div class="r-title">${L[3]}</div><p class="r-text">${educationText}</p></div><div class="r-section"><div class="r-title">${L[4]}</div><p class="r-text">${esc(val("profileLanguages"))}</p></div></div><div><div class="r-section"><div class="r-title">${L[0]}</div><p class="r-text">${esc(summary())}</p></div><div class="r-section"><div class="r-title">${L[1]}</div>${expBlock()}</div>${courseHtml?`<div class="r-section"><div class="r-title">${L[8]}</div>${courseHtml}</div>`:""}</div></div></div>`;
+  }
+
+  if(tpl.id==="global"){
+    return `<div class="resume-page ${tpl.cls}"><div class="head">${head}<p class="contact">${contactLine}</p></div><div class="body"><div><div class="r-section skills"><div class="r-title">${L[5]}</div>${skillsBlock()}</div><div class="r-section"><div class="r-title">${L[3]}</div><p class="r-text">${educationText}</p></div><div class="r-section"><div class="r-title">${L[4]}</div><p class="r-text">${esc(val("profileLanguages"))}</p></div></div><div><div class="r-section"><div class="r-title">${L[0]}</div><p class="r-text">${esc(summary())}</p></div><div class="r-section"><div class="r-title">${L[1]}</div>${expBlock()}</div>${courseHtml?`<div class="r-section"><div class="r-title">${L[8]}</div>${courseHtml}</div>`:""}<div class="r-section"><div class="r-title">${L[10]}</div>${volBlock()}${showHobbies.checked?`<p class="r-text">${esc(val("hobbies"))}</p>`:""}</div></div></div></div>`;
+  }
+
+  return `<div class="resume-page tpl-ats">${head}${mainBlock(L)}</div>`;
 }
 
 function filteredTemplates(){
-  if(templateFilter==="all")return templates.map((t,i)=>({tpl:t,index:i}));
-  return templates.map((t,i)=>({tpl:t,index:i})).filter(x=>x.tpl.access===templateFilter);
+  return templates.map((t,i)=>({tpl:t,index:i})).filter(x=>{
+    const accessOk=templateFilter==="all" || x.tpl.access===templateFilter;
+    const typeOk=templateType==="all" || x.tpl.type.includes(templateType);
+    return accessOk && typeOk;
+  });
 }
 
 function renderTemplateGrid(){
@@ -2604,16 +3033,24 @@ function setTemplateFilter(f){
   renderTemplateGrid();
 }
 
+function setTemplateType(v){
+  templateType=v;
+  localStorage.setItem("jsai_templateType",v);
+  renderTemplateGrid();
+}
+
 function updateFilterButtons(){
   if(!filterAll)return;
   filterAll.classList.toggle("active",templateFilter==="all");
   filterFree.classList.toggle("active",templateFilter==="free");
   filterPremium.classList.toggle("active",templateFilter==="premium");
+  if(templateTypeFilter)templateTypeFilter.value=templateType;
 }
 
 function selectTemplate(i){
   currentTpl=i;
   savePrefs();
+  saveResumeHistory();
   if(templates[i].access==="premium")showToast("Premium template. Open for testing now.");
   renderTemplateGrid();
   renderResume();
@@ -2623,12 +3060,14 @@ function selectTemplate(i){
 function selectNextTemplate(){
   currentTpl=(currentTpl+1)%templates.length;
   savePrefs();
+  saveResumeHistory();
   renderResume();
 }
 
 function selectPreviousTemplate(){
   currentTpl=(currentTpl-1+templates.length)%templates.length;
   savePrefs();
+  saveResumeHistory();
   renderResume();
 }
 
@@ -2654,6 +3093,7 @@ window.addEventListener("resize",fitResumePreview);
 
 function savePDF(){
   renderResume();
+  saveResumeHistory();
   setTimeout(()=>window.print(),100);
 }
 
@@ -2772,6 +3212,8 @@ async function generateCover(){
   }catch(e){
     coverOutput.textContent=makeCoverFallback(job,companyName,advert);
   }
+
+  saveCoverHistory();
 }
 
 function makeCoverFallback(job,companyName,advert){
@@ -2871,7 +3313,13 @@ function greetingText(){
 }
 
 function buildQuestionInstruction(){
-  return `Return only one short interview question. No comments, no explanations, no empathy phrases. The question must fit the exact job title. Use simple everyday language for practical jobs. Do not ask manager-style questions unless the role is managerial.`;
+  return `Return only one short concrete interview question.
+No comments, no explanations, no empathy phrases.
+The question must match the exact job title and vacancy.
+Use simple natural language.
+Do not repeat previous questions.
+Do not use abstract HR words like approaches, methods, strategies, efficiency, optimisation or process unless the role is managerial.
+For practical jobs ask about real tasks, tools, schedule, experience, clients, safety, cleanliness, speed and responsibility.`;
 }
 
 async function callInterviewAPI({feedback=false}={}){
@@ -2890,7 +3338,7 @@ async function callInterviewAPI({feedback=false}={}){
     feedback,
     questionLimit,
     instruction: feedback
-      ? "Analyse the candidate's real answers. Do not give generic advice. Give specific feedback based only on what the candidate said. If answers are short, explain exactly why. Provide improved example answers in the same language. Return detailed feedback in sections."
+      ? "Analyse the candidate's real answers. Do not give generic advice. Give specific feedback based only on what the candidate said. If answers are short or poorly transcribed, explain it clearly. Provide improved example answers in the same language. Return detailed feedback in sections."
       : buildQuestionInstruction()
   };
 
@@ -3009,7 +3457,7 @@ function renderDialog(){
       return `<div class="bubble ai"><b>${r[0]}:</b><br>${esc(m.text)}</div>`;
     }
 
-    return `<div class="bubble me"><b>You:</b><br>${esc(m.text)}
+    return `<div class="bubble me"><b>${t("meLabel")}:</b><br>${esc(m.text)}
       <div class="bubble-actions">
         <button onclick="deleteAnswer(${m.answerIndex})">${t("delete")}</button>
       </div>
@@ -3031,14 +3479,10 @@ function deleteAnswer(i){
 
   for(const m of messages){
     if(m.role==="me"){
-      if(seenAnswers<i){
-        keepMessages.push(m);
-      }
+      if(seenAnswers<i)keepMessages.push(m);
       seenAnswers++;
     }else{
-      if(seenAnswers<=i){
-        keepMessages.push(m);
-      }
+      if(seenAnswers<=i)keepMessages.push(m);
     }
   }
 
@@ -3065,9 +3509,7 @@ async function sendAnswer(){
   userAnswer.value="";
   clearMyAnswer(true);
 
-  const realQuestionCount=questionsAsked.length;
-
-  if(realQuestionCount>=questionLimit){
+  if(questionsAsked.length>=questionLimit){
     await finishInterview();
     return;
   }
@@ -3077,7 +3519,7 @@ async function sendAnswer(){
   try{
     const data=await callInterviewAPI();
     currentQuestionText=(data.question || data.text || "").trim();
-    if(!currentQuestionText || currentQuestionText.length>220){
+    if(!currentQuestionText || currentQuestionText.length>190){
       currentQuestionText=fallbackNextQuestion();
     }
   }catch(error){
@@ -3096,35 +3538,61 @@ function fallbackNextQuestion(){
   const lang=interviewLang.value;
 
   const cleanerUk=[
-    "Чи маєте ви досвід прибирання?",
-    "Які приміщення ви прибирали раніше?",
-    "Чи вмієте ви користуватися мийними засобами?",
-    "Чи можете ви працювати вранці або ввечері?",
-    "Що ви робите, якщо клієнт незадоволений прибиранням?"
+    "Чи маєте ви досвід прибирання? Де саме ви працювали?",
+    "Що саме ви прибирали раніше: квартири, офіси, кафе чи інші приміщення?",
+    "Чи працювали ви з мийними засобами?",
+    "Чи можете ви працювати швидко, але акуратно?",
+    "Що ви робите, якщо бачите, що десь залишився пил або бруд?",
+    "Чи готові ви працювати за графіком, який пропонує роботодавець?",
+    "Як ви реагуєте, якщо клієнт робить зауваження?",
+    "Чи можете ви працювати фізично кілька годин поспіль?",
+    "Чи важлива для вас пунктуальність?",
+    "Коли ви можете почати роботу?"
   ];
 
   const cleanerEn=[
-    "Do you have cleaning experience?",
-    "What places have you cleaned before?",
-    "Can you use cleaning products safely?",
-    "Can you work mornings or evenings?",
-    "What would you do if a client was not happy with the cleaning?"
+    "Do you have cleaning experience? Where did you work?",
+    "What places have you cleaned before: homes, offices, cafés or other places?",
+    "Have you worked with cleaning products?",
+    "Can you work quickly but carefully?",
+    "What do you do if you see dust or dirt left somewhere?",
+    "Can you work the schedule offered by the employer?",
+    "How do you react if a client gives a comment or complaint?",
+    "Can you do physical work for several hours?",
+    "Is punctuality important to you?",
+    "When can you start working?"
   ];
 
   const chefUk=[
     "Який у вас досвід роботи на кухні?",
-    "З якими стравами або заготовками ви працювали?",
-    "Як ви дотримуєтеся чистоти на кухні?",
+    "Які страви або заготовки ви готували раніше?",
     "Чи можете ви працювати у швидкому темпі?",
+    "Як ви підтримуєте чистоту на робочому місці?",
     "Як ви працюєте в команді на кухні?"
   ];
 
   const chefEn=[
     "What kitchen experience do you have?",
     "What dishes or preparation tasks have you worked with?",
-    "How do you keep the kitchen clean?",
     "Can you work at a fast pace?",
+    "How do you keep your workplace clean?",
     "How do you work in a kitchen team?"
+  ];
+
+  const supportUk=[
+    "Чи маєте ви досвід спілкування з клієнтами?",
+    "Що ви відповісте клієнту, якщо він незадоволений?",
+    "Чи можете ви швидко й грамотно відповідати в чаті?",
+    "Як ви дієте, якщо не знаєте відповідь на питання клієнта?",
+    "Чи комфортно вам працювати з повідомленнями протягом дня?"
+  ];
+
+  const supportEn=[
+    "Do you have experience communicating with customers?",
+    "What would you say to an unhappy customer?",
+    "Can you answer chat messages quickly and clearly?",
+    "What do you do if you do not know the answer to a customer question?",
+    "Are you comfortable working with messages during the day?"
   ];
 
   const generalUk=[
@@ -3146,6 +3614,7 @@ function fallbackNextQuestion(){
   let list;
   if(role.includes("clean")||role.includes("приб")||role.includes("убор"))list=lang==="Українська"?cleanerUk:cleanerEn;
   else if(role.includes("chef")||role.includes("cook")||role.includes("кухар")||role.includes("повар"))list=lang==="Українська"?chefUk:chefEn;
+  else if(role.includes("support")||role.includes("chat")||role.includes("оператор")||role.includes("клієнт"))list=lang==="Українська"?supportUk:supportEn;
   else list=lang==="Українська"?generalUk:generalEn;
 
   return list[questionsAsked.length%list.length];
@@ -3233,16 +3702,25 @@ function stopAllRecording(){
   }
 }
 
+function transcribeLangCode(){
+  const found=languages.find(l=>l[0]===interviewLang.value);
+  return found ? found[1] : appLang;
+}
+
 async function transcribeLastAnswer(){
   if(!lastAudioBlob)return;
 
   setBusy(true,t("transcribing"));
 
   try{
+    const formData=new FormData();
+    formData.append("file",lastAudioBlob,"answer.webm");
+    formData.append("language",transcribeLangCode());
+    formData.append("languageName",interviewLang.value || langName);
+
     const response=await fetch("/api/transcribe",{
       method:"POST",
-      headers:{"Content-Type":"audio/webm"},
-      body:lastAudioBlob
+      body:formData
     });
 
     if(!response.ok){
@@ -3291,6 +3769,7 @@ async function finishInterview(){
     feedbackText.innerHTML=interviewLang.value==="Українська"
       ? `<p>Ви ще не дали відповідей, тому повну оцінку сформувати неможливо.</p><p>Почніть співбесіду ще раз і дайте хоча б 2–3 відповіді.</p>`
       : `<p>You have not answered any questions yet, so a full assessment is not possible.</p><p>Start again and answer at least 2–3 questions.</p>`;
+    saveInterviewHistory();
     return;
   }
 
@@ -3311,6 +3790,8 @@ async function finishInterview(){
     feedbackTitle.textContent=interviewLang.value==="Українська"?"Попередній фідбек":"Preliminary Feedback";
     feedbackText.innerHTML=`<div class="cover-output">${esc(fallbackFeedback())}</div>`;
   }
+
+  saveInterviewHistory();
 }
 
 function fallbackFeedback(){
@@ -3318,7 +3799,7 @@ function fallbackFeedback(){
 
   if(interviewLang.value==="Українська"){
     return `ЗАГАЛЬНА ОЦІНКА
-Ви відповіли на ${answers.length} питань. ${shortCount?`Деякі відповіді були дуже короткими, тому рекрутеру може бути важко оцінити ваш досвід.`:""}
+Ви відповіли на ${answers.length} питань. ${shortCount?`Деякі відповіді були дуже короткими або погано розпізнаними, тому рекрутеру може бути важко оцінити ваш досвід.`:""}
 
 ЩО БУЛО ДОБРЕ
 - Ви дали відповіді й почали формувати свою позицію.
@@ -3330,14 +3811,14 @@ function fallbackFeedback(){
 - Відповідайте просто: досвід → що робили → чому це корисно роботодавцю.
 
 ПРИКЛАД КРАЩОЇ ВІДПОВІДІ
-“Я зацікавлена в цій роботі, тому що маю відповідальне ставлення до завдань, готова дотримуватися правил і працювати якісно. Раніше я виконувала подібні обов’язки, тому розумію, що важливі пунктуальність, уважність і стабільність.”
+“Я маю досвід роботи на подібній посаді. Я уважно виконую завдання, дотримуюся інструкцій, можу працювати стабільно й відповідально. Для мене важливо виконувати роботу якісно та бути пунктуальною.”
 
 ПОРАДА
 Перед наступною співбесідою підготуйте 3 короткі приклади: ваш досвід, ваша сильна сторона і ситуація, де ви добре впоралися із завданням.`;
   }
 
   return `GENERAL ASSESSMENT
-You answered ${answers.length} questions. ${shortCount?`Some answers were very short, so the recruiter may not see enough evidence of your experience.`:""}
+You answered ${answers.length} questions. ${shortCount?`Some answers were very short or poorly transcribed, so the recruiter may not see enough evidence of your experience.`:""}
 
 WHAT WAS GOOD
 - You answered the questions and started building your interview response.
@@ -3349,10 +3830,76 @@ WHAT TO IMPROVE
 - Keep answers simple: experience → what you did → why it helps the employer.
 
 BETTER ANSWER EXAMPLE
-“I am interested in this job because I am responsible, ready to follow instructions and able to work carefully. I have done similar tasks before, so I understand that punctuality, attention to detail and reliability are important.”
+“I have experience in a similar role. I follow instructions carefully, work responsibly and pay attention to detail. I understand that reliability and punctuality are important for this job.”
 
 ADVICE
 Before the next interview, prepare three short examples: your experience, your strongest quality and one situation where you handled a task well.`;
+}
+
+function saveResumeHistory(){
+  const data={
+    date:new Date().toLocaleString(),
+    template:templates[currentTpl]?.name || "Resume",
+    name:val("name"),
+    target:val("target")
+  };
+  localStorage.setItem("jsai_history_resume",JSON.stringify(data));
+}
+
+function saveCoverHistory(){
+  const data={
+    date:new Date().toLocaleString(),
+    job:val("coverJob"),
+    company:val("coverCompany"),
+    text:coverOutput.textContent
+  };
+  localStorage.setItem("jsai_history_cover",JSON.stringify(data));
+}
+
+function saveInterviewHistory(){
+  const data={
+    date:new Date().toLocaleString(),
+    position:val("jobPosition"),
+    score:scoreNum.textContent,
+    feedback:feedbackText.innerText || feedbackText.textContent || "",
+    answers:answers.length
+  };
+  localStorage.setItem("jsai_history_interview",JSON.stringify(data));
+}
+
+function renderHistory(){
+  if(!historyResumeBox)return;
+
+  let resume=null,cover=null,interview=null;
+
+  try{resume=JSON.parse(localStorage.getItem("jsai_history_resume")||"null");}catch(e){}
+  try{cover=JSON.parse(localStorage.getItem("jsai_history_cover")||"null");}catch(e){}
+  try{interview=JSON.parse(localStorage.getItem("jsai_history_interview")||"null");}catch(e){}
+
+  historyResumeBox.innerHTML=resume?`
+    <div class="history-item">
+      <b>${esc(resume.template)}</b>
+      <p>${esc(resume.name)} — ${esc(resume.target)}</p>
+      <p class="small">${esc(resume.date)}</p>
+    </div>
+  `:`<p>${t("noHistory")}</p>`;
+
+  historyCoverBox.innerHTML=cover?`
+    <div class="history-item">
+      <b>${esc(cover.job)} — ${esc(cover.company)}</b>
+      <p class="small">${esc(cover.date)}</p>
+      <div class="cover-output">${esc(cover.text||"")}</div>
+    </div>
+  `:`<p>${t("noHistory")}</p>`;
+
+  historyInterviewBox.innerHTML=interview?`
+    <div class="history-item">
+      <b>${esc(interview.position)}</b>
+      <p>${esc(interview.score)} / 10 · ${esc(String(interview.answers))} answers</p>
+      <p class="small">${esc(interview.date)}</p>
+      <div class="cover-output">${esc(interview.feedback||"")}</div>
+    </div>
+  `:`<p>${t("noHistory")}</p>`;
 }
 
 function init(){
