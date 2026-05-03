@@ -1,7 +1,7 @@
 export const config = {
   api: {
-    bodyParser: false,
-  },
+    bodyParser: false
+  }
 };
 
 import zlib from "zlib";
@@ -20,353 +20,310 @@ async function readRequestBuffer(req) {
 
 function getHeader(req, name) {
   const key = Object.keys(req.headers || {}).find(
-    (k) => k.toLowerCase() === name.toLowerCase()
+    k => k.toLowerCase() === name.toLowerCase()
   );
   return key ? req.headers[key] : "";
 }
 
 function parseMultipart(buffer, contentType) {
-  const boundaryMatch = String(contentType).match(/boundary=([^;]+)/i);
-  if (!boundaryMatch) throw new Error("Multipart boundary not found");
+  const match = String(contentType || "").match(/boundary=(?:"([^"]+)"|([^;]+))/i);
+  const boundary = match ? (match[1] || match[2]) : "";
 
-  const boundary = `--${boundaryMatch[1]}`;
-  const body = buffer.toString("binary");
-  const parts = body.split(boundary).filter((part) => {
-    const clean = part.trim();
-    return clean && clean !== "--";
-  });
+  if (!boundary) {
+    return { fields: {}, files: [] };
+  }
 
+  const boundaryText = "--" + boundary;
+  const raw = buffer.toString("binary");
+  const parts = raw.split(boundaryText);
   const fields = {};
-  const files = {};
+  const files = [];
 
   for (const part of parts) {
+    if (!part || part === "--" || part.trim() === "--") continue;
+
     const headerEnd = part.indexOf("\r\n\r\n");
     if (headerEnd === -1) continue;
 
-    const rawHeaders = part.slice(0, headerEnd);
-    let rawContent = part.slice(headerEnd + 4);
-    rawContent = rawContent.replace(/\r\n--$/, "").replace(/\r\n$/, "");
+    const headerText = part.slice(0, headerEnd);
+    let content = part.slice(headerEnd + 4);
 
-    const nameMatch = rawHeaders.match(/name="([^"]+)"/i);
-    if (!nameMatch) continue;
+    if (content.endsWith("\r\n")) content = content.slice(0, -2);
+    if (content.endsWith("--")) content = content.slice(0, -2);
 
-    const fieldName = nameMatch[1];
-    const fileNameMatch = rawHeaders.match(/filename="([^"]*)"/i);
-    const contentTypeMatch = rawHeaders.match(/Content-Type:\s*([^\r\n]+)/i);
+    const nameMatch = headerText.match(/name="([^"]+)"/i);
+    const fileMatch = headerText.match(/filename="([^"]*)"/i);
+    const typeMatch = headerText.match(/content-type:\s*([^\r\n]+)/i);
 
-    if (fileNameMatch) {
-      files[fieldName] = {
-        filename: fileNameMatch[1] || "cv-file",
-        contentType: contentTypeMatch ? contentTypeMatch[1].trim() : "application/octet-stream",
-        buffer: Buffer.from(rawContent, "binary"),
-      };
+    const name = nameMatch ? nameMatch[1] : "";
+    const filename = fileMatch ? fileMatch[1] : "";
+
+    if (!name) continue;
+
+    const contentBuffer = Buffer.from(content, "binary");
+
+    if (filename) {
+      files.push({
+        fieldName: name,
+        filename,
+        contentType: typeMatch ? typeMatch[1].trim() : "",
+        buffer: contentBuffer
+      });
     } else {
-      fields[fieldName] = rawContent.trim();
+      fields[name] = contentBuffer.toString("utf8").trim();
     }
   }
 
   return { fields, files };
 }
 
-function cleanXmlText(xml) {
+function cleanText(text) {
+  return String(text || "")
+    .replace(/\r/g, "\n")
+    .replace(/\t/g, " ")
+    .replace(/[ ]{2,}/g, " ")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
+}
+
+function stripXml(xml) {
   return String(xml || "")
     .replace(/<w:tab\/>/g, " ")
     .replace(/<\/w:p>/g, "\n")
-    .replace(/<\/w:tr>/g, "\n")
     .replace(/<[^>]+>/g, " ")
     .replace(/&amp;/g, "&")
     .replace(/&lt;/g, "<")
     .replace(/&gt;/g, ">")
     .replace(/&quot;/g, '"')
     .replace(/&apos;/g, "'")
-    .replace(/[ \t]+/g, " ")
-    .replace(/\n\s+/g, "\n")
-    .replace(/\n{3,}/g, "\n\n")
+    .replace(/\s+/g, " ")
     .trim();
 }
 
-function readUInt32LE(buffer, offset) {
-  return buffer.readUInt32LE(offset);
+function extractTextFromDocx(buffer) {
+  try {
+    const marker = Buffer.from("word/document.xml");
+    const idx = buffer.indexOf(marker);
+
+    if (idx === -1) return "";
+
+    const xmlStart = buffer.indexOf(Buffer.from("<w:document"), idx);
+    const xmlEnd = buffer.indexOf(Buffer.from("</w:document>"), xmlStart);
+
+    if (xmlStart === -1 || xmlEnd === -1) return "";
+
+    const xml = buffer.slice(xmlStart, xmlEnd + "</w:document>".length).toString("utf8");
+    return cleanText(stripXml(xml));
+  } catch (e) {
+    return "";
+  }
 }
 
-function readUInt16LE(buffer, offset) {
-  return buffer.readUInt16LE(offset);
-}
+function extractTextFromPdfBasic(buffer) {
+  try {
+    let raw = buffer.toString("latin1");
 
-function extractDocxText(buffer) {
-  const entries = [];
-  let offset = 0;
+    raw = raw.replace(/\\r/g, "\n").replace(/\\n/g, "\n");
 
-  while (offset < buffer.length - 30) {
-    const signature = readUInt32LE(buffer, offset);
+    const chunks = [];
 
-    if (signature !== 0x04034b50) {
-      offset++;
-      continue;
-    }
+    const streamRegex = /stream\r?\n([\s\S]*?)\r?\nendstream/g;
+    let m;
 
-    const compression = readUInt16LE(buffer, offset + 8);
-    const compressedSize = readUInt32LE(buffer, offset + 18);
-    const uncompressedSize = readUInt32LE(buffer, offset + 22);
-    const fileNameLength = readUInt16LE(buffer, offset + 26);
-    const extraLength = readUInt16LE(buffer, offset + 28);
+    while ((m = streamRegex.exec(raw))) {
+      let streamContent = Buffer.from(m[1], "latin1");
 
-    const fileNameStart = offset + 30;
-    const fileNameEnd = fileNameStart + fileNameLength;
-    const fileName = buffer.slice(fileNameStart, fileNameEnd).toString("utf8");
+      try {
+        streamContent = zlib.inflateSync(streamContent);
+      } catch (e) {}
 
-    const dataStart = fileNameEnd + extraLength;
-    const dataEnd = dataStart + compressedSize;
+      const s = streamContent.toString("latin1");
 
-    if (dataEnd > buffer.length || compressedSize <= 0) {
-      offset += 30 + fileNameLength + extraLength;
-      continue;
-    }
+      const textMatches = [...s.matchAll(/\(([^()]*)\)\s*Tj/g)];
+      for (const t of textMatches) chunks.push(t[1]);
 
-    const raw = buffer.slice(dataStart, dataEnd);
-    let content = null;
-
-    try {
-      if (compression === 0) {
-        content = raw;
-      } else if (compression === 8) {
-        content = zlib.inflateRawSync(raw);
+      const arrayMatches = [...s.matchAll(/\[([\s\S]*?)\]\s*TJ/g)];
+      for (const a of arrayMatches) {
+        const inside = a[1];
+        const parts = [...inside.matchAll(/\(([^()]*)\)/g)].map(x => x[1]);
+        if (parts.length) chunks.push(parts.join(""));
       }
-    } catch (_) {
-      content = null;
     }
 
-    if (content) {
-      entries.push({ fileName, content, uncompressedSize });
+    if (!chunks.length) {
+      const simple = [...raw.matchAll(/\(([^()]{2,})\)/g)].map(x => x[1]);
+      chunks.push(...simple);
     }
 
-    offset = dataEnd;
+    return cleanText(
+      chunks
+        .join("\n")
+        .replace(/\\\(/g, "(")
+        .replace(/\\\)/g, ")")
+        .replace(/\\\\/g, "\\")
+    );
+  } catch (e) {
+    return "";
   }
-
-  const wanted = entries.filter((entry) =>
-    /word\/(document|footnotes|endnotes|header|footer)\d*\.xml$/i.test(entry.fileName)
-  );
-
-  const xml = wanted.map((entry) => entry.content.toString("utf8")).join("\n");
-  return cleanXmlText(xml);
 }
 
-function extractPdfTextVeryBasic(buffer) {
-  const raw = buffer.toString("latin1");
-  const chunks = [];
-
-  const textMatches = raw.match(/\(([^()]{2,300})\)\s*Tj/g) || [];
-  for (const item of textMatches) {
-    chunks.push(item.replace(/^\(/, "").replace(/\)\s*Tj$/, ""));
-  }
-
-  const arrayMatches = raw.match(/\[(.*?)\]\s*TJ/g) || [];
-  for (const item of arrayMatches) {
-    const inner = item.replace(/^\[/, "").replace(/\]\s*TJ$/, "");
-    const parts = inner.match(/\(([^()]*)\)/g) || [];
-    chunks.push(parts.map((p) => p.slice(1, -1)).join(""));
-  }
-
-  return chunks
-    .join("\n")
-    .replace(/\\\(/g, "(")
-    .replace(/\\\)/g, ")")
-    .replace(/\\n/g, "\n")
-    .replace(/[ \t]+/g, " ")
-    .replace(/\n{3,}/g, "\n\n")
-    .trim();
-}
-
-function extractTextFromFile(file) {
-  const name = String(file.filename || "").toLowerCase();
+function extractText(file) {
+  const filename = String(file.filename || "").toLowerCase();
   const type = String(file.contentType || "").toLowerCase();
 
-  if (name.endsWith(".docx") || type.includes("wordprocessingml")) {
-    return extractDocxText(file.buffer);
+  if (filename.endsWith(".txt") || type.includes("text/plain")) {
+    return cleanText(file.buffer.toString("utf8"));
   }
 
-  if (name.endsWith(".txt") || type.includes("text/plain")) {
-    return file.buffer.toString("utf8").trim();
+  if (filename.endsWith(".docx")) {
+    return extractTextFromDocx(file.buffer);
   }
 
-  if (name.endsWith(".pdf") || type.includes("pdf")) {
-    return extractPdfTextVeryBasic(file.buffer);
+  if (filename.endsWith(".pdf") || type.includes("pdf")) {
+    return extractTextFromPdfBasic(file.buffer);
   }
 
-  return file.buffer.toString("utf8").trim();
+  return cleanText(file.buffer.toString("utf8"));
 }
 
 function safeJsonParse(text) {
-  if (!text) return null;
-
   try {
     return JSON.parse(text);
-  } catch (_) {
-    const first = text.indexOf("{");
-    const last = text.lastIndexOf("}");
-    if (first !== -1 && last !== -1 && last > first) {
+  } catch (e) {
+    const match = String(text || "").match(/\{[\s\S]*\}/);
+    if (match) {
       try {
-        return JSON.parse(text.slice(first, last + 1));
-      } catch (_) {
-        return null;
-      }
+        return JSON.parse(match[0]);
+      } catch (e2) {}
     }
+    return null;
   }
-
-  return null;
 }
 
-function extractOutputText(response) {
-  if (response.output_text) return response.output_text;
-
-  const chunks = [];
-
-  if (Array.isArray(response.output)) {
-    for (const item of response.output) {
-      if (Array.isArray(item.content)) {
-        for (const content of item.content) {
-          if (content.text) chunks.push(content.text);
-        }
-      }
-    }
-  }
-
-  return chunks.join("\n").trim();
-}
-
-function linesFromText(text) {
-  return String(text || "")
-    .split(/\r?\n/)
-    .map((line) => line.trim())
-    .filter(Boolean);
-}
-
-function looksLikeName(line) {
-  const clean = line
-    .replace(/[•●|:]/g, " ")
-    .replace(/\s+/g, " ")
-    .trim();
-
-  if (!clean) return false;
-  if (clean.length < 5 || clean.length > 60) return false;
-  if (clean.includes("@")) return false;
-  if (/\d/.test(clean)) return false;
-
-  const banned =
-    /resume|cv|curriculum|vitae|email|phone|tel|address|profile|summary|experience|education|skills|резюме|профіль|досвід|освіта|навички|телефон|пошта/i;
-
-  if (banned.test(clean)) return false;
-
-  const words = clean.split(" ").filter(Boolean);
-  if (words.length < 2 || words.length > 4) return false;
-
-  return words.every((word) => /^[A-ZА-ЯІЇЄҐ][A-Za-zА-Яа-яІіЇїЄєҐґʼ'’.-]+$/.test(word));
-}
-
-function fallbackName(text) {
-  const lines = linesFromText(text).slice(0, 20);
-
-  for (const line of lines) {
-    if (looksLikeName(line)) return line.replace(/\s+/g, " ").trim();
-  }
-
-  return "";
-}
-
-function fallbackEmail(text) {
+function firstEmail(text) {
   const m = String(text || "").match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i);
   return m ? m[0] : "";
 }
 
-function fallbackPhone(text) {
+function firstPhone(text) {
   const m = String(text || "").match(/(\+?\d[\d\s().-]{7,}\d)/);
-  return m ? m[0].replace(/\s+/g, " ").trim() : "";
+  return m ? m[1].replace(/\s{2,}/g, " ").trim() : "";
 }
 
-function fallbackLocation(text) {
-  const lines = linesFromText(text).slice(0, 40);
+function looksLikeName(line) {
+  const clean = String(line || "")
+    .replace(/[|•·]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 
-  const cityWords =
-    /(Odesa|Odessa|Kyiv|Kiev|Lviv|London|Manchester|Birmingham|Liverpool|Bristol|Cardiff|Ukraine|Ukrainian|UK|United Kingdom|Poland|Germany|Одеса|Київ|Львів|Україна|Велика Британія|Лондон|Польща|Німеччина)/i;
+  if (!clean) return false;
+  if (clean.length < 4 || clean.length > 55) return false;
+
+  const banned = [
+    "resume", "cv", "curriculum", "vitae", "profile", "email", "phone",
+    "contact", "address", "location", "education", "experience", "skills",
+    "languages", "objective", "summary", "резюме", "профіль", "контакти",
+    "телефон", "пошта", "досвід", "освіта", "навички", "мови", "локація"
+  ];
+
+  const lower = clean.toLowerCase();
+  if (banned.some(w => lower.includes(w))) return false;
+  if (/@/.test(clean)) return false;
+  if (/\d{3,}/.test(clean)) return false;
+
+  const words = clean.split(" ").filter(Boolean);
+  if (words.length < 2 || words.length > 4) return false;
+
+  const letterWords = words.filter(w => /^[A-Za-zА-Яа-яІіЇїЄєҐґ'’-]+$/.test(w));
+  if (letterWords.length !== words.length) return false;
+
+  return true;
+}
+
+function fallbackName(text) {
+  const lines = cleanText(text)
+    .split("\n")
+    .map(x => x.trim())
+    .filter(Boolean)
+    .slice(0, 25);
 
   for (const line of lines) {
-    if (line.includes("@")) continue;
-    if (cityWords.test(line) && line.length <= 80) {
-      return line.replace(/\s+/g, " ").trim();
-    }
+    if (looksLikeName(line)) return line;
   }
 
   return "";
 }
 
-function splitEducationAndSpeciality(profile) {
-  const education = String(profile.education || "").trim();
-  const speciality = String(profile.speciality || "").trim();
+function fallbackLocation(text) {
+  const lines = cleanText(text)
+    .split("\n")
+    .map(x => x.trim())
+    .filter(Boolean);
 
-  if (!education) return profile;
+  const locationLabel = /(location|address|city|country|локація|адреса|місто|країна|адрес|город|страна)/i;
 
-  const markers = [
-    "Бакалавр",
-    "Магістр",
-    "Спеціаліст",
-    "Викладач",
-    "Учитель",
-    "Bachelor",
-    "Master",
-    "Specialist",
-    "Degree",
-    "Qualification",
-    "Teacher",
+  for (let i = 0; i < lines.length; i++) {
+    if (locationLabel.test(lines[i])) {
+      const sameLine = lines[i]
+        .replace(locationLabel, "")
+        .replace(/[:\-–—]/g, " ")
+        .trim();
+
+      if (sameLine && sameLine.length < 70 && !/@/.test(sameLine)) {
+        return sameLine;
+      }
+
+      const next = lines[i + 1] || "";
+      if (next && next.length < 70 && !/@/.test(next) && !/\d{5,}/.test(next)) {
+        return next;
+      }
+    }
+  }
+
+  const cityPatterns = [
+    /\b(Odesa|Odessa|Kyiv|Kiev|Lviv|London|Manchester|Birmingham|Liverpool|Bristol|Warsaw|Krakow|Berlin|Paris|Madrid|Rome)\b(?:,\s*[A-Za-zА-Яа-яІіЇїЄєҐґ .'-]+)?/i,
+    /\b(Одеса|Київ|Львів|Харків|Дніпро|Лондон|Манчестер|Бірмінгем|Варшава|Краків|Берлін|Париж)\b(?:,\s*[A-Za-zА-Яа-яІіЇїЄєҐґ .'-]+)?/i
   ];
 
-  let markerIndex = -1;
-  let marker = "";
-
-  for (const m of markers) {
-    const idx = education.toLowerCase().indexOf(m.toLowerCase());
-    if (idx !== -1 && (markerIndex === -1 || idx < markerIndex)) {
-      markerIndex = idx;
-      marker = m;
-    }
+  for (const p of cityPatterns) {
+    const m = text.match(p);
+    if (m) return m[0].trim();
   }
 
-  if (markerIndex > 0) {
-    const institution = education.slice(0, markerIndex).replace(/[,\-—–]+$/g, "").trim();
-    const degreePart = education.slice(markerIndex).replace(/^[,\-—–]+/g, "").trim();
+  return "";
+}
 
-    if (institution.length >= 5) {
-      profile.education = institution;
-    }
+function fallbackLanguages(text) {
+  const lines = cleanText(text).split("\n").map(x => x.trim()).filter(Boolean);
+  const idx = lines.findIndex(l => /(languages|мови|языки)/i.test(l));
 
-    if (!speciality && degreePart.length >= 3) {
-      profile.speciality = degreePart;
-    }
+  if (idx !== -1) {
+    const next = lines.slice(idx, idx + 4).join(", ");
+    return next.replace(/languages|мови|языки/ig, "").replace(/[:\-–—]/g, " ").trim();
   }
 
-  return profile;
+  const found = [];
+  const langs = [
+    "English", "Ukrainian", "Russian", "Polish", "German", "French",
+    "Англійська", "Українська", "Російська", "Польська", "Німецька",
+    "английский", "украинский", "русский", "польский"
+  ];
+
+  for (const l of langs) {
+    if (new RegExp(l, "i").test(text)) found.push(l);
+  }
+
+  return [...new Set(found)].join(", ");
 }
 
-function applyFallbacks(profile, text) {
-  const result = profile || {};
-
-  if (!result.name) result.name = fallbackName(text);
-  if (!result.email) result.email = fallbackEmail(text);
-  if (!result.phone) result.phone = fallbackPhone(text);
-  if (!result.location) result.location = fallbackLocation(text);
-
-  splitEducationAndSpeciality(result);
-
-  return result;
-}
-
-function emptyProfile() {
+function fallbackProfile(text) {
   return {
-    name: "",
-    email: "",
-    phone: "",
-    location: "",
+    name: fallbackName(text),
+    email: firstEmail(text),
+    phone: firstPhone(text),
+    location: fallbackLocation(text),
     target: "",
-    languages: "",
+    languages: fallbackLanguages(text),
     education: "",
     speciality: "",
     skills: "",
@@ -374,73 +331,86 @@ function emptyProfile() {
     hobbies: "",
     experience: [],
     volunteering: [],
-    courses: [],
+    courses: []
   };
 }
 
-export default async function handler(req, res) {
-  if (req.method !== "POST") {
-    return sendJson(res, 405, { error: "Method not allowed" });
+function normalizeProfile(p, text) {
+  const fb = fallbackProfile(text);
+  const profile = p && typeof p === "object" ? p : {};
+
+  const out = {
+    name: cleanText(profile.name || fb.name),
+    email: cleanText(profile.email || fb.email),
+    phone: cleanText(profile.phone || fb.phone),
+    location: cleanText(profile.location || fb.location),
+    target: cleanText(profile.target || profile.jobTitle || profile.position || ""),
+    languages: cleanText(profile.languages || fb.languages),
+    education: cleanText(profile.education || ""),
+    speciality: cleanText(profile.speciality || profile.degree || profile.qualification || ""),
+    skills: cleanText(profile.skills || ""),
+    softSkills: cleanText(profile.softSkills || profile.soft_skills || ""),
+    hobbies: cleanText(profile.hobbies || ""),
+    experience: Array.isArray(profile.experience) ? profile.experience : [],
+    volunteering: Array.isArray(profile.volunteering) ? profile.volunteering : [],
+    courses: Array.isArray(profile.courses) ? profile.courses : []
+  };
+
+  if (!out.name) out.name = fb.name;
+  if (!out.email) out.email = fb.email;
+  if (!out.phone) out.phone = fb.phone;
+  if (!out.location) out.location = fb.location;
+  if (!out.languages) out.languages = fb.languages;
+
+  out.experience = out.experience.map(x => ({
+    company: cleanText(x.company || x.organisation || x.organization || ""),
+    position: cleanText(x.position || x.role || ""),
+    desc: cleanText(x.desc || x.description || x.responsibilities || "")
+  })).filter(x => x.company || x.position || x.desc);
+
+  out.volunteering = out.volunteering.map(x => ({
+    org: cleanText(x.org || x.organisation || x.organization || ""),
+    role: cleanText(x.role || x.position || ""),
+    desc: cleanText(x.desc || x.description || "")
+  })).filter(x => x.org || x.role || x.desc);
+
+  out.courses = out.courses.map(x => ({
+    name: cleanText(x.name || x.course || ""),
+    place: cleanText(x.place || x.organisation || x.organization || x.school || ""),
+    period: cleanText(x.period || x.year || ""),
+    desc: cleanText(x.desc || x.description || "")
+  })).filter(x => x.name || x.place || x.period || x.desc);
+
+  return out;
+}
+
+async function analyseWithOpenAI(text, language) {
+  if (!process.env.OPENAI_API_KEY) {
+    throw new Error("OPENAI_API_KEY is missing");
   }
 
-  try {
-    if (!process.env.OPENAI_API_KEY) {
-      return sendJson(res, 500, { error: "OPENAI_API_KEY is missing" });
-    }
+  const system = `
+You are a CV parsing assistant.
 
-    const contentType = getHeader(req, "content-type");
+Return JSON only.
 
-    if (!String(contentType).includes("multipart/form-data")) {
-      return sendJson(res, 400, { error: "Expected multipart/form-data" });
-    }
-
-    const buffer = await readRequestBuffer(req);
-    const { fields, files } = parseMultipart(buffer, contentType);
-
-    const file = files.file || files.cv;
-
-    if (!file || !file.buffer || file.buffer.length < 10) {
-      return sendJson(res, 400, { error: "CV file is missing" });
-    }
-
-    const requestedLanguage = String(fields.language || "English").trim();
-    const extractedText = extractTextFromFile(file);
-
-    if (!extractedText || extractedText.length < 20) {
-      return sendJson(res, 400, {
-        error: "Could not read enough text from this CV file. Try PDF, DOCX or TXT.",
-      });
-    }
-
-    const prompt = `
-You are parsing a CV/resume for a job application app.
-
-Final profile language: ${requestedLanguage}
+Extract candidate profile from the CV text.
 
 Important rules:
-- Extract only facts present in the CV.
-- Do not invent experience, education, skills or locations.
-- If a field is not present, return an empty string.
-- Candidate name is usually at the very top of the CV. Look carefully at the first lines.
-- If the CV contains a large heading with a person's name, use it as "name".
-- Location means city/country/address, if present.
-- Education must be split:
-  - "education" = only university / school / college / institution name.
-  - "speciality" = degree, qualification, speciality, profession, faculty or teaching subject.
-- Example:
-  "Південноукраїнський національний педагогічний університет ім. К. Д. Ушинського, Бакалавр — Викладач української мови, літератури та світової літератури"
-  should become:
-  education: "Південноукраїнський національний педагогічний університет ім. К. Д. Ушинського"
-  speciality: "Бакалавр — Викладач української мови, літератури та світової літератури"
-- Target job should be the role the person is applying for or the strongest career direction from the CV.
-- Soft skills should be separated from professional skills.
-- Translate labels/content naturally into the final profile language only when appropriate.
-- Keep names, universities, companies and emails unchanged.
+- Do not invent information.
+- If a field is not found, return an empty string.
+- Extract name from the top of the CV if possible.
+- Name can be Ukrainian, English, Polish or Russian.
+- Do not confuse name with job title, "CV", "Resume", "Profile", "Education", or section headings.
+- Extract location from contact/address/location/city lines or from city/country mentions.
+- Split education into:
+  education = university / school / institution name;
+  speciality = degree / speciality / qualification / profession.
+- Keep experience as an array.
+- Keep courses as an array.
+- Keep volunteering as an array.
 
-CV text:
-${extractedText.slice(0, 18000)}
-
-Return ONLY valid JSON:
+Return exactly this JSON:
 {
   "profile": {
     "name": "",
@@ -480,139 +450,92 @@ Return ONLY valid JSON:
 }
 `;
 
-    const response = await fetch("https://api.openai.com/v1/responses", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: "gpt-4o-mini",
-        input: [
-          {
-            role: "user",
-            content: [
-              {
-                type: "input_text",
-                text: prompt,
-              },
-            ],
-          },
-        ],
-        text: {
-          format: {
-            type: "json_schema",
-            name: "parsed_cv_profile",
-            schema: {
-              type: "object",
-              additionalProperties: false,
-              properties: {
-                profile: {
-                  type: "object",
-                  additionalProperties: false,
-                  properties: {
-                    name: { type: "string" },
-                    email: { type: "string" },
-                    phone: { type: "string" },
-                    location: { type: "string" },
-                    target: { type: "string" },
-                    languages: { type: "string" },
-                    education: { type: "string" },
-                    speciality: { type: "string" },
-                    skills: { type: "string" },
-                    softSkills: { type: "string" },
-                    hobbies: { type: "string" },
-                    experience: {
-                      type: "array",
-                      items: {
-                        type: "object",
-                        additionalProperties: false,
-                        properties: {
-                          company: { type: "string" },
-                          position: { type: "string" },
-                          desc: { type: "string" },
-                        },
-                        required: ["company", "position", "desc"],
-                      },
-                    },
-                    volunteering: {
-                      type: "array",
-                      items: {
-                        type: "object",
-                        additionalProperties: false,
-                        properties: {
-                          org: { type: "string" },
-                          role: { type: "string" },
-                          desc: { type: "string" },
-                        },
-                        required: ["org", "role", "desc"],
-                      },
-                    },
-                    courses: {
-                      type: "array",
-                      items: {
-                        type: "object",
-                        additionalProperties: false,
-                        properties: {
-                          name: { type: "string" },
-                          place: { type: "string" },
-                          period: { type: "string" },
-                          desc: { type: "string" },
-                        },
-                        required: ["name", "place", "period", "desc"],
-                      },
-                    },
-                  },
-                  required: [
-                    "name",
-                    "email",
-                    "phone",
-                    "location",
-                    "target",
-                    "languages",
-                    "education",
-                    "speciality",
-                    "skills",
-                    "softSkills",
-                    "hobbies",
-                    "experience",
-                    "volunteering",
-                    "courses",
-                  ],
-                },
-              },
-              required: ["profile"],
-            },
-          },
-        },
-      }),
-    });
+  const user = `
+App language: ${language}
 
-    const raw = await response.text();
+CV text:
+${text.slice(0, 14000)}
+`;
 
-    if (!response.ok) {
-      return sendJson(res, 500, {
-        error: "OpenAI CV parsing failed",
-        details: raw.slice(0, 1200),
+  const response = await fetch("https://api.openai.com/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`
+    },
+    body: JSON.stringify({
+      model: "gpt-4o-mini",
+      temperature: 0.1,
+      response_format: { type: "json_object" },
+      messages: [
+        { role: "system", content: system },
+        { role: "user", content: user }
+      ]
+    })
+  });
+
+  if (!response.ok) {
+    const err = await response.text();
+    throw new Error(err || "OpenAI request failed");
+  }
+
+  const data = await response.json();
+  const content = data.choices?.[0]?.message?.content || "{}";
+  return safeJsonParse(content);
+}
+
+export default async function handler(req, res) {
+  if (req.method !== "POST") {
+    return sendJson(res, 405, { error: "Method not allowed" });
+  }
+
+  try {
+    const contentType = getHeader(req, "content-type");
+
+    if (!String(contentType).includes("multipart/form-data")) {
+      return sendJson(res, 400, {
+        error: "Expected multipart/form-data upload."
       });
     }
 
-    const openaiData = safeJsonParse(raw);
-    const outputText = extractOutputText(openaiData || {});
-    const parsed = safeJsonParse(outputText);
+    const buffer = await readRequestBuffer(req);
+    const parsed = parseMultipart(buffer, contentType);
 
-    let profile = parsed && parsed.profile ? parsed.profile : emptyProfile();
-    profile = applyFallbacks(profile, extractedText);
+    const file = parsed.files.find(f => f.fieldName === "file") || parsed.files[0];
+    const language = parsed.fields.language || "English";
+
+    if (!file) {
+      return sendJson(res, 400, { error: "No file uploaded." });
+    }
+
+    const text = extractText(file);
+
+    if (!text || text.length < 20) {
+      return sendJson(res, 400, {
+        error: "Could not read enough text from this CV. Try TXT, DOCX or a clearer PDF."
+      });
+    }
+
+    let aiProfile = null;
+
+    try {
+      const ai = await analyseWithOpenAI(text, language);
+      aiProfile = ai?.profile || ai;
+    } catch (e) {
+      aiProfile = null;
+    }
+
+    const profile = normalizeProfile(aiProfile, text);
 
     return sendJson(res, 200, {
-      ok: true,
       profile,
-      extractedLength: extractedText.length,
+      rawTextPreview: text.slice(0, 1200)
     });
+
   } catch (error) {
     return sendJson(res, 500, {
-      error: "CV parser API error",
-      details: error.message || String(error),
+      error: "CV analysis error",
+      details: error.message
     });
   }
 }
