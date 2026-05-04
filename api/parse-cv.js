@@ -43,26 +43,19 @@ function parseMultipart(buffer, contentType) {
   const match = String(contentType || "").match(/boundary=(?:"([^"]+)"|([^;]+))/i);
   const boundary = match ? (match[1] || match[2]) : "";
 
-  if (!boundary) {
-    return { fields: {}, files: [] };
-  }
+  if (!boundary) return { fields: {}, files: [] };
 
   const boundaryBuffer = Buffer.from("--" + boundary);
   const parts = splitBuffer(buffer, boundaryBuffer);
+
   const fields = {};
   const files = [];
 
   for (let part of parts) {
     if (!part || part.length < 10) continue;
 
-    if (part.slice(0, 2).toString() === "\r\n") {
-      part = part.slice(2);
-    }
-
-    if (part.slice(-2).toString() === "\r\n") {
-      part = part.slice(0, -2);
-    }
-
+    if (part.slice(0, 2).toString() === "\r\n") part = part.slice(2);
+    if (part.slice(-2).toString() === "\r\n") part = part.slice(0, -2);
     if (part.toString("utf8").trim() === "--") continue;
 
     const headerEnd = part.indexOf(Buffer.from("\r\n\r\n"));
@@ -123,9 +116,9 @@ function decodePdfString(s) {
     .replace(/\\n/g, "\n")
     .replace(/\\r/g, "\n")
     .replace(/\\t/g, " ")
-    .replace(/\\([0-7]{1,3})/g, (_, oct) => {
-      return String.fromCharCode(parseInt(oct, 8));
-    });
+    .replace(/\\([0-7]{1,3})/g, (_, oct) =>
+      String.fromCharCode(parseInt(oct, 8))
+    );
 }
 
 function decodeHexPdf(hex) {
@@ -152,18 +145,15 @@ function decodeHexPdf(hex) {
 function extractTextFromPdfStream(streamText) {
   const chunks = [];
 
-  const tjMatches = [...streamText.matchAll(/\(([\s\S]*?)\)\s*Tj/g)];
-  for (const m of tjMatches) {
+  for (const m of streamText.matchAll(/\(([\s\S]*?)\)\s*Tj/g)) {
     chunks.push(decodePdfString(m[1]));
   }
 
-  const hexTjMatches = [...streamText.matchAll(/<([0-9A-Fa-f\s]+)>\s*Tj/g)];
-  for (const m of hexTjMatches) {
+  for (const m of streamText.matchAll(/<([0-9A-Fa-f\s]+)>\s*Tj/g)) {
     chunks.push(decodeHexPdf(m[1]));
   }
 
-  const tjArrayMatches = [...streamText.matchAll(/\[([\s\S]*?)\]\s*TJ/g)];
-  for (const arr of tjArrayMatches) {
+  for (const arr of streamText.matchAll(/\[([\s\S]*?)\]\s*TJ/g)) {
     const inside = arr[1];
     const parts = [];
 
@@ -201,17 +191,13 @@ function extractTextFromPdfBasic(buffer) {
       if (extracted) chunks.push(extracted);
     }
 
-    if (!chunks.length) {
-      chunks.push(extractTextFromPdfStream(raw));
-    }
+    if (!chunks.length) chunks.push(extractTextFromPdfStream(raw));
 
-    const simpleText = cleanText(
+    return cleanText(
       chunks
         .join("\n")
         .replace(/[^\S\n]+/g, " ")
     );
-
-    return simpleText;
   } catch (e) {
     return "";
   }
@@ -270,10 +256,7 @@ function extractZipEntries(buffer) {
       if (method === 8) data = zlib.inflateRawSync(compressed);
     } catch (e) {}
 
-    if (fileName) {
-      entries[fileName] = data;
-    }
-
+    if (fileName) entries[fileName] = data;
     offset = dataEnd;
   }
 
@@ -284,9 +267,7 @@ function extractTextFromDocx(buffer) {
   try {
     const entries = extractZipEntries(buffer);
     const doc = entries["word/document.xml"];
-
     if (!doc) return "";
-
     return cleanText(stripXml(doc.toString("utf8")));
   } catch (e) {
     return "";
@@ -336,115 +317,209 @@ function firstPhone(text) {
   return m ? m[1].replace(/\s{2,}/g, " ").trim() : "";
 }
 
-function looksLikeName(line) {
-  const clean = String(line || "")
+function normaliseLine(line) {
+  return String(line || "")
     .replace(/[|•·]/g, " ")
     .replace(/\s+/g, " ")
     .trim();
+}
+
+function getLines(text) {
+  return cleanText(text)
+    .split("\n")
+    .map(normaliseLine)
+    .filter(Boolean);
+}
+
+function looksLikeName(line) {
+  const clean = normaliseLine(line);
 
   if (!clean) return false;
-  if (clean.length < 4 || clean.length > 60) return false;
+  if (clean.length < 4 || clean.length > 70) return false;
   if (/@/.test(clean)) return false;
   if (/\d{3,}/.test(clean)) return false;
+  if (/https?:|www\.|linkedin|telegram|facebook/i.test(clean)) return false;
 
   const lower = clean.toLowerCase();
 
-  const banned = [
-    "resume", "cv", "curriculum", "vitae", "profile", "email", "phone",
-    "contact", "address", "location", "education", "experience", "skills",
-    "languages", "objective", "summary", "резюме", "профіль", "контакти",
-    "телефон", "пошта", "досвід", "освіта", "навички", "мови", "локація",
-    "бажана посада", "прибиральниця", "customer support", "cleaner"
+  const bannedExactOrContains = [
+    "resume",
+    "cv",
+    "curriculum",
+    "vitae",
+    "profile",
+    "email",
+    "phone",
+    "contact",
+    "address",
+    "location",
+    "education",
+    "experience",
+    "skills",
+    "languages",
+    "objective",
+    "summary",
+    "резюме",
+    "профіль",
+    "контакти",
+    "телефон",
+    "пошта",
+    "досвід",
+    "освіта",
+    "навички",
+    "мови",
+    "локація",
+    "адреса",
+    "бажана посада",
+    "прибиральниця",
+    "cleaner",
+    "customer support",
+    "social worker",
+    "cover letter"
   ];
 
-  if (banned.some(w => lower.includes(w))) return false;
+  if (bannedExactOrContains.some(w => lower.includes(w))) return false;
 
   const words = clean.split(" ").filter(Boolean);
   if (words.length < 2 || words.length > 4) return false;
 
-  const letterWords = words.filter(w => /^[A-Za-zА-Яа-яІіЇїЄєҐґ'’-]+$/.test(w));
+  const letterWords = words.filter(w =>
+    /^[A-Za-zА-Яа-яІіЇїЄєҐґ'’ʼ-]+$/.test(w)
+  );
+
   if (letterWords.length !== words.length) return false;
 
+  const hasUpperStart = words.some(w => /^[A-ZА-ЯІЇЄҐ]/.test(w));
+  if (!hasUpperStart) return false;
+
   return true;
+}
+
+function scoreNameCandidate(line, index) {
+  let score = 0;
+  const clean = normaliseLine(line);
+  const words = clean.split(" ").filter(Boolean);
+
+  if (looksLikeName(clean)) score += 50;
+  if (index <= 3) score += 30;
+  if (index <= 8) score += 15;
+  if (words.length === 2) score += 15;
+  if (words.length === 3) score += 10;
+  if (/^[А-ЯІЇЄҐA-Z][а-яіїєґa-z'’ʼ-]+\s+[А-ЯІЇЄҐA-Z][а-яіїєґa-z'’ʼ-]+/.test(clean)) score += 20;
+  if (clean === clean.toUpperCase() && /[A-ZА-ЯІЇЄҐ]/.test(clean)) score += 5;
+
+  return score;
 }
 
 function nameFromEmail(email) {
   if (!email) return "";
 
   const local = email.split("@")[0] || "";
+  if (!local || /\d{4,}/.test(local)) return "";
+
   const parts = local
     .replace(/[._-]+/g, " ")
     .split(" ")
     .filter(Boolean)
+    .filter(p => p.length >= 2 && !/^\d+$/.test(p))
     .map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase());
 
-  if (parts.length >= 2 && parts.length <= 3) {
-    return parts.join(" ");
-  }
-
+  if (parts.length >= 2 && parts.length <= 3) return parts.join(" ");
   return "";
 }
 
 function fallbackName(text) {
-  const lines = cleanText(text)
-    .split("\n")
-    .map(x => x.trim())
-    .filter(Boolean)
-    .slice(0, 35);
+  const lines = getLines(text).slice(0, 80);
+  const candidates = [];
 
-  for (const line of lines) {
-    if (looksLikeName(line)) return line;
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+
+    if (looksLikeName(line)) {
+      candidates.push({
+        value: line,
+        score: scoreNameCandidate(line, i)
+      });
+    }
+
+    const joined2 = normaliseLine(`${lines[i] || ""} ${lines[i + 1] || ""}`);
+    if (looksLikeName(joined2)) {
+      candidates.push({
+        value: joined2,
+        score: scoreNameCandidate(joined2, i) - 5
+      });
+    }
   }
 
-  const email = firstEmail(text);
-  return nameFromEmail(email);
+  candidates.sort((a, b) => b.score - a.score);
+
+  if (candidates.length) return candidates[0].value;
+
+  return nameFromEmail(firstEmail(text));
 }
 
 function fallbackLocation(text) {
-  const lines = cleanText(text)
-    .split("\n")
-    .map(x => x.trim())
-    .filter(Boolean);
+  const lines = getLines(text);
 
-  const locationLabel = /(location|address|city|country|локація|адреса|місто|країна|адрес|город|страна)/i;
+  const locationLabel =
+    /(location|address|city|country|локація|адреса|місто|країна|адрес|город|страна|місцезнаходження)/i;
 
   for (let i = 0; i < lines.length; i++) {
-    if (locationLabel.test(lines[i])) {
-      const sameLine = lines[i]
+    const line = lines[i];
+
+    if (locationLabel.test(line)) {
+      const sameLine = line
         .replace(locationLabel, "")
         .replace(/[:\-–—]/g, " ")
         .trim();
 
-      if (sameLine && sameLine.length < 80 && !/@/.test(sameLine)) {
+      if (sameLine && sameLine.length < 90 && !/@/.test(sameLine) && !/\d{5,}/.test(sameLine)) {
         return sameLine;
       }
 
       const next = lines[i + 1] || "";
-      if (next && next.length < 80 && !/@/.test(next) && !/\d{5,}/.test(next)) {
+      if (next && next.length < 90 && !/@/.test(next) && !/\d{5,}/.test(next)) {
         return next;
       }
     }
   }
 
-  const cityPatterns = [
-    /\b(Odesa|Odessa|Kyiv|Kiev|Lviv|Kharkiv|Dnipro|London|Manchester|Birmingham|Liverpool|Bristol|Warsaw|Krakow|Berlin|Paris|Madrid|Rome)\b(?:,\s*[A-Za-zА-Яа-яІіЇїЄєҐґ .'-]+)?/i,
-    /\b(Одеса|Київ|Львів|Харків|Дніпро|Лондон|Манчестер|Бірмінгем|Варшава|Краків|Берлін|Париж)\b(?:,\s*[A-Za-zА-Яа-яІіЇїЄєҐґ .'-]+)?/i
+  const cityCountryPatterns = [
+    /(Одеса|Odesa|Odessa)\s*,?\s*(Україна|Ukraine|Ukraina)?/i,
+    /(Київ|Kyiv|Kiev)\s*,?\s*(Україна|Ukraine|Ukraina)?/i,
+    /(Львів|Lviv)\s*,?\s*(Україна|Ukraine|Ukraina)?/i,
+    /(Харків|Kharkiv)\s*,?\s*(Україна|Ukraine|Ukraina)?/i,
+    /(Дніпро|Dnipro)\s*,?\s*(Україна|Ukraine|Ukraina)?/i,
+    /(London|Manchester|Birmingham|Liverpool|Bristol)\s*,?\s*(UK|United Kingdom|England)?/i,
+    /(Warsaw|Krakow)\s*,?\s*(Poland)?/i,
+    /(Berlin)\s*,?\s*(Germany)?/i,
+    /(Paris)\s*,?\s*(France)?/i,
+    /(Madrid)\s*,?\s*(Spain)?/i,
+    /(Rome)\s*,?\s*(Italy)?/i
   ];
 
-  for (const pattern of cityPatterns) {
-    const m = text.match(pattern);
-    if (m) return m[0].trim();
+  for (const pattern of cityCountryPatterns) {
+    const m = String(text || "").match(pattern);
+    if (m) {
+      const raw = m[0].replace(/\s+/g, " ").trim();
+      if (/^(Одеса|Odesa|Odessa)$/i.test(raw)) return "Одеса, Україна";
+      return raw;
+    }
+  }
+
+  if (/Україна|Ukraine/i.test(text) && /Одеса|Odesa|Odessa/i.test(text)) {
+    return "Одеса, Україна";
   }
 
   return "";
 }
 
 function fallbackLanguages(text) {
-  const lines = cleanText(text).split("\n").map(x => x.trim()).filter(Boolean);
+  const lines = getLines(text);
   const idx = lines.findIndex(l => /(languages|мови|языки)/i.test(l));
 
   if (idx !== -1) {
-    const next = lines.slice(idx, idx + 4).join(", ");
+    const next = lines.slice(idx, idx + 5).join(", ");
     return next
       .replace(/languages|мови|языки/ig, "")
       .replace(/[:\-–—]/g, " ")
@@ -455,7 +530,7 @@ function fallbackLanguages(text) {
   const found = [];
   const langs = [
     "English", "Ukrainian", "Russian", "Polish", "German", "French",
-    "Англійська", "Українська", "Російська", "Польська", "Німецька",
+    "Англійська", "Українська", "Російська", "Польська", "Німецька", "Французька",
     "английский", "украинский", "русский", "польский"
   ];
 
@@ -506,10 +581,14 @@ function normalizeProfile(p, text) {
     courses: Array.isArray(profile.courses) ? profile.courses : []
   };
 
-  if (!out.name) out.name = fb.name;
+  const fbName = fb.name;
+  const fbLocation = fb.location;
+
+  if (!out.name && fbName) out.name = fbName;
+  if (!out.location && fbLocation) out.location = fbLocation;
+
   if (!out.email) out.email = fb.email;
   if (!out.phone) out.phone = fb.phone;
-  if (!out.location) out.location = fb.location;
   if (!out.languages) out.languages = fb.languages;
 
   out.experience = out.experience.map(x => ({
@@ -539,26 +618,26 @@ async function analyseWithOpenAI(text, language) {
     throw new Error("OPENAI_API_KEY is missing");
   }
 
+  const firstLines = getLines(text).slice(0, 60).join("\n");
+
   const system = `
-You are a CV parsing assistant.
+You are a strict CV parsing assistant.
 
 Return JSON only.
 
-Extract candidate profile from the CV text.
+Extract the candidate profile from the CV text.
 
-Important:
+Critical rules:
 - Do not invent information.
-- If a field is not found, return an empty string.
-- Extract name from the top of the CV when possible.
-- Name can be Ukrainian, English, Polish or Russian.
-- Do not confuse name with job title or section headings.
-- Extract location from contact/address/location/city lines or city/country mentions.
-- Split education into:
+- Extract candidate name if it appears anywhere in the first lines or near contact details.
+- The name may be Cyrillic/Ukrainian, for example "Юлія Кучіяш", "Кучіяш Юлія", or Latin, for example "Yuliia Kuchiash".
+- Do not confuse candidate name with job title, CV heading, section heading, education heading, or company name.
+- Extract location if a city/country appears, for example "Одеса, Україна", "Odesa, Ukraine", "London, UK".
+- Split education:
   education = university / school / institution name;
   speciality = degree / speciality / qualification / profession.
-- Keep experience as an array.
-- Keep courses as an array.
-- Keep volunteering as an array.
+- Keep experience, volunteering and courses as arrays.
+- Empty unknown fields must be empty strings, not null.
 
 Return exactly:
 {
@@ -603,8 +682,11 @@ Return exactly:
   const user = `
 App language: ${language}
 
-CV text:
-${text.slice(0, 14000)}
+Most important first lines:
+${firstLines}
+
+Full CV text:
+${text.slice(0, 15000)}
 `;
 
   const response = await fetch("https://api.openai.com/v1/chat/completions", {
@@ -615,7 +697,7 @@ ${text.slice(0, 14000)}
     },
     body: JSON.stringify({
       model: "gpt-4o-mini",
-      temperature: 0.1,
+      temperature: 0,
       response_format: { type: "json_object" },
       messages: [
         { role: "system", content: system },
@@ -670,6 +752,7 @@ export default async function handler(req, res) {
         profile: basicProfile,
         warning: "Could not read enough text from this CV. Try DOCX or TXT if PDF does not work.",
         rawTextPreview: text.slice(0, 1200),
+        firstLines: getLines(text).slice(0, 60),
         filename: file.filename
       });
     }
@@ -688,6 +771,9 @@ export default async function handler(req, res) {
     return sendJson(res, 200, {
       profile,
       rawTextPreview: text.slice(0, 1200),
+      firstLines: getLines(text).slice(0, 60),
+      detectedNameFallback: fallbackName(text),
+      detectedLocationFallback: fallbackLocation(text),
       filename: file.filename
     });
 
