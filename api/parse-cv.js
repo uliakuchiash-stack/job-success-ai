@@ -112,7 +112,7 @@ function cleanText(text) {
 
 function normaliseLine(line) {
   return String(line || "")
-    .replace(/[|•·]/g, " ")
+    .replace(/[|•·●▪▫◆◇■□]/g, " ")
     .replace(/\s+/g, " ")
     .trim();
 }
@@ -205,7 +205,6 @@ function extractZipEntries(buffer) {
 function extractTextFromDocx(buffer) {
   try {
     const entries = extractZipEntries(buffer);
-
     const parts = [];
 
     if (entries["word/document.xml"]) {
@@ -356,7 +355,7 @@ function firstEmail(text) {
 
 function firstPhone(text) {
   const labelled = String(text || "").match(
-    /(?:телефон|phone|mobile|mob|tel)\s*[:\-–—]?\s*(\+?\d[\d\s().-]{7,}\d)/i
+    /(?:телефон|тел|phone|mobile|mob|tel|telefono|teléfono|téléphone|telefon|telefone|电话|手機|手机|連絡先|联系方式|الهاتف|رقم الهاتف)\s*[:：\-–—]?\s*(\+?\d[\d\s().-]{7,}\d)/i
   );
 
   if (labelled && labelled[1]) {
@@ -368,7 +367,13 @@ function firstPhone(text) {
 }
 
 function titleCaseName(value) {
-  return String(value || "")
+  const raw = String(value || "").trim();
+
+  if (/[\u3400-\u9FFF\u3040-\u30FF]/.test(raw)) {
+    return raw;
+  }
+
+  return raw
     .toLowerCase()
     .split(" ")
     .filter(Boolean)
@@ -388,20 +393,50 @@ function titleCaseName(value) {
 function isResumeHeading(line) {
   const l = String(line || "")
     .trim()
-    .replace(/[.:;|•\-–—]+$/g, "")
+    .replace(/[.:;|•\-–—：]+$/g, "")
     .toLowerCase();
 
-  return [
+  const headings = [
     "резюме",
     "resume",
     "cv",
+    "c.v.",
     "curriculum vitae",
-    "curriculum"
-  ].includes(l);
+    "curriculum",
+    "lebenslauf",
+    "bewerbung",
+    "currículo",
+    "curriculo",
+    "hoja de vida",
+    "profil",
+    "życiorys",
+    "zyciorys",
+    "履历",
+    "履歷",
+    "简历",
+    "簡歷",
+    "个人简历",
+    "個人簡歷",
+    "个人履历",
+    "個人履歷",
+    "이력서",
+    "職務経歴書",
+    "職歴",
+    "السيرة الذاتية",
+    "سيرة ذاتية"
+  ];
+
+  return headings.includes(l);
 }
 
 function isContactLine(line) {
-  return /email|e-mail|телефон|phone|моб|mobile|@|\+?\d[\d\s().-]{7,}\d/i.test(
+  return /email|e-mail|mail|почта|пошта|телефон|тел|phone|mobile|mob|tel|contact|contacts|контакти|контакт|telefono|teléfono|téléphone|telefon|telefone|电话|手機|手机|邮箱|電子郵件|邮件|連絡先|联系方式|الهاتف|بريد|@|\+?\d[\d\s().-]{7,}\d/i.test(
+    String(line || "")
+  );
+}
+
+function looksLikeLocationLabel(line) {
+  return /(location|address|city|country|state|region|province|place|локація|адреса|місто|країна|область|адрес|город|страна|регион|województwo|miasto|kraj|adres|ort|adresse|stadt|land|adresse|ville|pays|dirección|ciudad|país|endereço|cidade|país|地址|城市|国家|國家|所在地|住所|地點|地点|居住地|지역|주소|المدينة|الدولة|العنوان)/i.test(
     String(line || "")
   );
 }
@@ -409,18 +444,24 @@ function isContactLine(line) {
 function looksLikeLocation(line) {
   const clean = normaliseLine(line);
   if (!clean) return false;
-  if (clean.length > 90) return false;
+  if (clean.length > 100) return false;
   if (/@/.test(clean)) return false;
+  if (/\+?\d[\d\s().-]{7,}\d/.test(clean)) return false;
 
-  if (
-    /(україна|украина|ukraine|united kingdom|england|poland|germany|france|italy|spain|usa|canada|одеса|одесса|odesa|odessa|київ|киев|kyiv|kiev|львів|lviv|london|warsaw|berlin|paris|rome)/i.test(clean)
-  ) {
+  if (looksLikeLocationLabel(clean)) return true;
+
+  if (/^[\p{L}\p{M}\s.'’ʼ-]+,\s*[\p{L}\p{M}\s.'’ʼ-]+$/u.test(clean)) {
     return true;
   }
 
-  if (/^[\p{L}\s.'’ʼ-]+,\s*[\p{L}\s.'’ʼ-]+$/u.test(clean)) {
+  if (/[\u3400-\u9FFF]/.test(clean) && /(市|省|区|縣|县|國|国|中国|台灣|台湾|香港|北京|上海|深圳|广州|廣州)/.test(clean)) {
     return true;
   }
+
+  const commonLocationWords =
+    /(ukraine|україна|украина|poland|polska|germany|deutschland|france|italy|spain|canada|usa|united states|united kingdom|england|china|中国|japan|日本|korea|한국|romania|moldova|молдова|turkey|türkiye|netherlands|ireland|australia|city|місто|город|stadt|ville|ciudad|cidade)/i;
+
+  if (commonLocationWords.test(clean)) return true;
 
   return false;
 }
@@ -451,6 +492,8 @@ function looksLikeJobTitleOrHeading(line) {
     "about me",
     "work experience",
     "employment",
+    "personal information",
+    "career objective",
     "резюме",
     "профіль",
     "профиль",
@@ -471,6 +514,53 @@ function looksLikeJobTitleOrHeading(line) {
     "адрес",
     "бажана посада",
     "желаемая должность",
+    "дані",
+    "данные",
+    "lebenslauf",
+    "ausbildung",
+    "berufserfahrung",
+    "kenntnisse",
+    "fähigkeiten",
+    "profil",
+    "erfahrung",
+    "wykształcenie",
+    "doświadczenie",
+    "umiejętności",
+    "języki",
+    "edukacja",
+    "experiencia",
+    "educación",
+    "habilidades",
+    "idiomas",
+    "formation",
+    "expérience",
+    "compétences",
+    "langues",
+    "教育",
+    "经验",
+    "經驗",
+    "工作经历",
+    "工作經歷",
+    "技能",
+    "语言",
+    "語言",
+    "个人信息",
+    "個人信息",
+    "联系方式",
+    "聯繫方式",
+    "連絡先",
+    "学歴",
+    "職歴",
+    "スキル",
+    "言語",
+    "학력",
+    "경력",
+    "기술",
+    "언어",
+    "التعليم",
+    "الخبرة",
+    "المهارات",
+    "اللغات",
     "social worker",
     "customer support",
     "chat operator",
@@ -487,6 +577,8 @@ function looksLikeJobTitleOrHeading(line) {
     "operator",
     "specialist",
     "assistant",
+    "engineer",
+    "accountant",
     "працівник",
     "работник",
     "оператор",
@@ -506,7 +598,20 @@ function looksLikeJobTitleOrHeading(line) {
   if (banned.some(w => lower.includes(w))) return true;
 
   if (/^\d{4}\s*[-–—]\s*\d{4}/.test(lower)) return true;
-  if (/^\d{4}\s*[-–—]\s*(present|now|current|тепер|дотепер)/i.test(lower)) return true;
+  if (/^\d{4}\s*[-–—]\s*(present|now|current|тепер|дотепер|obecnie|aktuell|现在|現在)/i.test(lower)) return true;
+
+  return false;
+}
+
+function isMostlySymbolsOrNumbers(line) {
+  const clean = normaliseLine(line);
+  if (!clean) return true;
+
+  const letters = clean.match(/\p{L}/gu) || [];
+  const digits = clean.match(/\d/g) || [];
+
+  if (letters.length === 0) return true;
+  if (digits.length > letters.length) return true;
 
   return false;
 }
@@ -515,25 +620,38 @@ function looksLikeName(line) {
   const clean = normaliseLine(line);
 
   if (!clean) return false;
-  if (clean.length < 4 || clean.length > 70) return false;
+  if (clean.length < 2 || clean.length > 80) return false;
   if (isContactLine(clean)) return false;
   if (looksLikeLocation(clean)) return false;
   if (looksLikeJobTitleOrHeading(clean)) return false;
-  if (/https?:|www\.|linkedin|telegram|facebook/i.test(clean)) return false;
+  if (/https?:|www\.|linkedin|telegram|facebook|instagram|github/i.test(clean)) return false;
   if (/\d{2,}/.test(clean)) return false;
+  if (isMostlySymbolsOrNumbers(clean)) return false;
+
+  const hasCjk = /[\u3400-\u9FFF\u3040-\u30FF\uAC00-\uD7AF]/.test(clean);
+
+  if (hasCjk) {
+    const onlyCjkNameChars = /^[\p{L}\p{M}\s.'’ʼ・·-]+$/u.test(clean);
+    if (!onlyCjkNameChars) return false;
+
+    const compact = clean.replace(/\s+/g, "");
+    if (compact.length < 2 || compact.length > 20) return false;
+
+    return true;
+  }
 
   const words = clean.split(" ").filter(Boolean);
 
-  if (words.length < 2 || words.length > 4) return false;
+  if (words.length < 2 || words.length > 5) return false;
 
   const letterWords = words.filter(w =>
-    /^[A-Za-zА-Яа-яІіЇїЄєҐґŁłŚśŻżŹźĆćŃńÓóĄąĘę'’ʼ-]+$/.test(w)
+    /^[\p{L}\p{M}'’ʼ.-]+$/u.test(w)
   );
 
   if (letterWords.length !== words.length) return false;
 
   const longEnough = words.filter(w => {
-    const letters = w.replace(/[^A-Za-zА-Яа-яІіЇїЄєҐґŁłŚśŻżŹźĆćŃńÓóĄąĘę]/g, "");
+    const letters = w.replace(/[^\p{L}\p{M}]/gu, "");
     return letters.length >= 2;
   });
 
@@ -543,10 +661,10 @@ function looksLikeName(line) {
 }
 
 function extractNameAfterResumeHeading(lines) {
-  for (let i = 0; i < Math.min(lines.length, 30); i++) {
+  for (let i = 0; i < Math.min(lines.length, 40); i++) {
     if (!isResumeHeading(lines[i])) continue;
 
-    for (let j = i + 1; j <= i + 6 && j < lines.length; j++) {
+    for (let j = i + 1; j <= i + 8 && j < lines.length; j++) {
       const candidate = normaliseLine(lines[j]);
 
       if (!candidate) continue;
@@ -565,7 +683,7 @@ function extractNameAfterResumeHeading(lines) {
 
 function extractNameBeforeContacts(lines) {
   const contactIndex = lines.findIndex(line => isContactLine(line));
-  const end = contactIndex === -1 ? Math.min(lines.length, 25) : Math.min(contactIndex, 25);
+  const end = contactIndex === -1 ? Math.min(lines.length, 30) : Math.min(contactIndex, 30);
   const candidates = [];
 
   for (let i = 0; i < end; i++) {
@@ -607,7 +725,16 @@ function nameFromEmail(email) {
 }
 
 function fallbackName(text) {
-  const lines = getLines(text).slice(0, 100);
+  const raw = String(text || "");
+  const lines = getLines(raw).slice(0, 150);
+
+  const direct = raw.match(
+    /(?:^|\n|\r)\s*(РЕЗЮМЕ|RESUME|C\.?V\.?|CV|CURRICULUM VITAE|LEBENSLAUF|履历|履歷|简历|簡歷|个人简历|個人簡歷|이력서|職務経歴書|السيرة الذاتية)\s*(?:\n|\r)+\s*([^\n\r]{2,80})/iu
+  );
+
+  if (direct && direct[2] && looksLikeName(direct[2])) {
+    return titleCaseName(direct[2]);
+  }
 
   const afterResume = extractNameAfterResumeHeading(lines);
   if (afterResume) return afterResume;
@@ -615,7 +742,7 @@ function fallbackName(text) {
   const beforeContacts = extractNameBeforeContacts(lines);
   if (beforeContacts) return beforeContacts;
 
-  for (let i = 0; i < Math.min(lines.length, 30); i++) {
+  for (let i = 0; i < Math.min(lines.length, 40); i++) {
     const line = lines[i];
 
     const splitByDash = line.split(/\s+[—–-]\s+/);
@@ -624,76 +751,86 @@ function fallbackName(text) {
     }
   }
 
-  return nameFromEmail(firstEmail(text));
+  return nameFromEmail(firstEmail(raw));
+}
+
+function removeLocationLabel(line) {
+  return String(line || "")
+    .replace(/(location|address|city|country|state|region|province|place|локація|адреса|місто|країна|область|адрес|город|страна|регион|województwo|miasto|kraj|adres|ort|adresse|stadt|land|ville|pays|dirección|ciudad|país|endereço|cidade|地址|城市|国家|國家|所在地|住所|地點|地点|居住地|지역|주소|المدينة|الدولة|العنوان)/ig, "")
+    .replace(/[:：\-–—]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 }
 
 function fallbackLocation(text) {
-  const lines = getLines(text);
-
-  const locationLabel =
-    /(location|address|city|country|локація|адреса|місто|країна|адрес|город|страна|місцезнаходження)/i;
+  const raw = String(text || "");
+  const lines = getLines(raw).slice(0, 120);
 
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
 
-    if (locationLabel.test(line)) {
-      const sameLine = line
-        .replace(locationLabel, "")
-        .replace(/[:\-–—]/g, " ")
-        .trim();
+    if (looksLikeLocationLabel(line)) {
+      const sameLine = removeLocationLabel(line);
 
-      if (sameLine && sameLine.length < 90 && !/@/.test(sameLine) && !/\d{5,}/.test(sameLine)) {
+      if (
+        sameLine &&
+        sameLine.length < 100 &&
+        !isContactLine(sameLine) &&
+        !looksLikeJobTitleOrHeading(sameLine)
+      ) {
         return sameLine;
       }
 
-      const next = lines[i + 1] || "";
-      if (next && next.length < 90 && !/@/.test(next) && !/\d{5,}/.test(next)) {
-        return next;
+      for (let j = i + 1; j <= i + 3 && j < lines.length; j++) {
+        const next = lines[j];
+
+        if (
+          next &&
+          next.length < 100 &&
+          !isContactLine(next) &&
+          !isResumeHeading(next) &&
+          !looksLikeJobTitleOrHeading(next)
+        ) {
+          return next;
+        }
       }
     }
   }
 
-  for (const line of lines.slice(0, 20)) {
+  const name = fallbackName(raw);
+  const nameIndex = name
+    ? lines.findIndex(line => normaliseLine(line).toLowerCase() === normaliseLine(name).toLowerCase())
+    : -1;
+
+  if (nameIndex !== -1) {
+    for (let j = nameIndex + 1; j <= nameIndex + 4 && j < lines.length; j++) {
+      const candidate = lines[j];
+
+      if (!candidate) continue;
+      if (isContactLine(candidate)) continue;
+      if (isResumeHeading(candidate)) continue;
+      if (looksLikeJobTitleOrHeading(candidate)) continue;
+      if (looksLikeName(candidate)) continue;
+
+      if (looksLikeLocation(candidate)) return candidate;
+
+      if (
+        candidate.length <= 80 &&
+        /^[\p{L}\p{M}\s.'’ʼ,，-]+$/u.test(candidate) &&
+        /[,，]/.test(candidate)
+      ) {
+        return candidate;
+      }
+    }
+  }
+
+  for (const line of lines.slice(0, 40)) {
     if (isResumeHeading(line)) continue;
     if (isContactLine(line)) continue;
     if (looksLikeName(line)) continue;
+    if (looksLikeJobTitleOrHeading(line)) continue;
 
-    if (looksLikeLocation(line)) {
-      if (/^(Одеса|Odesa|Odessa)$/i.test(line)) return "Одеса, Україна";
-      return line;
-    }
-  }
-
-  const cityCountryPatterns = [
-    /(Одеса|Odesa|Odessa)\s*,?\s*(Україна|Ukraine|Ukraina)?/i,
-    /(Київ|Kyiv|Kiev)\s*,?\s*(Україна|Ukraine|Ukraina)?/i,
-    /(Львів|Lviv)\s*,?\s*(Україна|Ukraine|Ukraina)?/i,
-    /(Харків|Kharkiv)\s*,?\s*(Україна|Ukraine|Ukraina)?/i,
-    /(Дніпро|Dnipro)\s*,?\s*(Україна|Ukraine|Ukraina)?/i,
-    /(London|Manchester|Birmingham|Liverpool|Bristol)\s*,?\s*(UK|United Kingdom|England)?/i,
-    /(Warsaw|Krakow)\s*,?\s*(Poland)?/i,
-    /(Berlin)\s*,?\s*(Germany)?/i,
-    /(Paris)\s*,?\s*(France)?/i,
-    /(Madrid)\s*,?\s*(Spain)?/i,
-    /(Rome)\s*,?\s*(Italy)?/i
-  ];
-
-  for (const pattern of cityCountryPatterns) {
-    const m = String(text || "").match(pattern);
-    if (m) {
-      const raw = m[0].replace(/\s+/g, " ").trim();
-
-      if (/^(Одеса|Odesa|Odessa)$/i.test(raw)) return "Одеса, Україна";
-      if (/Одеса|Odesa|Odessa/i.test(raw) && !/Україна|Ukraine|Ukraina/i.test(raw)) {
-        return "Одеса, Україна";
-      }
-
-      return raw;
-    }
-  }
-
-  if (/Україна|Ukraine/i.test(text) && /Одеса|Odesa|Odessa/i.test(text)) {
-    return "Одеса, Україна";
+    if (looksLikeLocation(line)) return line;
   }
 
   return "";
@@ -701,22 +838,25 @@ function fallbackLocation(text) {
 
 function fallbackLanguages(text) {
   const lines = getLines(text);
-  const idx = lines.findIndex(l => /(languages|мови|языки)/i.test(l));
+  const idx = lines.findIndex(l =>
+    /(languages|language|мови|языки|języki|sprachen|langues|idiomas|línguas|语言|語言|言語|언어|اللغات)/i.test(l)
+  );
 
   if (idx !== -1) {
     const next = lines.slice(idx, idx + 5).join(", ");
     return next
-      .replace(/languages|мови|языки/ig, "")
-      .replace(/[:\-–—]/g, " ")
+      .replace(/languages|language|мови|языки|języki|sprachen|langues|idiomas|línguas|语言|語言|言語|언어|اللغات/ig, "")
+      .replace(/[:：\-–—]/g, " ")
       .replace(/\s+/g, " ")
       .trim();
   }
 
   const found = [];
   const langs = [
-    "English", "Ukrainian", "Russian", "Polish", "German", "French",
-    "Англійська", "Українська", "Російська", "Польська", "Німецька", "Французька",
-    "английский", "украинский", "русский", "польский"
+    "English", "Ukrainian", "Russian", "Polish", "German", "French", "Spanish", "Italian", "Chinese", "Japanese", "Korean", "Arabic",
+    "Англійська", "Українська", "Російська", "Польська", "Німецька", "Французька", "Іспанська", "Китайська",
+    "английский", "украинский", "русский", "польский", "немецкий", "французский", "испанский", "китайский",
+    "中文", "普通话", "漢語", "汉语", "日本語", "한국어", "العربية"
   ];
 
   for (const lang of langs) {
@@ -799,27 +939,34 @@ async function analyseWithOpenAI(text, language) {
     throw new Error("OPENAI_API_KEY is missing");
   }
 
-  const firstLines = getLines(text).slice(0, 60).join("\n");
+  const firstLines = getLines(text).slice(0, 80).join("\n");
 
   const system = `
-You are a strict CV parsing assistant.
+You are a strict multilingual CV parsing assistant.
 
 Return JSON only.
+
+The CV may be written in any language, including English, Ukrainian, Russian, Polish, German, French, Spanish, Portuguese, Italian, Chinese, Japanese, Korean, Arabic or mixed languages.
 
 Extract the candidate profile from the CV text.
 
 Critical rules:
 - Do not invent information.
-- If the CV begins with "РЕЗЮМЕ", "RESUME" or "CV", the next line is often the candidate name.
-- Extract candidate name even if it is fully uppercase, for example "ЮЛІЯ КУЧІЯШ".
-- The name may be Cyrillic/Ukrainian or Latin.
-- Do not confuse candidate name with job title, CV heading, section heading, education heading, company name, city or country.
-- Extract location if a city/country appears, for example "Одеса, Україна", "Odesa, Ukraine", "London, UK".
+- Keep the person's real name exactly as written, but normalise full uppercase names into normal readable case when appropriate.
+- If the CV begins with a heading like "РЕЗЮМЕ", "RESUME", "CV", "Curriculum Vitae", "Lebenslauf", "简历", "履历", "個人簡歷", "이력서", "職務経歴書", or Arabic CV headings, the next meaningful line is often the candidate name.
+- Detect candidate name in any writing system: Latin, Cyrillic, Chinese, Japanese, Korean, Arabic, etc.
+- Do not confuse candidate name with job title, CV heading, section heading, education heading, company name, city, country, email, phone number or website.
+- Detect location in any language or writing system. It may be a city, country, region, province, state or address line.
+- Do not force the location into English. Keep it in the CV language if written that way.
+- Extract email and phone if present.
+- Extract target / desired role if present.
+- Extract languages if present.
 - Split education:
   education = university / school / institution name;
   speciality = degree / speciality / qualification / profession.
 - Keep experience, volunteering and courses as arrays.
 - Empty unknown fields must be empty strings, not null.
+- If something is not clearly present in the CV, leave it empty.
 
 Return exactly:
 {
@@ -868,7 +1015,7 @@ Most important first lines:
 ${firstLines}
 
 Full CV text:
-${text.slice(0, 15000)}
+${text.slice(0, 18000)}
 `;
 
   const response = await fetch("https://api.openai.com/v1/chat/completions", {
@@ -934,7 +1081,7 @@ export default async function handler(req, res) {
         profile: basicProfile,
         warning: "Could not read enough text from this CV. Try DOCX or TXT if PDF does not work.",
         rawTextPreview: text.slice(0, 1200),
-        firstLines: getLines(text).slice(0, 60),
+        firstLines: getLines(text).slice(0, 80),
         detectedNameFallback: fallbackName(text),
         detectedLocationFallback: fallbackLocation(text),
         filename: file.filename
@@ -955,7 +1102,7 @@ export default async function handler(req, res) {
     return sendJson(res, 200, {
       profile,
       rawTextPreview: text.slice(0, 1200),
-      firstLines: getLines(text).slice(0, 60),
+      firstLines: getLines(text).slice(0, 80),
       detectedNameFallback: fallbackName(text),
       detectedLocationFallback: fallbackLocation(text),
       filename: file.filename
