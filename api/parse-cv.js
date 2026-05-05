@@ -211,14 +211,31 @@ function extractTextFromDocx(buffer) {
     const entries = extractZipEntries(buffer);
     const parts = [];
 
-    if (entries["word/document.xml"]) {
-      parts.push(stripXml(entries["word/document.xml"].toString("utf8")));
+    const importantXmlFiles = [
+      "word/document.xml",
+      "word/header1.xml",
+      "word/header2.xml",
+      "word/header3.xml",
+      "word/footer1.xml",
+      "word/footer2.xml",
+      "word/footer3.xml"
+    ];
+
+    for (const key of importantXmlFiles) {
+      if (entries[key]) {
+        const value = stripXml(entries[key].toString("utf8"));
+        if (value) parts.push(value);
+      }
     }
 
     for (const key of Object.keys(entries)) {
-      if (/^word\/header\d*\.xml$/i.test(key) || /^word\/footer\d*\.xml$/i.test(key)) {
+      if (
+        /^word\/(header|footer)\d*\.xml$/i.test(key) ||
+        /^word\/footnotes\.xml$/i.test(key) ||
+        /^word\/endnotes\.xml$/i.test(key)
+      ) {
         const value = stripXml(entries[key].toString("utf8"));
-        if (value) parts.push(value);
+        if (value && !parts.includes(value)) parts.push(value);
       }
     }
 
@@ -746,7 +763,7 @@ function fallbackName(text) {
 
   if (sameLine && sameLine[1]) {
     const possible = sameLine[1]
-      .replace(/\s+(Одеса|Odesa|Odessa|Kyiv|Kiev|Київ|Україна|Ukraine|телефон|phone|email|mail).*$/iu, "")
+      .replace(/\s+(телефон|phone|email|mail|location|address|локація|адреса|місто|city).*$/iu, "")
       .trim();
 
     if (looksLikeName(possible)) return titleCaseName(possible);
@@ -920,11 +937,35 @@ function fallbackProfile(text) {
   };
 }
 
+function forceFallbackFields(profile, text) {
+  const fbName = fallbackName(text);
+  const fbLocation = fallbackLocation(text);
+  const fbEmail = firstEmail(text);
+  const fbPhone = firstPhone(text);
+  const fbLanguages = fallbackLanguages(text);
+
+  if (!profile.name && fbName) profile.name = fbName;
+  if (!profile.fullName && profile.name) profile.fullName = profile.name;
+  if (!profile.full_name && profile.name) profile.full_name = profile.name;
+  if (!profile.candidateName && profile.name) profile.candidateName = profile.name;
+  if (!profile.candidate_name && profile.name) profile.candidate_name = profile.name;
+
+  if (!profile.location && fbLocation) profile.location = fbLocation;
+  if (!profile.city && profile.location) profile.city = profile.location;
+  if (!profile.address && profile.location) profile.address = profile.location;
+
+  if (!profile.email && fbEmail) profile.email = fbEmail;
+  if (!profile.phone && fbPhone) profile.phone = fbPhone;
+  if (!profile.languages && fbLanguages) profile.languages = fbLanguages;
+
+  return profile;
+}
+
 function normalizeProfile(p, text) {
   const fb = fallbackProfile(text);
   const profile = p && typeof p === "object" ? p : {};
 
-  const name = cleanText(
+  let name = cleanText(
     profile.name ||
     profile.fullName ||
     profile.full_name ||
@@ -933,7 +974,7 @@ function normalizeProfile(p, text) {
     fb.name
   );
 
-  const location = cleanText(
+  let location = cleanText(
     profile.location ||
     profile.city ||
     profile.address ||
@@ -980,23 +1021,7 @@ function normalizeProfile(p, text) {
     courses: Array.isArray(profile.courses) ? profile.courses : []
   };
 
-  if (!out.name && fb.name) {
-    out.name = fb.name;
-    out.fullName = fb.name;
-    out.full_name = fb.name;
-    out.candidateName = fb.name;
-    out.candidate_name = fb.name;
-  }
-
-  if (!out.location && fb.location) {
-    out.location = fb.location;
-    out.city = fb.location;
-    out.address = fb.location;
-  }
-
-  if (!out.email) out.email = fb.email;
-  if (!out.phone) out.phone = fb.phone;
-  if (!out.languages) out.languages = fb.languages;
+  forceFallbackFields(out, text);
 
   out.experience = out.experience.map(x => ({
     company: cleanText(x.company || x.organisation || x.organization || ""),
@@ -1166,7 +1191,7 @@ export default async function handler(req, res) {
     }
 
     const text = extractText(file);
-    const basicProfile = fallbackProfile(text);
+    const basicProfile = forceFallbackFields(fallbackProfile(text), text);
 
     if (!text || text.length < 10) {
       return sendJson(res, 200, {
@@ -1191,6 +1216,22 @@ export default async function handler(req, res) {
 
     const profile = normalizeProfile(aiProfile, text);
 
+    // Final protection: index.html reads profile.name and profile.location directly.
+    profile.name = cleanText(profile.name || fallbackName(text));
+    profile.location = cleanText(profile.location || fallbackLocation(text));
+
+    profile.fullName = profile.name;
+    profile.full_name = profile.name;
+    profile.candidateName = profile.name;
+    profile.candidate_name = profile.name;
+
+    profile.city = profile.location;
+    profile.address = profile.location;
+
+    if (!profile.email) profile.email = firstEmail(text);
+    if (!profile.phone) profile.phone = firstPhone(text);
+    if (!profile.languages) profile.languages = fallbackLanguages(text);
+
     return sendJson(res, 200, {
       profile,
       rawTextPreview: text.slice(0, 1200),
@@ -1202,7 +1243,7 @@ export default async function handler(req, res) {
 
   } catch (error) {
     return sendJson(res, 200, {
-      profile: fallbackProfile(""),
+      profile: forceFallbackFields(fallbackProfile(""), ""),
       warning: "CV analysis fallback mode.",
       details: error && error.message ? error.message : String(error)
     });
