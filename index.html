@@ -97,6 +97,23 @@
 .tpl-modern-head .mh-photo{width:137px!important;height:132px!important;}
 /* keep all other templates as originally designed */
 
+
+/* === FINAL PHOTO SHAPE PATCH: exactly 4 templates use square/rectangular photos === */
+.tpl-film .film-photo,
+.tpl-film img.film-photo,
+.tpl-editorial .ed-photo,
+.tpl-editorial img.ed-photo,
+.tpl-modern-head .mh-photo,
+.tpl-modern-head img.mh-photo,
+.tpl-classic .r-photo,
+.tpl-classic img.r-photo{
+  border-radius:0!important;
+  -webkit-border-radius:0!important;
+  clip-path:none!important;
+  -webkit-clip-path:none!important;
+  object-fit:cover!important;
+}
+
 </style>
 </head>
 <body>
