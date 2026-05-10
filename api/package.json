@@ -4,6 +4,8 @@
   "private": true,
   "type": "module",
   "dependencies": {
-    "docx": "^8.5.0"
+    "docx": "^8.5.0",
+    "mammoth": "^1.8.0",
+    "pdf-parse": "^1.1.1"
   }
 }
