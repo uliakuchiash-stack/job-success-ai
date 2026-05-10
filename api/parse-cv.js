@@ -25,6 +25,33 @@ function getHeader(req, name) {
   return key ? req.headers[key] : "";
 }
 
+function cleanText(text) {
+  return String(text || "")
+    .replace(/\u0000/g, "")
+    .replace(/\u00A0/g, " ")
+    .replace(/\r/g, "\n")
+    .replace(/\t/g, " ")
+    .replace(/[ ]{2,}/g, " ")
+    .replace(/\n[ ]+/g, "\n")
+    .replace(/[ ]+\n/g, "\n")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
+}
+
+function normaliseLine(line) {
+  return String(line || "")
+    .replace(/[|•·●▪▫◆◇■□]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function getLines(text) {
+  return cleanText(text)
+    .split("\n")
+    .map(normaliseLine)
+    .filter(Boolean);
+}
+
 function splitBuffer(buffer, separator) {
   const parts = [];
   let start = 0;
@@ -97,33 +124,6 @@ function parseMultipart(buffer, contentType) {
   return { fields, files };
 }
 
-function cleanText(text) {
-  return String(text || "")
-    .replace(/\u0000/g, "")
-    .replace(/\u00A0/g, " ")
-    .replace(/\r/g, "\n")
-    .replace(/\t/g, " ")
-    .replace(/[ ]{2,}/g, " ")
-    .replace(/\n[ ]+/g, "\n")
-    .replace(/[ ]+\n/g, "\n")
-    .replace(/\n{3,}/g, "\n\n")
-    .trim();
-}
-
-function normaliseLine(line) {
-  return String(line || "")
-    .replace(/[|•·●▪▫◆◇■□]/g, " ")
-    .replace(/\s+/g, " ")
-    .trim();
-}
-
-function getLines(text) {
-  return cleanText(text)
-    .split("\n")
-    .map(normaliseLine)
-    .filter(Boolean);
-}
-
 function decodeXmlEntities(text) {
   return String(text || "")
     .replace(/&amp;/g, "&")
@@ -150,10 +150,8 @@ function stripXml(xml) {
     .replace(/<\/w:tc>/g, " ")
     .replace(/<[^>]+>/g, "");
 
-  s = decodeXmlEntities(s);
-
   return cleanText(
-    s
+    decodeXmlEntities(s)
       .split("\n")
       .map(line => line.replace(/\s+/g, " ").trim())
       .join("\n")
@@ -211,17 +209,19 @@ function extractTextFromDocx(buffer) {
     const entries = extractZipEntries(buffer);
     const parts = [];
 
-    const importantXmlFiles = [
+    const preferred = [
       "word/document.xml",
       "word/header1.xml",
       "word/header2.xml",
       "word/header3.xml",
       "word/footer1.xml",
       "word/footer2.xml",
-      "word/footer3.xml"
+      "word/footer3.xml",
+      "word/footnotes.xml",
+      "word/endnotes.xml"
     ];
 
-    for (const key of importantXmlFiles) {
+    for (const key of preferred) {
       if (entries[key]) {
         const value = stripXml(entries[key].toString("utf8"));
         if (value) parts.push(value);
@@ -229,11 +229,7 @@ function extractTextFromDocx(buffer) {
     }
 
     for (const key of Object.keys(entries)) {
-      if (
-        /^word\/(header|footer)\d*\.xml$/i.test(key) ||
-        /^word\/footnotes\.xml$/i.test(key) ||
-        /^word\/endnotes\.xml$/i.test(key)
-      ) {
+      if (/^word\/.*\.xml$/i.test(key)) {
         const value = stripXml(entries[key].toString("utf8"));
         if (value && !parts.includes(value)) parts.push(value);
       }
@@ -282,15 +278,15 @@ function decodeHexPdf(hex) {
 function extractTextFromPdfStream(streamText) {
   const chunks = [];
 
-  for (const m of streamText.matchAll(/\(([\s\S]*?)\)\s*Tj/g)) {
+  for (const m of String(streamText || "").matchAll(/\(([\s\S]*?)\)\s*Tj/g)) {
     chunks.push(decodePdfString(m[1]));
   }
 
-  for (const m of streamText.matchAll(/<([0-9A-Fa-f\s]+)>\s*Tj/g)) {
+  for (const m of String(streamText || "").matchAll(/<([0-9A-Fa-f\s]+)>\s*Tj/g)) {
     chunks.push(decodeHexPdf(m[1]));
   }
 
-  for (const arr of streamText.matchAll(/\[([\s\S]*?)\]\s*TJ/g)) {
+  for (const arr of String(streamText || "").matchAll(/\[([\s\S]*?)\]\s*TJ/g)) {
     const inside = arr[1];
     const parts = [];
 
@@ -328,15 +324,38 @@ function extractTextFromPdfBasic(buffer) {
       if (extracted) chunks.push(extracted);
     }
 
-    if (!chunks.length) chunks.push(extractTextFromPdfStream(raw));
+    if (!chunks.length) {
+      chunks.push(extractTextFromPdfStream(raw));
+    }
 
-    return cleanText(chunks.join("\n").replace(/[^\S\n]+/g, " "));
+    let out = cleanText(chunks.join("\n").replace(/[^\S\n]+/g, " "));
+
+    if (out.length < 20) {
+      const readable = raw
+        .replace(/[^\x09\x0A\x0D\x20-\x7EА-Яа-яІіЇїЄєҐґąćęłńóśźżĄĆĘŁŃÓŚŹŻÄÖÜäöüßÀ-ÿ]+/g, " ")
+        .replace(/\s+/g, " ");
+      out = cleanText(readable);
+    }
+
+    return out;
   } catch (e) {
     return "";
   }
 }
 
-function extractText(file) {
+async function extractTextFromPdfWithOptionalPackage(buffer) {
+  try {
+    const mod = await import("pdf-parse");
+    const pdfParse = mod.default || mod;
+    const result = await pdfParse(buffer);
+    const text = cleanText(result && result.text ? result.text : "");
+    if (text && text.length > 20) return text;
+  } catch (e) {}
+
+  return extractTextFromPdfBasic(buffer);
+}
+
+async function extractText(file) {
   const filename = String(file.filename || "").toLowerCase();
   const type = String(file.contentType || "").toLowerCase();
 
@@ -349,7 +368,7 @@ function extractText(file) {
   }
 
   if (filename.endsWith(".pdf") || type.includes("pdf")) {
-    return extractTextFromPdfBasic(file.buffer);
+    return await extractTextFromPdfWithOptionalPackage(file.buffer);
   }
 
   return cleanText(file.buffer.toString("utf8"));
@@ -398,15 +417,15 @@ function titleCaseName(value) {
     .toLowerCase()
     .split(" ")
     .filter(Boolean)
-    .map(word => {
-      return word
+    .map(word =>
+      word
         .split("-")
         .map(part => {
           if (!part) return "";
           return part.charAt(0).toUpperCase() + part.slice(1);
         })
-        .join("-");
-    })
+        .join("-")
+    )
     .join(" ")
     .trim();
 }
@@ -482,9 +501,7 @@ function looksLikeLocation(line) {
   const commonLocationWords =
     /(ukraine|україна|украина|poland|polska|germany|deutschland|france|italy|spain|canada|usa|united states|united kingdom|england|china|中国|japan|日本|korea|한국|romania|moldova|молдова|turkey|türkiye|netherlands|ireland|australia|city|місто|город|stadt|ville|ciudad|cidade)/i;
 
-  if (commonLocationWords.test(clean)) return true;
-
-  return false;
+  return commonLocationWords.test(clean);
 }
 
 function looksLikeJobTitleOrHeading(line) {
@@ -582,37 +599,6 @@ function looksLikeJobTitleOrHeading(line) {
     "الخبرة",
     "المهارات",
     "اللغات",
-    "social worker",
-    "customer support",
-    "chat operator",
-    "teacher",
-    "care assistant",
-    "cleaner",
-    "manager",
-    "developer",
-    "designer",
-    "recruiter",
-    "administrator",
-    "consultant",
-    "coordinator",
-    "operator",
-    "specialist",
-    "assistant",
-    "engineer",
-    "accountant",
-    "працівник",
-    "работник",
-    "оператор",
-    "вчитель",
-    "учитель",
-    "асистент",
-    "менеджер",
-    "спеціаліст",
-    "специалист",
-    "адміністратор",
-    "администратор",
-    "прибиральниця",
-    "вихователь",
     "cover letter"
   ];
 
@@ -685,7 +671,7 @@ function extractNameAfterResumeHeading(lines) {
   for (let i = 0; i < Math.min(lines.length, 40); i++) {
     if (!isResumeHeading(lines[i])) continue;
 
-    for (let j = i + 1; j <= i + 8 && j < lines.length; j++) {
+    for (let j = i + 1; j <= i + 10 && j < lines.length; j++) {
       const candidate = normaliseLine(lines[j]);
 
       if (!candidate) continue;
@@ -704,7 +690,7 @@ function extractNameAfterResumeHeading(lines) {
 
 function extractNameBeforeContacts(lines) {
   const contactIndex = lines.findIndex(line => isContactLine(line));
-  const end = contactIndex === -1 ? Math.min(lines.length, 30) : Math.min(contactIndex, 30);
+  const end = contactIndex === -1 ? Math.min(lines.length, 35) : Math.min(contactIndex, 35);
   const candidates = [];
 
   for (let i = 0; i < end; i++) {
@@ -747,7 +733,7 @@ function nameFromEmail(email) {
 
 function fallbackName(text) {
   const raw = String(text || "");
-  const lines = getLines(raw).slice(0, 150);
+  const lines = getLines(raw).slice(0, 180);
 
   const directLine = raw.match(
     /(?:^|\n|\r)\s*(РЕЗЮМЕ|RESUME|C\.?V\.?|CV|CURRICULUM VITAE|LEBENSLAUF|履历|履歷|简历|簡歷|个人简历|個人簡歷|이력서|職務経歴書|السيرة الذاتية)\s*(?:\n|\r)+\s*([^\n\r]{2,90})/iu
@@ -775,10 +761,10 @@ function fallbackName(text) {
   const beforeContacts = extractNameBeforeContacts(lines);
   if (beforeContacts) return beforeContacts;
 
-  for (let i = 0; i < Math.min(lines.length, 40); i++) {
+  for (let i = 0; i < Math.min(lines.length, 45); i++) {
     const line = lines[i];
-
     const splitByDash = line.split(/\s+[—–-]\s+/);
+
     if (splitByDash.length >= 2 && looksLikeName(splitByDash[0])) {
       return titleCaseName(splitByDash[0]);
     }
@@ -797,7 +783,7 @@ function removeLocationLabel(line) {
 
 function fallbackLocation(text) {
   const raw = String(text || "");
-  const lines = getLines(raw).slice(0, 150);
+  const lines = getLines(raw).slice(0, 180);
 
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
@@ -857,7 +843,7 @@ function fallbackLocation(text) {
     }
   }
 
-  for (const line of lines.slice(0, 50)) {
+  for (const line of lines.slice(0, 60)) {
     if (isResumeHeading(line)) continue;
     if (isContactLine(line)) continue;
     if (looksLikeName(line)) continue;
@@ -876,7 +862,7 @@ function fallbackLanguages(text) {
   );
 
   if (idx !== -1) {
-    const next = lines.slice(idx, idx + 5).join(", ");
+    const next = lines.slice(idx, idx + 7).join(", ");
     return next
       .replace(/languages|language|мови|языки|języki|sprachen|langues|idiomas|línguas|语言|語言|言語|언어|اللغات/ig, "")
       .replace(/[:：\-–—]/g, " ")
@@ -886,7 +872,7 @@ function fallbackLanguages(text) {
 
   const found = [];
   const langs = [
-    "English", "Ukrainian", "Russian", "Polish", "German", "French", "Spanish", "Italian", "Chinese", "Japanese", "Korean", "Arabic",
+    "English", "Ukrainian", "Russian", "Polish", "German", "French", "Spanish", "Italian", "Portuguese", "Chinese", "Japanese", "Korean", "Arabic",
     "Англійська", "Українська", "Російська", "Польська", "Німецька", "Французька", "Іспанська", "Китайська",
     "английский", "украинский", "русский", "польский", "немецкий", "французский", "испанский", "китайский",
     "中文", "普通话", "漢語", "汉语", "日本語", "한국어", "العربية"
@@ -899,11 +885,175 @@ function fallbackLanguages(text) {
   return [...new Set(found)].join(", ");
 }
 
+function collectSection(text, headingRegex, stopRegex) {
+  const lines = getLines(text);
+  const start = lines.findIndex(l => headingRegex.test(l));
+
+  if (start === -1) return "";
+
+  const out = [];
+
+  for (let i = start + 1; i < lines.length; i++) {
+    const line = lines[i];
+
+    if (stopRegex.test(line)) break;
+    out.push(line);
+
+    if (out.join(" ").length > 1200) break;
+  }
+
+  return cleanText(out.join("\n"));
+}
+
+function fallbackSkills(text) {
+  return collectSection(
+    text,
+    /(skills|навички|навыки|kompetencje|umiejętności|fähigkeiten|skills|compétences|habilidades|技能|스킬|المهارات)/i,
+    /(experience|work|education|courses|languages|досвід|опыт|освіта|образование|курси|мови|языки|doświadczenie|edukacja|języki|erfahrung|bildung|langues|idiomas|工作|教育|언어|الخبرة|التعليم)/i
+  );
+}
+
+function fallbackSoftSkills(text) {
+  const found = [];
+  const common = [
+    "responsibility",
+    "punctuality",
+    "teamwork",
+    "communication",
+    "attention to detail",
+    "adaptability",
+    "problem solving",
+    "відповідальність",
+    "пунктуальність",
+    "комунікабельність",
+    "уважність",
+    "стресостійкість",
+    "ответственность",
+    "пунктуальность",
+    "коммуникабельность",
+    "внимательность",
+    "odpowiedzialność",
+    "punktualność",
+    "komunikatywność"
+  ];
+
+  for (const item of common) {
+    if (new RegExp(item, "i").test(text)) found.push(item);
+  }
+
+  return [...new Set(found)].join(", ");
+}
+
+function fallbackEducation(text) {
+  return collectSection(
+    text,
+    /(education|освіта|образование|wykształcenie|edukacja|ausbildung|bildung|formation|educación|教育|学歴|학력|التعليم)/i,
+    /(experience|work|skills|languages|courses|volunteer|досвід|опыт|навички|навыки|мови|языки|курси|волонтер|doświadczenie|umiejętności|języki|erfahrung|fähigkeiten|langues|idiomas|工作|技能|언어|الخبرة|المهارات)/i
+  );
+}
+
+function fallbackExperience(text) {
+  const section = collectSection(
+    text,
+    /(experience|work experience|employment|досвід роботи|досвід|опыт работы|опыт|doświadczenie|berufserfahrung|erfahrung|expérience|experiencia|工作经历|工作經歷|경력|الخبرة)/i,
+    /(education|skills|languages|courses|volunteer|освіта|образование|навички|навыки|мови|языки|курси|волонтер|wykształcenie|edukacja|umiejętności|języki|ausbildung|bildung|compétences|idiomas|教育|技能|언어|التعليم|المهارات)/i
+  );
+
+  if (!section) return [];
+
+  const blocks = section
+    .split(/\n(?=\d{4}|[A-ZА-ЯІЇЄҐ][^\n]{2,80})/g)
+    .map(x => cleanText(x))
+    .filter(Boolean)
+    .slice(0, 5);
+
+  return blocks.map(block => {
+    const lines = getLines(block);
+    const first = lines[0] || "";
+    const second = lines[1] || "";
+    const rest = lines.slice(2).join("\n") || lines.slice(1).join("\n");
+
+    let company = "";
+    let position = "";
+
+    if (first.includes("—") || first.includes("-")) {
+      const parts = first.split(/\s+[—–-]\s+/);
+      position = parts[0] || "";
+      company = parts.slice(1).join(" ") || "";
+    } else {
+      position = first;
+      company = second;
+    }
+
+    return {
+      company: cleanText(company),
+      position: cleanText(position),
+      desc: cleanText(rest)
+    };
+  }).filter(x => x.company || x.position || x.desc);
+}
+
+function fallbackCourses(text) {
+  const section = collectSection(
+    text,
+    /(courses|certificates|certifications|курси|сертифікати|курсы|сертификаты|szkolenia|certyfikaty|kurse|zertifikate|certificats|cursos|证书|資格|자격증|الدورات|الشهادات)/i,
+    /(experience|work|education|skills|languages|досвід|опыт|освіта|образование|навички|навыки|мови|языки|doświadczenie|edukacja|umiejętności|języki|erfahrung|bildung|compétences|idiomas|工作|教育|技能|언어|الخبرة|التعليم)/i
+  );
+
+  if (!section) return [];
+
+  return getLines(section).slice(0, 6).map(line => ({
+    name: line,
+    place: "",
+    period: "",
+    desc: ""
+  }));
+}
+
+function emptyProfile() {
+  return {
+    name: "",
+    fullName: "",
+    full_name: "",
+    candidateName: "",
+    candidate_name: "",
+
+    email: "",
+    phone: "",
+
+    location: "",
+    city: "",
+    address: "",
+
+    target: "",
+    jobTitle: "",
+    position: "",
+
+    languages: "",
+    education: "",
+    speciality: "",
+    skills: "",
+    softSkills: "",
+    soft_skills: "",
+    hobbies: "",
+
+    experience: [],
+    volunteering: [],
+    courses: []
+  };
+}
+
 function fallbackProfile(text) {
   const name = fallbackName(text);
   const email = firstEmail(text);
   const phone = firstPhone(text);
   const location = fallbackLocation(text);
+  const education = fallbackEducation(text);
+  const skills = fallbackSkills(text);
+  const softSkills = fallbackSoftSkills(text);
+  const languages = fallbackLanguages(text);
+  const experience = fallbackExperience(text);
+  const courses = fallbackCourses(text);
 
   return {
     name,
@@ -923,42 +1073,55 @@ function fallbackProfile(text) {
     jobTitle: "",
     position: "",
 
-    languages: fallbackLanguages(text),
-    education: "",
+    languages,
+    education,
     speciality: "",
-    skills: "",
-    softSkills: "",
-    soft_skills: "",
+    skills,
+    softSkills,
+    soft_skills: softSkills,
     hobbies: "",
 
-    experience: [],
+    experience,
     volunteering: [],
-    courses: []
+    courses
   };
 }
 
 function forceFallbackFields(profile, text) {
-  const fbName = fallbackName(text);
-  const fbLocation = fallbackLocation(text);
-  const fbEmail = firstEmail(text);
-  const fbPhone = firstPhone(text);
-  const fbLanguages = fallbackLanguages(text);
+  const fb = fallbackProfile(text);
 
-  if (!profile.name && fbName) profile.name = fbName;
+  if (!profile.name && fb.name) profile.name = fb.name;
   if (!profile.fullName && profile.name) profile.fullName = profile.name;
   if (!profile.full_name && profile.name) profile.full_name = profile.name;
   if (!profile.candidateName && profile.name) profile.candidateName = profile.name;
   if (!profile.candidate_name && profile.name) profile.candidate_name = profile.name;
 
-  if (!profile.location && fbLocation) profile.location = fbLocation;
+  if (!profile.email && fb.email) profile.email = fb.email;
+  if (!profile.phone && fb.phone) profile.phone = fb.phone;
+
+  if (!profile.location && fb.location) profile.location = fb.location;
   if (!profile.city && profile.location) profile.city = profile.location;
   if (!profile.address && profile.location) profile.address = profile.location;
 
-  if (!profile.email && fbEmail) profile.email = fbEmail;
-  if (!profile.phone && fbPhone) profile.phone = fbPhone;
-  if (!profile.languages && fbLanguages) profile.languages = fbLanguages;
+  if (!profile.languages && fb.languages) profile.languages = fb.languages;
+  if (!profile.education && fb.education) profile.education = fb.education;
+  if (!profile.skills && fb.skills) profile.skills = fb.skills;
+  if (!profile.softSkills && fb.softSkills) profile.softSkills = fb.softSkills;
+  if (!profile.soft_skills && profile.softSkills) profile.soft_skills = profile.softSkills;
+
+  if ((!profile.experience || !profile.experience.length) && fb.experience.length) {
+    profile.experience = fb.experience;
+  }
+
+  if ((!profile.courses || !profile.courses.length) && fb.courses.length) {
+    profile.courses = fb.courses;
+  }
 
   return profile;
+}
+
+function normalizeArray(value) {
+  return Array.isArray(value) ? value : [];
 }
 
 function normalizeProfile(p, text) {
@@ -1009,24 +1172,22 @@ function normalizeProfile(p, text) {
     position: target,
 
     languages: cleanText(profile.languages || fb.languages),
-    education: cleanText(profile.education || ""),
+    education: cleanText(profile.education || profile.institution || fb.education),
     speciality: cleanText(profile.speciality || profile.degree || profile.qualification || ""),
-    skills: cleanText(profile.skills || ""),
-    softSkills: cleanText(profile.softSkills || profile.soft_skills || ""),
-    soft_skills: cleanText(profile.softSkills || profile.soft_skills || ""),
+    skills: cleanText(profile.skills || fb.skills),
+    softSkills: cleanText(profile.softSkills || profile.soft_skills || fb.softSkills),
+    soft_skills: cleanText(profile.softSkills || profile.soft_skills || fb.softSkills),
     hobbies: cleanText(profile.hobbies || ""),
 
-    experience: Array.isArray(profile.experience) ? profile.experience : [],
-    volunteering: Array.isArray(profile.volunteering) ? profile.volunteering : [],
-    courses: Array.isArray(profile.courses) ? profile.courses : []
+    experience: normalizeArray(profile.experience),
+    volunteering: normalizeArray(profile.volunteering),
+    courses: normalizeArray(profile.courses)
   };
 
-  forceFallbackFields(out, text);
-
   out.experience = out.experience.map(x => ({
-    company: cleanText(x.company || x.organisation || x.organization || ""),
-    position: cleanText(x.position || x.role || ""),
-    desc: cleanText(x.desc || x.description || x.responsibilities || "")
+    company: cleanText(x.company || x.organisation || x.organization || x.employer || ""),
+    position: cleanText(x.position || x.role || x.jobTitle || x.job_title || ""),
+    desc: cleanText(x.desc || x.description || x.responsibilities || x.details || "")
   })).filter(x => x.company || x.position || x.desc);
 
   out.volunteering = out.volunteering.map(x => ({
@@ -1036,11 +1197,21 @@ function normalizeProfile(p, text) {
   })).filter(x => x.org || x.role || x.desc);
 
   out.courses = out.courses.map(x => ({
-    name: cleanText(x.name || x.course || ""),
+    name: cleanText(x.name || x.course || x.title || ""),
     place: cleanText(x.place || x.organisation || x.organization || x.school || ""),
-    period: cleanText(x.period || x.year || ""),
+    period: cleanText(x.period || x.year || x.date || ""),
     desc: cleanText(x.desc || x.description || "")
   })).filter(x => x.name || x.place || x.period || x.desc);
+
+  forceFallbackFields(out, text);
+
+  out.fullName = out.name;
+  out.full_name = out.name;
+  out.candidateName = out.name;
+  out.candidate_name = out.name;
+
+  out.city = out.location;
+  out.address = out.location;
 
   return out;
 }
@@ -1050,34 +1221,40 @@ async function analyseWithOpenAI(text, language) {
     throw new Error("OPENAI_API_KEY is missing");
   }
 
-  const firstLines = getLines(text).slice(0, 100).join("\n");
+  const firstLines = getLines(text).slice(0, 120).join("\n");
 
   const system = `
-You are a strict multilingual CV parsing assistant.
+You are a strict multilingual CV/resume parser.
 
 Return JSON only.
 
-The CV may be written in any language, including English, Ukrainian, Russian, Polish, German, French, Spanish, Portuguese, Italian, Chinese, Japanese, Korean, Arabic or mixed languages.
+The CV may be written in any language, including English, Ukrainian, Russian, Polish, German, French, Spanish, Portuguese, Italian, Chinese, Japanese, Korean, Arabic, Hebrew, Hindi, Georgian or mixed languages.
 
-Extract the candidate profile from the CV text.
+Extract ALL available candidate data from the CV text and map it into the exact app fields.
 
 Critical rules:
 - Do not invent information.
-- Keep the person's real name exactly as written, but normalise full uppercase names into normal readable case when appropriate.
+- Do not return demo/example/template data.
+- If a field is not present, return an empty string or empty array.
+- Keep the candidate's real name as written, but normalise full uppercase names into readable case when appropriate.
 - If the CV begins with a heading like "РЕЗЮМЕ", "RESUME", "CV", "Curriculum Vitae", "Lebenslauf", "简历", "履历", "個人簡歷", "이력서", "職務経歴書", or Arabic CV headings, the next meaningful line is often the candidate name.
-- Detect candidate name in any writing system: Latin, Cyrillic, Chinese, Japanese, Korean, Arabic, etc.
+- Detect candidate name in any writing system.
 - Do not confuse candidate name with job title, CV heading, section heading, education heading, company name, city, country, email, phone number or website.
-- Detect location in any language or writing system. It may be a city, country, region, province, state or address line.
-- Do not force the location into English. Keep it in the CV language if written that way.
 - Extract email and phone if present.
-- Extract target / desired role if present.
+- Extract location if present. Keep it in the CV language.
+- Extract target / desired role / professional title if present.
 - Extract languages if present.
 - Split education:
-  education = university / school / institution name;
+  education = university / school / institution name or education section text;
   speciality = degree / speciality / qualification / profession.
-- Keep experience, volunteering and courses as arrays.
+- Extract professional skills into skills.
+- Extract personal qualities / soft skills into softSkills.
+- Extract hobbies/interests if present.
+- Extract work history into experience array.
+- Extract volunteering into volunteering array.
+- Extract courses and certificates into courses array.
+- Preserve useful details from the CV, but keep fields concise enough for a mobile CV builder.
 - Empty unknown fields must be empty strings, not null.
-- If something is not clearly present in the CV, leave it empty.
 
 Return exactly:
 {
@@ -1085,6 +1262,8 @@ Return exactly:
     "name": "",
     "fullName": "",
     "full_name": "",
+    "candidateName": "",
+    "candidate_name": "",
     "email": "",
     "phone": "",
     "location": "",
@@ -1098,6 +1277,7 @@ Return exactly:
     "speciality": "",
     "skills": "",
     "softSkills": "",
+    "soft_skills": "",
     "hobbies": "",
     "experience": [
       {
@@ -1132,7 +1312,7 @@ Most important first lines:
 ${firstLines}
 
 Full CV text:
-${text.slice(0, 18000)}
+${text.slice(0, 24000)}
 `;
 
   const response = await fetch("https://api.openai.com/v1/chat/completions", {
@@ -1162,6 +1342,24 @@ ${text.slice(0, 18000)}
   return safeJsonParse(content);
 }
 
+function hasUsefulProfileData(profile) {
+  if (!profile || typeof profile !== "object") return false;
+
+  return Boolean(
+    profile.name ||
+    profile.email ||
+    profile.phone ||
+    profile.location ||
+    profile.languages ||
+    profile.education ||
+    profile.skills ||
+    profile.softSkills ||
+    profile.target ||
+    (Array.isArray(profile.experience) && profile.experience.length) ||
+    (Array.isArray(profile.courses) && profile.courses.length)
+  );
+}
+
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     return sendJson(res, 405, { error: "Method not allowed" });
@@ -1171,9 +1369,9 @@ export default async function handler(req, res) {
     const contentType = getHeader(req, "content-type");
 
     if (!String(contentType).includes("multipart/form-data")) {
-      return sendJson(res, 200, {
-        profile: fallbackProfile(""),
-        warning: "Expected multipart/form-data upload."
+      return sendJson(res, 400, {
+        error: "Expected multipart/form-data upload.",
+        profile: emptyProfile()
       });
     }
 
@@ -1184,68 +1382,82 @@ export default async function handler(req, res) {
     const language = parsed.fields.language || "English";
 
     if (!file) {
-      return sendJson(res, 200, {
-        profile: fallbackProfile(""),
-        warning: "No file uploaded."
+      return sendJson(res, 400, {
+        error: "No file uploaded.",
+        profile: emptyProfile()
       });
     }
 
-    const text = extractText(file);
-    const basicProfile = forceFallbackFields(fallbackProfile(text), text);
+    const text = await extractText(file);
+    const firstLines = getLines(text).slice(0, 120);
+    const basicProfile = normalizeProfile(fallbackProfile(text), text);
 
     if (!text || text.length < 10) {
-      return sendJson(res, 200, {
-        profile: basicProfile,
-        warning: "Could not read enough text from this CV. Try DOCX or TXT if PDF does not work.",
+      return sendJson(res, 422, {
+        error: "Could not read text from this CV. Please try DOCX or TXT, or upload a PDF with selectable text.",
+        profile: emptyProfile(),
         rawTextPreview: text.slice(0, 1200),
-        firstLines: getLines(text).slice(0, 100),
-        detectedNameFallback: fallbackName(text),
-        detectedLocationFallback: fallbackLocation(text),
+        firstLines,
+        detectedNameFallback: "",
+        detectedLocationFallback: "",
         filename: file.filename
       });
     }
 
     let aiProfile = null;
+    let aiError = "";
 
     try {
       const ai = await analyseWithOpenAI(text, language);
       aiProfile = ai?.profile || ai;
     } catch (e) {
+      aiError = e && e.message ? e.message : String(e);
       aiProfile = null;
     }
 
-    const profile = normalizeProfile(aiProfile, text);
+    const profile = normalizeProfile(aiProfile || basicProfile, text);
 
-    // Final protection: index.html reads profile.name and profile.location directly.
-    profile.name = cleanText(profile.name || fallbackName(text));
-    profile.location = cleanText(profile.location || fallbackLocation(text));
+    if (!profile.email) profile.email = firstEmail(text);
+    if (!profile.phone) profile.phone = firstPhone(text);
+    if (!profile.name) profile.name = fallbackName(text);
+    if (!profile.location) profile.location = fallbackLocation(text);
+    if (!profile.languages) profile.languages = fallbackLanguages(text);
 
     profile.fullName = profile.name;
     profile.full_name = profile.name;
     profile.candidateName = profile.name;
     profile.candidate_name = profile.name;
-
     profile.city = profile.location;
     profile.address = profile.location;
 
-    if (!profile.email) profile.email = firstEmail(text);
-    if (!profile.phone) profile.phone = firstPhone(text);
-    if (!profile.languages) profile.languages = fallbackLanguages(text);
+    if (!hasUsefulProfileData(profile)) {
+      return sendJson(res, 422, {
+        error: "CV was uploaded, but no useful fields could be extracted. Try another CV format: DOCX or TXT works best.",
+        profile: emptyProfile(),
+        rawTextPreview: text.slice(0, 1200),
+        firstLines,
+        detectedNameFallback: fallbackName(text),
+        detectedLocationFallback: fallbackLocation(text),
+        aiError,
+        filename: file.filename
+      });
+    }
 
     return sendJson(res, 200, {
       profile,
       rawTextPreview: text.slice(0, 1200),
-      firstLines: getLines(text).slice(0, 100),
+      firstLines,
       detectedNameFallback: fallbackName(text),
       detectedLocationFallback: fallbackLocation(text),
+      aiError,
       filename: file.filename
     });
 
   } catch (error) {
-    return sendJson(res, 200, {
-      profile: forceFallbackFields(fallbackProfile(""), ""),
-      warning: "CV analysis fallback mode.",
-      details: error && error.message ? error.message : String(error)
+    return sendJson(res, 500, {
+      error: "CV analysis failed.",
+      details: error && error.message ? error.message : String(error),
+      profile: emptyProfile()
     });
   }
 }
