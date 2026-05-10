@@ -25,33 +25,6 @@ function getHeader(req, name) {
   return key ? req.headers[key] : "";
 }
 
-function cleanText(text) {
-  return String(text || "")
-    .replace(/\u0000/g, "")
-    .replace(/\u00A0/g, " ")
-    .replace(/\r/g, "\n")
-    .replace(/\t/g, " ")
-    .replace(/[ ]{2,}/g, " ")
-    .replace(/\n[ ]+/g, "\n")
-    .replace(/[ ]+\n/g, "\n")
-    .replace(/\n{3,}/g, "\n\n")
-    .trim();
-}
-
-function normaliseLine(line) {
-  return String(line || "")
-    .replace(/[|•·●▪▫◆◇■□]/g, " ")
-    .replace(/\s+/g, " ")
-    .trim();
-}
-
-function getLines(text) {
-  return cleanText(text)
-    .split("\n")
-    .map(normaliseLine)
-    .filter(Boolean);
-}
-
 function splitBuffer(buffer, separator) {
   const parts = [];
   let start = 0;
@@ -124,6 +97,33 @@ function parseMultipart(buffer, contentType) {
   return { fields, files };
 }
 
+function cleanText(text) {
+  return String(text || "")
+    .replace(/\u0000/g, "")
+    .replace(/\u00A0/g, " ")
+    .replace(/\r/g, "\n")
+    .replace(/\t/g, " ")
+    .replace(/[ ]{2,}/g, " ")
+    .replace(/\n[ ]+/g, "\n")
+    .replace(/[ ]+\n/g, "\n")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
+}
+
+function normaliseLine(line) {
+  return String(line || "")
+    .replace(/[|•·●▪▫◆◇■□]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function getLines(text) {
+  return cleanText(text)
+    .split("\n")
+    .map(normaliseLine)
+    .filter(Boolean);
+}
+
 function decodeXmlEntities(text) {
   return String(text || "")
     .replace(/&amp;/g, "&")
@@ -150,55 +150,130 @@ function stripXml(xml) {
     .replace(/<\/w:tc>/g, " ")
     .replace(/<[^>]+>/g, "");
 
+  s = decodeXmlEntities(s);
+
   return cleanText(
-    decodeXmlEntities(s)
+    s
       .split("\n")
       .map(line => line.replace(/\s+/g, " ").trim())
       .join("\n")
   );
 }
 
+function findEndOfCentralDirectory(buffer) {
+  const min = Math.max(0, buffer.length - 70000);
+
+  for (let i = buffer.length - 22; i >= min; i--) {
+    if (buffer.readUInt32LE(i) === 0x06054b50) {
+      return i;
+    }
+  }
+
+  return -1;
+}
+
 function extractZipEntries(buffer) {
   const entries = {};
+
+  try {
+    const eocd = findEndOfCentralDirectory(buffer);
+
+    if (eocd !== -1) {
+      const centralDirectorySize = buffer.readUInt32LE(eocd + 12);
+      const centralDirectoryOffset = buffer.readUInt32LE(eocd + 16);
+      let offset = centralDirectoryOffset;
+      const end = centralDirectoryOffset + centralDirectorySize;
+
+      while (offset + 46 <= buffer.length && offset < end) {
+        const sig = buffer.readUInt32LE(offset);
+
+        if (sig !== 0x02014b50) break;
+
+        const method = buffer.readUInt16LE(offset + 10);
+        const compressedSize = buffer.readUInt32LE(offset + 20);
+        const fileNameLength = buffer.readUInt16LE(offset + 28);
+        const extraLength = buffer.readUInt16LE(offset + 30);
+        const commentLength = buffer.readUInt16LE(offset + 32);
+        const localHeaderOffset = buffer.readUInt32LE(offset + 42);
+
+        const nameStart = offset + 46;
+        const nameEnd = nameStart + fileNameLength;
+        const fileName = buffer.slice(nameStart, nameEnd).toString("utf8");
+
+        if (fileName && localHeaderOffset + 30 <= buffer.length) {
+          const localSig = buffer.readUInt32LE(localHeaderOffset);
+
+          if (localSig === 0x04034b50) {
+            const localNameLength = buffer.readUInt16LE(localHeaderOffset + 26);
+            const localExtraLength = buffer.readUInt16LE(localHeaderOffset + 28);
+            const dataStart = localHeaderOffset + 30 + localNameLength + localExtraLength;
+            const dataEnd = dataStart + compressedSize;
+            const compressed = buffer.slice(dataStart, dataEnd);
+
+            let data = Buffer.alloc(0);
+
+            try {
+              if (method === 0) data = compressed;
+              if (method === 8) data = zlib.inflateRawSync(compressed);
+            } catch (e) {
+              data = Buffer.alloc(0);
+            }
+
+            entries[fileName] = data;
+          }
+        }
+
+        offset = nameEnd + extraLength + commentLength;
+      }
+
+      if (Object.keys(entries).length) return entries;
+    }
+  } catch (e) {}
+
   let offset = 0;
 
   while (offset < buffer.length - 30) {
-    const sig = buffer.readUInt32LE(offset);
-
-    if (sig !== 0x04034b50) {
-      offset++;
-      continue;
-    }
-
-    const flags = buffer.readUInt16LE(offset + 6);
-    const method = buffer.readUInt16LE(offset + 8);
-    const compressedSize = buffer.readUInt32LE(offset + 18);
-    const fileNameLength = buffer.readUInt16LE(offset + 26);
-    const extraLength = buffer.readUInt16LE(offset + 28);
-
-    const nameStart = offset + 30;
-    const nameEnd = nameStart + fileNameLength;
-    const fileName = buffer.slice(nameStart, nameEnd).toString("utf8");
-
-    const dataStart = nameEnd + extraLength;
-
-    if (flags & 0x08) {
-      offset = dataStart + Math.max(1, compressedSize || 1);
-      continue;
-    }
-
-    const dataEnd = dataStart + compressedSize;
-    const compressed = buffer.slice(dataStart, dataEnd);
-
-    let data = Buffer.alloc(0);
-
     try {
-      if (method === 0) data = compressed;
-      if (method === 8) data = zlib.inflateRawSync(compressed);
-    } catch (e) {}
+      const sig = buffer.readUInt32LE(offset);
 
-    if (fileName) entries[fileName] = data;
-    offset = dataEnd;
+      if (sig !== 0x04034b50) {
+        offset++;
+        continue;
+      }
+
+      const flags = buffer.readUInt16LE(offset + 6);
+      const method = buffer.readUInt16LE(offset + 8);
+      const compressedSize = buffer.readUInt32LE(offset + 18);
+      const fileNameLength = buffer.readUInt16LE(offset + 26);
+      const extraLength = buffer.readUInt16LE(offset + 28);
+
+      const nameStart = offset + 30;
+      const nameEnd = nameStart + fileNameLength;
+      const fileName = buffer.slice(nameStart, nameEnd).toString("utf8");
+      const dataStart = nameEnd + extraLength;
+
+      if (flags & 0x08) {
+        offset = dataStart + Math.max(1, compressedSize || 1);
+        continue;
+      }
+
+      const dataEnd = dataStart + compressedSize;
+      const compressed = buffer.slice(dataStart, dataEnd);
+
+      let data = Buffer.alloc(0);
+
+      try {
+        if (method === 0) data = compressed;
+        if (method === 8) data = zlib.inflateRawSync(compressed);
+      } catch (e) {
+        data = Buffer.alloc(0);
+      }
+
+      if (fileName) entries[fileName] = data;
+      offset = dataEnd;
+    } catch (e) {
+      offset++;
+    }
   }
 
   return entries;
@@ -209,7 +284,7 @@ function extractTextFromDocx(buffer) {
     const entries = extractZipEntries(buffer);
     const parts = [];
 
-    const preferred = [
+    const importantXmlFiles = [
       "word/document.xml",
       "word/header1.xml",
       "word/header2.xml",
@@ -221,7 +296,7 @@ function extractTextFromDocx(buffer) {
       "word/endnotes.xml"
     ];
 
-    for (const key of preferred) {
+    for (const key of importantXmlFiles) {
       if (entries[key]) {
         const value = stripXml(entries[key].toString("utf8"));
         if (value) parts.push(value);
@@ -229,7 +304,10 @@ function extractTextFromDocx(buffer) {
     }
 
     for (const key of Object.keys(entries)) {
-      if (/^word\/.*\.xml$/i.test(key)) {
+      if (
+        /^word\/(header|footer)\d+\.xml$/i.test(key) ||
+        /^word\/(footnotes|endnotes)\.xml$/i.test(key)
+      ) {
         const value = stripXml(entries[key].toString("utf8"));
         if (value && !parts.includes(value)) parts.push(value);
       }
@@ -278,15 +356,15 @@ function decodeHexPdf(hex) {
 function extractTextFromPdfStream(streamText) {
   const chunks = [];
 
-  for (const m of String(streamText || "").matchAll(/\(([\s\S]*?)\)\s*Tj/g)) {
+  for (const m of streamText.matchAll(/\(([\s\S]*?)\)\s*Tj/g)) {
     chunks.push(decodePdfString(m[1]));
   }
 
-  for (const m of String(streamText || "").matchAll(/<([0-9A-Fa-f\s]+)>\s*Tj/g)) {
+  for (const m of streamText.matchAll(/<([0-9A-Fa-f\s]+)>\s*Tj/g)) {
     chunks.push(decodeHexPdf(m[1]));
   }
 
-  for (const arr of String(streamText || "").matchAll(/\[([\s\S]*?)\]\s*TJ/g)) {
+  for (const arr of streamText.matchAll(/\[([\s\S]*?)\]\s*TJ/g)) {
     const inside = arr[1];
     const parts = [];
 
@@ -324,38 +402,15 @@ function extractTextFromPdfBasic(buffer) {
       if (extracted) chunks.push(extracted);
     }
 
-    if (!chunks.length) {
-      chunks.push(extractTextFromPdfStream(raw));
-    }
+    if (!chunks.length) chunks.push(extractTextFromPdfStream(raw));
 
-    let out = cleanText(chunks.join("\n").replace(/[^\S\n]+/g, " "));
-
-    if (out.length < 20) {
-      const readable = raw
-        .replace(/[^\x09\x0A\x0D\x20-\x7EА-Яа-яІіЇїЄєҐґąćęłńóśźżĄĆĘŁŃÓŚŹŻÄÖÜäöüßÀ-ÿ]+/g, " ")
-        .replace(/\s+/g, " ");
-      out = cleanText(readable);
-    }
-
-    return out;
+    return cleanText(chunks.join("\n").replace(/[^\S\n]+/g, " "));
   } catch (e) {
     return "";
   }
 }
 
-async function extractTextFromPdfWithOptionalPackage(buffer) {
-  try {
-    const mod = await import("pdf-parse");
-    const pdfParse = mod.default || mod;
-    const result = await pdfParse(buffer);
-    const text = cleanText(result && result.text ? result.text : "");
-    if (text && text.length > 20) return text;
-  } catch (e) {}
-
-  return extractTextFromPdfBasic(buffer);
-}
-
-async function extractText(file) {
+function extractText(file) {
   const filename = String(file.filename || "").toLowerCase();
   const type = String(file.contentType || "").toLowerCase();
 
@@ -368,7 +423,7 @@ async function extractText(file) {
   }
 
   if (filename.endsWith(".pdf") || type.includes("pdf")) {
-    return await extractTextFromPdfWithOptionalPackage(file.buffer);
+    return extractTextFromPdfBasic(file.buffer);
   }
 
   return cleanText(file.buffer.toString("utf8"));
@@ -395,7 +450,7 @@ function firstEmail(text) {
 
 function firstPhone(text) {
   const labelled = String(text || "").match(
-    /(?:телефон|тел|phone|mobile|mob|tel|telefono|teléfono|téléphone|telefon|telefone|电话|手機|手机|連絡先|联系方式|الهاتف|رقم الهاتف)\s*[:：\-–—]?\s*(\+?\d[\d\s().-]{7,}\d)/i
+    /(?:телефон|тел|phone|mobile|mob|tel|telefono|teléfono|téléphone|telefon|telefone|電話|电话|手機|手机|連絡先|联系方式|الهاتف|رقم الهاتف)\s*[:：\-–—]?\s*(\+?\d[\d\s().-]{7,}\d)/i
   );
 
   if (labelled && labelled[1]) {
@@ -417,15 +472,15 @@ function titleCaseName(value) {
     .toLowerCase()
     .split(" ")
     .filter(Boolean)
-    .map(word =>
-      word
+    .map(word => {
+      return word
         .split("-")
         .map(part => {
           if (!part) return "";
           return part.charAt(0).toUpperCase() + part.slice(1);
         })
-        .join("-")
-    )
+        .join("-");
+    })
     .join(" ")
     .trim();
 }
@@ -449,6 +504,7 @@ function isResumeHeading(line) {
     "curriculo",
     "hoja de vida",
     "profil",
+    "profile",
     "życiorys",
     "zyciorys",
     "履历",
@@ -470,7 +526,7 @@ function isResumeHeading(line) {
 }
 
 function isContactLine(line) {
-  return /email|e-mail|mail|почта|пошта|телефон|тел|phone|mobile|mob|tel|contact|contacts|контакти|контакт|telefono|teléfono|téléphone|telefon|telefone|电话|手機|手机|邮箱|電子郵件|邮件|連絡先|联系方式|الهاتف|بريد|@|\+?\d[\d\s().-]{7,}\d/i.test(
+  return /email|e-mail|mail|почта|пошта|телефон|тел|phone|mobile|mob|tel|contact|contacts|контакти|контакт|telefono|teléfono|téléphone|telefon|telefone|電話|电话|手機|手机|邮箱|電子郵件|邮件|連絡先|联系方式|الهاتف|بريد|@|\+?\d[\d\s().-]{7,}\d/i.test(
     String(line || "")
   );
 }
@@ -499,9 +555,17 @@ function looksLikeLocation(line) {
   }
 
   const commonLocationWords =
-    /(ukraine|україна|украина|poland|polska|germany|deutschland|france|italy|spain|canada|usa|united states|united kingdom|england|china|中国|japan|日本|korea|한국|romania|moldova|молдова|turkey|türkiye|netherlands|ireland|australia|city|місто|город|stadt|ville|ciudad|cidade)/i;
+    /(ukraine|україна|украина|poland|polska|germany|deutschland|france|italy|spain|canada|usa|united states|united kingdom|england|china|中国|japan|日本|korea|한국|romania|moldova|молдова|turkey|türkiye|netherlands|ireland|australia|city|місто|город|stadt|ville|ciudad|cidade|одеса|київ|львів|харків|warszawa|kraków|berlin|london|paris|madrid|roma)/i;
 
-  return commonLocationWords.test(clean);
+  if (commonLocationWords.test(clean)) return true;
+
+  return false;
+}
+
+function isSectionHeading(line) {
+  return /(experience|work experience|employment|career|education|skills|languages|courses|certificates|profile|summary|objective|досвід|опыт|робота|работа|освіта|образование|навички|навыки|мови|языки|курси|курсы|сертифікати|сертификаты|профіль|профиль|про себе|umiejętności|doświadczenie|edukacja|języki|wykształcenie|erfahrung|ausbildung|kenntnisse|fähigkeiten|sprachen|expérience|formation|compétences|langues|experiencia|educación|habilidades|idiomas)/i.test(
+    String(line || "")
+  );
 }
 
 function looksLikeJobTitleOrHeading(line) {
@@ -515,6 +579,8 @@ function looksLikeJobTitleOrHeading(line) {
     "curriculum",
     "vitae",
     "profile",
+    "summary",
+    "objective",
     "email",
     "phone",
     "contact",
@@ -525,9 +591,6 @@ function looksLikeJobTitleOrHeading(line) {
     "experience",
     "skills",
     "languages",
-    "objective",
-    "summary",
-    "about me",
     "work experience",
     "employment",
     "personal information",
@@ -602,7 +665,7 @@ function looksLikeJobTitleOrHeading(line) {
     "cover letter"
   ];
 
-  if (banned.some(w => lower.includes(w))) return true;
+  if (banned.some(w => lower === w || lower.includes(w))) return true;
 
   if (/^\d{4}\s*[-–—]\s*\d{4}/.test(lower)) return true;
   if (/^\d{4}\s*[-–—]\s*(present|now|current|тепер|дотепер|obecnie|aktuell|现在|現在)/i.test(lower)) return true;
@@ -822,7 +885,7 @@ function fallbackLocation(text) {
     : -1;
 
   if (nameIndex !== -1) {
-    for (let j = nameIndex + 1; j <= nameIndex + 5 && j < lines.length; j++) {
+    for (let j = nameIndex + 1; j <= nameIndex + 6 && j < lines.length; j++) {
       const candidate = lines[j];
 
       if (!candidate) continue;
@@ -843,7 +906,7 @@ function fallbackLocation(text) {
     }
   }
 
-  for (const line of lines.slice(0, 60)) {
+  for (const line of lines.slice(0, 70)) {
     if (isResumeHeading(line)) continue;
     if (isContactLine(line)) continue;
     if (looksLikeName(line)) continue;
@@ -855,192 +918,192 @@ function fallbackLocation(text) {
   return "";
 }
 
+function findSection(lines, headingRegex, stopRegex, maxLines = 14) {
+  const idx = lines.findIndex(l => headingRegex.test(l));
+
+  if (idx === -1) return "";
+
+  const out = [];
+
+  for (let i = idx + 1; i < lines.length && out.length < maxLines; i++) {
+    const line = lines[i];
+
+    if (!line) continue;
+    if (stopRegex.test(line)) break;
+    out.push(line);
+  }
+
+  return cleanText(out.join("\n"));
+}
+
 function fallbackLanguages(text) {
   const lines = getLines(text);
-  const idx = lines.findIndex(l =>
-    /(languages|language|мови|языки|języki|sprachen|langues|idiomas|línguas|语言|語言|言語|언어|اللغات)/i.test(l)
+  const value = findSection(
+    lines,
+    /(languages|language|мови|языки|języki|sprachen|langues|idiomas|línguas|语言|語言|言語|언어|اللغات)/i,
+    /(experience|work|education|skills|courses|certificates|summary|profile|досвід|опыт|освіта|образование|навички|навыки|курси|курсы|профіль|профиль|doświadczenie|edukacja|umiejętności|wykształcenie|erfahrung|ausbildung|kenntnisse|formation|compétences)/i,
+    6
   );
 
-  if (idx !== -1) {
-    const next = lines.slice(idx, idx + 7).join(", ");
-    return next
-      .replace(/languages|language|мови|языки|języki|sprachen|langues|idiomas|línguas|语言|語言|言語|언어|اللغات/ig, "")
-      .replace(/[:：\-–—]/g, " ")
-      .replace(/\s+/g, " ")
-      .trim();
-  }
+  if (value) return value.replace(/[:：\-–—]/g, " ").trim();
 
   const found = [];
   const langs = [
     "English", "Ukrainian", "Russian", "Polish", "German", "French", "Spanish", "Italian", "Portuguese", "Chinese", "Japanese", "Korean", "Arabic",
     "Англійська", "Українська", "Російська", "Польська", "Німецька", "Французька", "Іспанська", "Китайська",
     "английский", "украинский", "русский", "польский", "немецкий", "французский", "испанский", "китайский",
+    "Polski", "Deutsch", "Français", "Español", "Italiano", "Português",
     "中文", "普通话", "漢語", "汉语", "日本語", "한국어", "العربية"
   ];
 
   for (const lang of langs) {
-    if (new RegExp(lang, "i").test(text)) found.push(lang);
-  }
-
-  return [...new Set(found)].join(", ");
-}
-
-function collectSection(text, headingRegex, stopRegex) {
-  const lines = getLines(text);
-  const start = lines.findIndex(l => headingRegex.test(l));
-
-  if (start === -1) return "";
-
-  const out = [];
-
-  for (let i = start + 1; i < lines.length; i++) {
-    const line = lines[i];
-
-    if (stopRegex.test(line)) break;
-    out.push(line);
-
-    if (out.join(" ").length > 1200) break;
-  }
-
-  return cleanText(out.join("\n"));
-}
-
-function fallbackSkills(text) {
-  return collectSection(
-    text,
-    /(skills|навички|навыки|kompetencje|umiejętności|fähigkeiten|skills|compétences|habilidades|技能|스킬|المهارات)/i,
-    /(experience|work|education|courses|languages|досвід|опыт|освіта|образование|курси|мови|языки|doświadczenie|edukacja|języki|erfahrung|bildung|langues|idiomas|工作|教育|언어|الخبرة|التعليم)/i
-  );
-}
-
-function fallbackSoftSkills(text) {
-  const found = [];
-  const common = [
-    "responsibility",
-    "punctuality",
-    "teamwork",
-    "communication",
-    "attention to detail",
-    "adaptability",
-    "problem solving",
-    "відповідальність",
-    "пунктуальність",
-    "комунікабельність",
-    "уважність",
-    "стресостійкість",
-    "ответственность",
-    "пунктуальность",
-    "коммуникабельность",
-    "внимательность",
-    "odpowiedzialność",
-    "punktualność",
-    "komunikatywność"
-  ];
-
-  for (const item of common) {
-    if (new RegExp(item, "i").test(text)) found.push(item);
+    if (new RegExp(lang.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i").test(text)) {
+      found.push(lang);
+    }
   }
 
   return [...new Set(found)].join(", ");
 }
 
 function fallbackEducation(text) {
-  return collectSection(
-    text,
-    /(education|освіта|образование|wykształcenie|edukacja|ausbildung|bildung|formation|educación|教育|学歴|학력|التعليم)/i,
-    /(experience|work|skills|languages|courses|volunteer|досвід|опыт|навички|навыки|мови|языки|курси|волонтер|doświadczenie|umiejętności|języki|erfahrung|fähigkeiten|langues|idiomas|工作|技能|언어|الخبرة|المهارات)/i
+  const lines = getLines(text);
+
+  return findSection(
+    lines,
+    /(education|освіта|образование|навчання|учеба|wykształcenie|edukacja|ausbildung|bildung|formation|educación|educação|istruzione|教育|学歴|학력|التعليم)/i,
+    /(experience|work|employment|skills|languages|courses|certificates|profile|summary|досвід|опыт|робота|работа|навички|навыки|мови|языки|курси|курсы|doświadczenie|umiejętności|języki|erfahrung|kenntnisse|fähigkeiten|sprachen)/i,
+    10
   );
 }
 
-function fallbackExperience(text) {
-  const section = collectSection(
-    text,
-    /(experience|work experience|employment|досвід роботи|досвід|опыт работы|опыт|doświadczenie|berufserfahrung|erfahrung|expérience|experiencia|工作经历|工作經歷|경력|الخبرة)/i,
-    /(education|skills|languages|courses|volunteer|освіта|образование|навички|навыки|мови|языки|курси|волонтер|wykształcenie|edukacja|umiejętności|języki|ausbildung|bildung|compétences|idiomas|教育|技能|언어|التعليم|المهارات)/i
+function fallbackSkills(text) {
+  const lines = getLines(text);
+
+  return findSection(
+    lines,
+    /(skills|professional skills|hard skills|навички|навыки|вміння|умения|kompetencje|umiejętności|fähigkeiten|kenntnisse|compétences|habilidades|competenze|技能|スキル|기술|المهارات)/i,
+    /(experience|work|education|languages|courses|certificates|profile|summary|досвід|опыт|освіта|образование|мови|языки|курси|курсы|doświadczenie|edukacja|języki|erfahrung|ausbildung|sprachen)/i,
+    12
+  );
+}
+
+function fallbackSummary(text) {
+  const lines = getLines(text);
+
+  return findSection(
+    lines,
+    /(profile|summary|about me|objective|профіль|профиль|про себе|мета|цель|podsumowanie|profil|zusammenfassung|profil|résumé|perfil|自己紹介|소개|الملخص)/i,
+    /(experience|work|education|skills|languages|courses|certificates|досвід|опыт|освіта|образование|навички|навыки|мови|языки|doświadczenie|edukacja|umiejętności|erfahrung|ausbildung)/i,
+    8
+  );
+}
+
+function fallbackTarget(text) {
+  const lines = getLines(text).slice(0, 80);
+
+  for (const line of lines) {
+    const m = line.match(
+      /(?:target job|desired role|desired position|position|job title|бажана посада|желаемая должность|посада|должность|stanowisko|position souhaitée|puesto|cargo)\s*[:：\-–—]\s*(.{2,90})/i
+    );
+
+    if (m && m[1] && !isContactLine(m[1]) && !looksLikeName(m[1])) {
+      return cleanText(m[1]);
+    }
+  }
+
+  const name = fallbackName(text);
+  const nameIndex = name
+    ? lines.findIndex(line => normaliseLine(line).toLowerCase() === normaliseLine(name).toLowerCase())
+    : -1;
+
+  if (nameIndex !== -1) {
+    for (let i = nameIndex + 1; i <= nameIndex + 4 && i < lines.length; i++) {
+      const line = lines[i];
+
+      if (!line) continue;
+      if (isContactLine(line)) continue;
+      if (looksLikeLocation(line)) continue;
+      if (isSectionHeading(line)) continue;
+      if (looksLikeName(line)) continue;
+      if (line.length > 90) continue;
+
+      return line;
+    }
+  }
+
+  return "";
+}
+
+function extractExperienceBlocks(text) {
+  const lines = getLines(text);
+  const section = findSection(
+    lines,
+    /(experience|work experience|employment|career|professional experience|досвід роботи|досвід|опыт работы|опыт|робота|работа|doświadczenie|ervaring|berufserfahrung|erfahrung|expérience|experiencia|職歴|경력|الخبرة)/i,
+    /(education|skills|languages|courses|certificates|profile|summary|освіта|образование|навички|навыки|мови|языки|курси|сертифікати|edukacja|wykształcenie|umiejętności|języki|ausbildung|kenntnisse|sprachen|formation|compétences)/i,
+    35
   );
 
-  if (!section) return [];
+  const source = section ? getLines(section) : [];
+  const joined = source.join("\n");
 
-  const blocks = section
-    .split(/\n(?=\d{4}|[A-ZА-ЯІЇЄҐ][^\n]{2,80})/g)
+  if (!joined) return [];
+
+  const result = [];
+  const chunks = joined
+    .split(/\n(?=\d{4}\s*[-–—]|[A-ZА-ЯІЇЄҐ][^\n]{2,80}\s*[-–—]\s*)/)
     .map(x => cleanText(x))
-    .filter(Boolean)
-    .slice(0, 5);
+    .filter(Boolean);
 
-  return blocks.map(block => {
-    const lines = getLines(block);
-    const first = lines[0] || "";
-    const second = lines[1] || "";
-    const rest = lines.slice(2).join("\n") || lines.slice(1).join("\n");
+  for (const chunk of chunks.slice(0, 6)) {
+    const cLines = getLines(chunk);
+    if (!cLines.length) continue;
 
-    let company = "";
     let position = "";
+    let company = "";
+    let desc = "";
 
-    if (first.includes("—") || first.includes("-")) {
-      const parts = first.split(/\s+[—–-]\s+/);
-      position = parts[0] || "";
-      company = parts.slice(1).join(" ") || "";
+    const first = cLines[0] || "";
+    const dash = first.split(/\s+[—–-]\s+/);
+
+    if (dash.length >= 2) {
+      position = dash[0];
+      company = dash.slice(1).join(" - ");
+      desc = cLines.slice(1).join("\n");
     } else {
       position = first;
-      company = second;
+      company = cLines[1] || "";
+      desc = cLines.slice(2).join("\n");
     }
 
-    return {
-      company: cleanText(company),
-      position: cleanText(position),
-      desc: cleanText(rest)
-    };
-  }).filter(x => x.company || x.position || x.desc);
+    if (position || company || desc) {
+      result.push({
+        company: cleanText(company),
+        position: cleanText(position),
+        desc: cleanText(desc)
+      });
+    }
+  }
+
+  return result.filter(x => x.company || x.position || x.desc);
 }
 
-function fallbackCourses(text) {
-  const section = collectSection(
-    text,
-    /(courses|certificates|certifications|курси|сертифікати|курсы|сертификаты|szkolenia|certyfikaty|kurse|zertifikate|certificats|cursos|证书|資格|자격증|الدورات|الشهادات)/i,
-    /(experience|work|education|skills|languages|досвід|опыт|освіта|образование|навички|навыки|мови|языки|doświadczenie|edukacja|umiejętności|języki|erfahrung|bildung|compétences|idiomas|工作|教育|技能|언어|الخبرة|التعليم)/i
+function extractCourses(text) {
+  const lines = getLines(text);
+  const section = findSection(
+    lines,
+    /(courses|certificates|certifications|training|курси|сертифікати|сертификаты|тренінги|szkolenia|certyfikaty|kurse|zertifikate|formations|certificats|cursos|certificados)/i,
+    /(experience|work|education|skills|languages|profile|summary|досвід|опыт|освіта|образование|навички|навыки|мови|языки|doświadczenie|edukacja|umiejętności|języki)/i,
+    18
   );
 
   if (!section) return [];
 
-  return getLines(section).slice(0, 6).map(line => ({
+  return getLines(section).slice(0, 8).map(line => ({
     name: line,
     place: "",
     period: "",
     desc: ""
-  }));
-}
-
-function emptyProfile() {
-  return {
-    name: "",
-    fullName: "",
-    full_name: "",
-    candidateName: "",
-    candidate_name: "",
-
-    email: "",
-    phone: "",
-
-    location: "",
-    city: "",
-    address: "",
-
-    target: "",
-    jobTitle: "",
-    position: "",
-
-    languages: "",
-    education: "",
-    speciality: "",
-    skills: "",
-    softSkills: "",
-    soft_skills: "",
-    hobbies: "",
-
-    experience: [],
-    volunteering: [],
-    courses: []
-  };
+  })).filter(x => x.name);
 }
 
 function fallbackProfile(text) {
@@ -1050,10 +1113,9 @@ function fallbackProfile(text) {
   const location = fallbackLocation(text);
   const education = fallbackEducation(text);
   const skills = fallbackSkills(text);
-  const softSkills = fallbackSoftSkills(text);
   const languages = fallbackLanguages(text);
-  const experience = fallbackExperience(text);
-  const courses = fallbackCourses(text);
+  const target = fallbackTarget(text);
+  const summary = fallbackSummary(text);
 
   return {
     name,
@@ -1069,21 +1131,25 @@ function fallbackProfile(text) {
     city: location,
     address: location,
 
-    target: "",
-    jobTitle: "",
-    position: "",
+    target,
+    jobTitle: target,
+    position: target,
 
     languages,
     education,
+    institution: education,
     speciality: "",
-    skills,
-    softSkills,
-    soft_skills: softSkills,
+    degree: "",
+    qualification: "",
+
+    skills: skills || summary,
+    softSkills: "",
+    soft_skills: "",
     hobbies: "",
 
-    experience,
+    experience: extractExperienceBlocks(text),
     volunteering: [],
-    courses
+    courses: extractCourses(text)
   };
 }
 
@@ -1096,18 +1162,22 @@ function forceFallbackFields(profile, text) {
   if (!profile.candidateName && profile.name) profile.candidateName = profile.name;
   if (!profile.candidate_name && profile.name) profile.candidate_name = profile.name;
 
-  if (!profile.email && fb.email) profile.email = fb.email;
-  if (!profile.phone && fb.phone) profile.phone = fb.phone;
-
   if (!profile.location && fb.location) profile.location = fb.location;
   if (!profile.city && profile.location) profile.city = profile.location;
   if (!profile.address && profile.location) profile.address = profile.location;
 
+  if (!profile.email && fb.email) profile.email = fb.email;
+  if (!profile.phone && fb.phone) profile.phone = fb.phone;
+
+  if (!profile.target && fb.target) profile.target = fb.target;
+  if (!profile.jobTitle && profile.target) profile.jobTitle = profile.target;
+  if (!profile.position && profile.target) profile.position = profile.target;
+
   if (!profile.languages && fb.languages) profile.languages = fb.languages;
   if (!profile.education && fb.education) profile.education = fb.education;
+  if (!profile.institution && profile.education) profile.institution = profile.education;
+
   if (!profile.skills && fb.skills) profile.skills = fb.skills;
-  if (!profile.softSkills && fb.softSkills) profile.softSkills = fb.softSkills;
-  if (!profile.soft_skills && profile.softSkills) profile.soft_skills = profile.softSkills;
 
   if ((!profile.experience || !profile.experience.length) && fb.experience.length) {
     profile.experience = fb.experience;
@@ -1118,10 +1188,6 @@ function forceFallbackFields(profile, text) {
   }
 
   return profile;
-}
-
-function normalizeArray(value) {
-  return Array.isArray(value) ? value : [];
 }
 
 function normalizeProfile(p, text) {
@@ -1153,6 +1219,23 @@ function normalizeProfile(p, text) {
     ""
   );
 
+  const education = cleanText(
+    profile.education ||
+    profile.institution ||
+    profile.school ||
+    profile.university ||
+    fb.education ||
+    ""
+  );
+
+  const speciality = cleanText(
+    profile.speciality ||
+    profile.degree ||
+    profile.qualification ||
+    profile.profession ||
+    ""
+  );
+
   const out = {
     name,
     fullName: name,
@@ -1172,21 +1255,27 @@ function normalizeProfile(p, text) {
     position: target,
 
     languages: cleanText(profile.languages || fb.languages),
-    education: cleanText(profile.education || profile.institution || fb.education),
-    speciality: cleanText(profile.speciality || profile.degree || profile.qualification || ""),
+    education,
+    institution: education,
+    speciality,
+    degree: speciality,
+    qualification: speciality,
+
     skills: cleanText(profile.skills || fb.skills),
-    softSkills: cleanText(profile.softSkills || profile.soft_skills || fb.softSkills),
-    soft_skills: cleanText(profile.softSkills || profile.soft_skills || fb.softSkills),
+    softSkills: cleanText(profile.softSkills || profile.soft_skills || ""),
+    soft_skills: cleanText(profile.softSkills || profile.soft_skills || ""),
     hobbies: cleanText(profile.hobbies || ""),
 
-    experience: normalizeArray(profile.experience),
-    volunteering: normalizeArray(profile.volunteering),
-    courses: normalizeArray(profile.courses)
+    experience: Array.isArray(profile.experience) ? profile.experience : [],
+    volunteering: Array.isArray(profile.volunteering) ? profile.volunteering : [],
+    courses: Array.isArray(profile.courses) ? profile.courses : []
   };
+
+  forceFallbackFields(out, text);
 
   out.experience = out.experience.map(x => ({
     company: cleanText(x.company || x.organisation || x.organization || x.employer || ""),
-    position: cleanText(x.position || x.role || x.jobTitle || x.job_title || ""),
+    position: cleanText(x.position || x.role || x.title || ""),
     desc: cleanText(x.desc || x.description || x.responsibilities || x.details || "")
   })).filter(x => x.company || x.position || x.desc);
 
@@ -1199,19 +1288,9 @@ function normalizeProfile(p, text) {
   out.courses = out.courses.map(x => ({
     name: cleanText(x.name || x.course || x.title || ""),
     place: cleanText(x.place || x.organisation || x.organization || x.school || ""),
-    period: cleanText(x.period || x.year || x.date || ""),
+    period: cleanText(x.period || x.year || ""),
     desc: cleanText(x.desc || x.description || "")
   })).filter(x => x.name || x.place || x.period || x.desc);
-
-  forceFallbackFields(out, text);
-
-  out.fullName = out.name;
-  out.full_name = out.name;
-  out.candidateName = out.name;
-  out.candidate_name = out.name;
-
-  out.city = out.location;
-  out.address = out.location;
 
   return out;
 }
@@ -1224,37 +1303,28 @@ async function analyseWithOpenAI(text, language) {
   const firstLines = getLines(text).slice(0, 120).join("\n");
 
   const system = `
-You are a strict multilingual CV/resume parser.
+You are a strict multilingual CV parsing assistant.
 
 Return JSON only.
 
-The CV may be written in any language, including English, Ukrainian, Russian, Polish, German, French, Spanish, Portuguese, Italian, Chinese, Japanese, Korean, Arabic, Hebrew, Hindi, Georgian or mixed languages.
-
-Extract ALL available candidate data from the CV text and map it into the exact app fields.
+Extract the candidate profile from the CV text and map it to the exact app fields.
 
 Critical rules:
 - Do not invent information.
-- Do not return demo/example/template data.
-- If a field is not present, return an empty string or empty array.
-- Keep the candidate's real name as written, but normalise full uppercase names into readable case when appropriate.
-- If the CV begins with a heading like "РЕЗЮМЕ", "RESUME", "CV", "Curriculum Vitae", "Lebenslauf", "简历", "履历", "個人簡歷", "이력서", "職務経歴書", or Arabic CV headings, the next meaningful line is often the candidate name.
+- Fill as many app fields as possible from the CV.
+- Keep the person's real name exactly as written, but normalise full uppercase names into readable case when appropriate.
 - Detect candidate name in any writing system.
-- Do not confuse candidate name with job title, CV heading, section heading, education heading, company name, city, country, email, phone number or website.
-- Extract email and phone if present.
-- Extract location if present. Keep it in the CV language.
-- Extract target / desired role / professional title if present.
-- Extract languages if present.
+- Do not confuse name with job title, section heading, education heading, company name, city, country, email, phone number, website or template text.
+- Extract email, phone, location, target job, languages, education, speciality, skills, soft skills, hobbies if present.
+- Extract work experience as an array.
+- Extract volunteering as an array if present.
+- Extract courses/certificates as an array if present.
+- If the CV contains a professional summary, use it to improve skills only if skills are otherwise missing.
 - Split education:
-  education = university / school / institution name or education section text;
+  education = university / school / institution name;
   speciality = degree / speciality / qualification / profession.
-- Extract professional skills into skills.
-- Extract personal qualities / soft skills into softSkills.
-- Extract hobbies/interests if present.
-- Extract work history into experience array.
-- Extract volunteering into volunteering array.
-- Extract courses and certificates into courses array.
-- Preserve useful details from the CV, but keep fields concise enough for a mobile CV builder.
 - Empty unknown fields must be empty strings, not null.
+- Keep experience, volunteering and courses as arrays.
 
 Return exactly:
 {
@@ -1274,7 +1344,10 @@ Return exactly:
     "position": "",
     "languages": "",
     "education": "",
+    "institution": "",
     "speciality": "",
+    "degree": "",
+    "qualification": "",
     "skills": "",
     "softSkills": "",
     "soft_skills": "",
@@ -1312,7 +1385,7 @@ Most important first lines:
 ${firstLines}
 
 Full CV text:
-${text.slice(0, 24000)}
+${text.slice(0, 20000)}
 `;
 
   const response = await fetch("https://api.openai.com/v1/chat/completions", {
@@ -1342,24 +1415,6 @@ ${text.slice(0, 24000)}
   return safeJsonParse(content);
 }
 
-function hasUsefulProfileData(profile) {
-  if (!profile || typeof profile !== "object") return false;
-
-  return Boolean(
-    profile.name ||
-    profile.email ||
-    profile.phone ||
-    profile.location ||
-    profile.languages ||
-    profile.education ||
-    profile.skills ||
-    profile.softSkills ||
-    profile.target ||
-    (Array.isArray(profile.experience) && profile.experience.length) ||
-    (Array.isArray(profile.courses) && profile.courses.length)
-  );
-}
-
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     return sendJson(res, 405, { error: "Method not allowed" });
@@ -1369,9 +1424,9 @@ export default async function handler(req, res) {
     const contentType = getHeader(req, "content-type");
 
     if (!String(contentType).includes("multipart/form-data")) {
-      return sendJson(res, 400, {
-        error: "Expected multipart/form-data upload.",
-        profile: emptyProfile()
+      return sendJson(res, 200, {
+        profile: fallbackProfile(""),
+        warning: "Expected multipart/form-data upload."
       });
     }
 
@@ -1382,82 +1437,87 @@ export default async function handler(req, res) {
     const language = parsed.fields.language || "English";
 
     if (!file) {
-      return sendJson(res, 400, {
-        error: "No file uploaded.",
-        profile: emptyProfile()
+      return sendJson(res, 200, {
+        profile: fallbackProfile(""),
+        warning: "No file uploaded."
       });
     }
 
-    const text = await extractText(file);
-    const firstLines = getLines(text).slice(0, 120);
-    const basicProfile = normalizeProfile(fallbackProfile(text), text);
+    const text = extractText(file);
+    const basicProfile = forceFallbackFields(fallbackProfile(text), text);
 
     if (!text || text.length < 10) {
-      return sendJson(res, 422, {
-        error: "Could not read text from this CV. Please try DOCX or TXT, or upload a PDF with selectable text.",
-        profile: emptyProfile(),
+      return sendJson(res, 200, {
+        profile: basicProfile,
+        warning: "Could not read text from this CV. Please try another DOCX, TXT, or a PDF with selectable text.",
         rawTextPreview: text.slice(0, 1200),
-        firstLines,
-        detectedNameFallback: "",
-        detectedLocationFallback: "",
-        filename: file.filename
+        firstLines: getLines(text).slice(0, 100),
+        detectedNameFallback: fallbackName(text),
+        detectedLocationFallback: fallbackLocation(text),
+        filename: file.filename,
+        fileType: file.contentType,
+        fileSize: file.buffer.length
       });
     }
 
     let aiProfile = null;
-    let aiError = "";
 
     try {
       const ai = await analyseWithOpenAI(text, language);
       aiProfile = ai?.profile || ai;
     } catch (e) {
-      aiError = e && e.message ? e.message : String(e);
       aiProfile = null;
     }
 
-    const profile = normalizeProfile(aiProfile || basicProfile, text);
+    const profile = normalizeProfile(aiProfile, text);
 
-    if (!profile.email) profile.email = firstEmail(text);
-    if (!profile.phone) profile.phone = firstPhone(text);
-    if (!profile.name) profile.name = fallbackName(text);
-    if (!profile.location) profile.location = fallbackLocation(text);
-    if (!profile.languages) profile.languages = fallbackLanguages(text);
+    profile.name = cleanText(profile.name || fallbackName(text));
+    profile.location = cleanText(profile.location || fallbackLocation(text));
 
     profile.fullName = profile.name;
     profile.full_name = profile.name;
     profile.candidateName = profile.name;
     profile.candidate_name = profile.name;
+
     profile.city = profile.location;
     profile.address = profile.location;
 
-    if (!hasUsefulProfileData(profile)) {
-      return sendJson(res, 422, {
-        error: "CV was uploaded, but no useful fields could be extracted. Try another CV format: DOCX or TXT works best.",
-        profile: emptyProfile(),
-        rawTextPreview: text.slice(0, 1200),
-        firstLines,
-        detectedNameFallback: fallbackName(text),
-        detectedLocationFallback: fallbackLocation(text),
-        aiError,
-        filename: file.filename
-      });
+    if (!profile.email) profile.email = firstEmail(text);
+    if (!profile.phone) profile.phone = firstPhone(text);
+    if (!profile.languages) profile.languages = fallbackLanguages(text);
+
+    if (!profile.education) profile.education = fallbackEducation(text);
+    if (!profile.institution) profile.institution = profile.education;
+
+    if (!profile.skills) profile.skills = fallbackSkills(text);
+    if (!profile.target) profile.target = fallbackTarget(text);
+    if (!profile.jobTitle) profile.jobTitle = profile.target;
+    if (!profile.position) profile.position = profile.target;
+
+    if (!profile.experience || !profile.experience.length) {
+      profile.experience = extractExperienceBlocks(text);
+    }
+
+    if (!profile.courses || !profile.courses.length) {
+      profile.courses = extractCourses(text);
     }
 
     return sendJson(res, 200, {
       profile,
       rawTextPreview: text.slice(0, 1200),
-      firstLines,
+      firstLines: getLines(text).slice(0, 100),
       detectedNameFallback: fallbackName(text),
       detectedLocationFallback: fallbackLocation(text),
-      aiError,
-      filename: file.filename
+      filename: file.filename,
+      fileType: file.contentType,
+      fileSize: file.buffer.length
     });
 
   } catch (error) {
-    return sendJson(res, 500, {
-      error: "CV analysis failed.",
-      details: error && error.message ? error.message : String(error),
-      profile: emptyProfile()
+    return sendJson(res, 200, {
+      profile: forceFallbackFields(fallbackProfile(""), ""),
+      warning: "CV analysis fallback mode.",
+      details: error && error.message ? error.message : String(error)
     });
   }
 }
