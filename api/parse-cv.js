@@ -346,7 +346,40 @@ function extractTextFromRtf(buffer) {
   );
 }
 
-function extractText(file) {
+
+async function extractTextFromDocxBetter(buffer) {
+  let text = "";
+  try {
+    const mammothModule = await import("mammoth");
+    const mammoth = mammothModule.default || mammothModule;
+    const result = await mammoth.extractRawText({ buffer });
+    text = cleanText(result && result.value ? result.value : "");
+  } catch (e) {}
+
+  if (!text || text.length < 10) {
+    text = extractTextFromDocx(buffer);
+  }
+
+  return cleanText(text);
+}
+
+async function extractTextFromPdfBetter(buffer) {
+  let text = "";
+  try {
+    const pdfModule = await import("pdf-parse");
+    const pdfParse = pdfModule.default || pdfModule;
+    const result = await pdfParse(buffer);
+    text = cleanText(result && result.text ? result.text : "");
+  } catch (e) {}
+
+  if (!text || text.length < 10) {
+    text = extractTextFromPdfBasic(buffer);
+  }
+
+  return cleanText(text);
+}
+
+async function extractText(file) {
   const filename = String(file.filename || "").toLowerCase();
   const type = String(file.contentType || "").toLowerCase();
 
@@ -359,11 +392,11 @@ function extractText(file) {
   }
 
   if (filename.endsWith(".docx") || type.includes("wordprocessingml")) {
-    return extractTextFromDocx(file.buffer);
+    return await extractTextFromDocxBetter(file.buffer);
   }
 
   if (filename.endsWith(".pdf") || type.includes("pdf")) {
-    return extractTextFromPdfBasic(file.buffer);
+    return await extractTextFromPdfBetter(file.buffer);
   }
 
   return cleanText(file.buffer.toString("utf8"));
@@ -1313,7 +1346,7 @@ export default async function handler(req, res) {
       });
     }
 
-    const text = extractText(file);
+    const text = await extractText(file);
     const basicProfile = forceFallbackFields(fallbackProfile(text), text);
 
     if (!text || text.length < 10) {
