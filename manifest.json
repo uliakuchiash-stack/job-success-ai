@@ -1,0 +1,19 @@
+{
+  "name": "Job Success AI",
+  "short_name": "Job Success",
+  "description": "AI CV builder, cover letter creator and interview coach.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/logo.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    }
+  ]
+}
