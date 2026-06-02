@@ -177,6 +177,65 @@
   }
 }
 
+
+
+/* === URGENT FIX: real multi-page PDF export (not cropped visual preview) === */
+#printArea .pdf-export-doc{display:none;}
+@media print{
+  html,body{background:#fff!important;margin:0!important;padding:0!important;}
+  body *{visibility:hidden!important;}
+  #printArea,#printArea *{visibility:visible!important;}
+  #printArea{
+    display:block!important;
+    position:absolute!important;
+    left:0!important;
+    top:0!important;
+    width:210mm!important;
+    height:auto!important;
+    min-height:297mm!important;
+    margin:0!important;
+    padding:0!important;
+    background:#fff!important;
+    overflow:visible!important;
+  }
+  #printArea .resume-page{display:none!important;}
+  #printArea .pdf-export-doc{
+    display:block!important;
+    width:210mm!important;
+    min-height:297mm!important;
+    height:auto!important;
+    padding:16mm 16mm 18mm!important;
+    background:#fff!important;
+    color:#111!important;
+    font-family:Arial,Helvetica,sans-serif!important;
+    box-sizing:border-box!important;
+    overflow:visible!important;
+    page-break-after:auto!important;
+    break-after:auto!important;
+  }
+  .pdf-export-doc,.pdf-export-doc *{
+    color:#111!important;
+    background:transparent!important;
+    box-shadow:none!important;
+    text-shadow:none!important;
+    -webkit-print-color-adjust:exact!important;
+    print-color-adjust:exact!important;
+    overflow:visible!important;
+  }
+  .pdf-export-head{border-bottom:1.5px solid #111!important;padding-bottom:6mm!important;margin-bottom:6mm!important;display:block!important;}
+  .pdf-export-name{font-size:23pt!important;font-weight:800!important;line-height:1.05!important;margin:0 0 2mm!important;text-transform:uppercase!important;}
+  .pdf-export-role{font-size:11pt!important;margin:0 0 2mm!important;color:#333!important;}
+  .pdf-export-contact{font-size:9pt!important;line-height:1.35!important;color:#333!important;}
+  .pdf-section{margin:0 0 6mm!important;page-break-inside:auto!important;break-inside:auto!important;}
+  .pdf-section-title{font-size:10pt!important;font-weight:800!important;text-transform:uppercase!important;letter-spacing:.8px!important;border-bottom:1px solid #999!important;padding-bottom:1.5mm!important;margin:0 0 3mm!important;}
+  .pdf-text{font-size:9.5pt!important;line-height:1.38!important;white-space:pre-wrap!important;margin:0!important;}
+  .pdf-item{margin:0 0 4mm!important;page-break-inside:avoid!important;break-inside:avoid!important;}
+  .pdf-item-title{font-size:10pt!important;font-weight:800!important;margin:0 0 1mm!important;}
+  .pdf-item-meta{font-size:9pt!important;color:#444!important;margin:0 0 1.5mm!important;}
+  .pdf-item-desc{font-size:9pt!important;line-height:1.35!important;white-space:pre-wrap!important;margin:0!important;}
+  .pdf-chips{font-size:9pt!important;line-height:1.45!important;white-space:pre-wrap!important;}
+}
+
 </style>
 </head>
 <body>
@@ -934,7 +993,7 @@ const $=id=>document.getElementById(id);function t(k){return(core[appLang]&&core
 function defaultValuesForKey(key){return Object.values(defaults).map(x=>x&&x[key]).filter(Boolean)}
 function isSampleValue(key,value){const v=String(value||"").trim();if(!v)return true;const old={name:["Your Name","Full Name","Candidate"],email:["Email","your@email.com","example@example.com"],phone:["+44 0000 000000"],location:["London, UK"],target:["Cleaner","Target job","Target Position","Target Role"],languages:["English B1, Ukrainian native","English, Ukrainian"],education:["University / college / school","Education"],speciality:["Speciality or profession"],skills:["cleaning rooms, using cleaning products, maintaining order, customer service"],softSkills:["responsibility, punctuality, attention to detail, friendliness"],hobbies:["Volunteering, languages, cooking"],coverJob:["Cleaner"],coverCompany:["Company name"],coverText:["Paste the job advert here."],interviewJob:["Cleaner"],interviewCompany:["Company name"],interviewDesc:["Paste job description here."],expCompany:["Company name","Company"],expPosition:["Cleaner","Position"],expDesc:["Cleaned rooms, maintained order, followed instructions and supported a safe working environment."],volOrg:["Organisation name","Organisation"],volRole:["Volunteer","Role"],volDesc:["Helped with community activities, supported people and completed assigned tasks."]};return (old[key]||[]).includes(v)||defaultValuesForKey(key).includes(v)}
 function syncSampleProfileLanguage(){const ids={name:"name",email:"email",phone:"phone",location:"location",target:"target",profileLanguages:"languages",hobbies:"hobbies",education:"education",speciality:"speciality",skills:"skills",softSkills:"softSkills",coverJob:"coverJob",coverCompany:"coverCompany",coverText:"coverText",jobPosition:"interviewJob",jobCompany:"interviewCompany",jobDescription:"interviewDesc"};Object.keys(ids).forEach(id=>{const el=$(id);const key=ids[id];if(el&&isSampleValue(key,el.value))el.value=""});const expIsSample=exp.length&&exp.every(e=>isSampleValue("expCompany",e.company)&&isSampleValue("expPosition",e.position)&&isSampleValue("expDesc",e.desc));if(expIsSample)exp=[];const volIsSample=vols.length&&vols.every(v=>isSampleValue("volOrg",v.org)&&isSampleValue("volRole",v.role)&&isSampleValue("volDesc",v.desc));if(volIsSample)vols=[];saveProfile(false)}
-function cleanText(v,fb=""){if(v===undefined||v===null)return fb;const s=String(v).trim();if(!s)return fb;const low=s.toLowerCase();if(low==="undefined"||low==="null"||low==="nan")return fb;return s}function esc(s){return cleanText(s,"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[m]))}function val(id,fb=""){const el=$(id);return cleanText(el&&el.value,fb)||fb}function objVal(obj,key,fb=""){return cleanText(obj&&obj[key],fb)||fb}function markUserEdited(){userEdited=true;localStorage.setItem("jsai_userEdited","true")}function openSupportEmail(){const email="aislang.business@gmail.com";const subject=t("supportSubject")||"Job Success AI Support";const body=t("supportBody")||"Hello Job Success AI Support,\n\n";const url=`mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;window.location.href=url;setTimeout(()=>showToast(t("supportEmailOpening")),350)}
+function cleanText(v,fb=""){if(v===undefined||v===null)return fb;const s=String(v).trim();if(!s)return fb;const low=s.toLowerCase();if(low==="undefined"||low==="null"||low==="nan")return fb;return s}function esc(s){return cleanText(s,"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",""":"&quot;","'":"&#039;"}[m]))}function val(id,fb=""){const el=$(id);return cleanText(el&&el.value,fb)||fb}function objVal(obj,key,fb=""){return cleanText(obj&&obj[key],fb)||fb}function markUserEdited(){userEdited=true;localStorage.setItem("jsai_userEdited","true")}function openSupportEmail(){const email="aislang.business@gmail.com";const subject=t("supportSubject")||"Job Success AI Support";const body=t("supportBody")||"Hello Job Success AI Support,\n\n";const url=`mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;window.location.href=url;setTimeout(()=>showToast(t("supportEmailOpening")),350)}
 function showToast(x){toast.textContent=x;toast.style.display="block";clearTimeout(window.tt);window.tt=setTimeout(()=>toast.style.display="none",2200)}function languageShort(){const f=languages.find(l=>l[1]===appLang||l[0]===langName);return f?f[3]:"EN"}function updateGenderOptions(){const g=$("gender");if(!g)return;Array.from(g.options).forEach(o=>{if(o.value==="male")o.textContent=t("maleOpt");if(o.value==="female")o.textContent=t("femaleOpt")})}
 function applyTranslations(){document.documentElement.lang=appLang;document.documentElement.dir=["ar","he"].includes(appLang)?"rtl":"ltr";document.body.dir=document.documentElement.dir;document.querySelectorAll("[data-i]").forEach(el=>{el.innerHTML=t(el.dataset.i)});document.querySelectorAll("select option[data-i]").forEach(opt=>{opt.textContent=t(opt.dataset.i)});if(langChip)langChip.textContent=languageShort();if($("settingsLangChip"))settingsLangChip.textContent=languageShort();if(userAnswer)userAnswer.placeholder=t("answerPlaceholder");updateGenderOptions();renderExperience();renderVolunteers();renderDiplomas();renderManualCourses();renderHistory();updateThemeButtons();updateFilterButtons();if($("interviewer")&&$("interviewer").classList.contains("active"))renderInterviewers()}
 function buildLangs(){langs.innerHTML=languages.map(l=>`<div class="lang ${l[0]===langName?'active':''}" onclick="selectLang('${l[0]}','${l[1]}')"><span>${l[0]}</span><b>${l[0]===langName?'✓':'○'}</b></div>`).join("")}function selectLang(name,code){langName=name;appLang=code;localStorage.setItem("jsai_langName",name);localStorage.setItem("jsai_appLang",code);["cvContentLang","coverLang","interviewLang"].forEach(id=>{if($(id))$(id).value=name});if(!userEdited)setDefaultProfile();else syncSampleProfileLanguage();buildLangs();applyTranslations();renderResume();go("home")}function buildSelects(){const opts=languages.map(l=>`<option>${l[0]}</option>`).join("");if($("cvContentLang"))cvContentLang.innerHTML=opts;coverLang.innerHTML=opts;interviewLang.innerHTML=opts;["cvContentLang","coverLang","interviewLang"].forEach(id=>{if($(id))$(id).value=langName})}
@@ -963,29 +1022,83 @@ function filteredTemplates(){return templates.map((t,i)=>({tpl:t,index:i})).filt
     new Promise(resolve=>setTimeout(resolve,900))
   ]);
 }
+function pdfEsc(v){return esc(cleanText(v,""));}
+function pdfSection(title,body){
+  if(!cleanText(body,""))return "";
+  return `<section class="pdf-section"><h2 class="pdf-section-title">${pdfEsc(title)}</h2><div class="pdf-text">${body}</div></section>`;
+}
+function pdfItems(title,items,kind){
+  if(!Array.isArray(items)||!items.length)return "";
+  const html=items.map(x=>{
+    const pos=kind==="vol"?(x.role||x.position||""):(x.position||x.role||"");
+    const org=kind==="vol"?(x.org||x.company||""):(x.company||x.org||"");
+    const headline=[pos,org].filter(Boolean).map(pdfEsc).join(" — ");
+    const period=pdfEsc(x.period||"");
+    const desc=pdfEsc(x.desc||"");
+    if(!headline&&!period&&!desc)return "";
+    return `<div class="pdf-item"><div class="pdf-item-title">${headline||pdfEsc(title)}</div>${period?`<div class="pdf-item-meta">${period}</div>`:""}${desc?`<p class="pdf-item-desc">${desc}</p>`:""}</div>`;
+  }).filter(Boolean).join("");
+  if(!html)return "";
+  return `<section class="pdf-section"><h2 class="pdf-section-title">${pdfEsc(title)}</h2>${html}</section>`;
+}
+function pdfCourseItems(){
+  if(!Array.isArray(courses)||!courses.length)return "";
+  const html=courses.map(x=>{
+    const title=pdfEsc(x.name||x.title||"");
+    const place=pdfEsc(x.place||x.org||"");
+    const period=pdfEsc(x.period||"");
+    const desc=pdfEsc(x.desc||"");
+    if(!title&&!place&&!period&&!desc)return "";
+    return `<div class="pdf-item"><div class="pdf-item-title">${title||pdfEsc(t("courses"))}</div>${[place,period].filter(Boolean).join(" · ")?`<div class="pdf-item-meta">${[place,period].filter(Boolean).join(" · ")}</div>`:""}${desc?`<p class="pdf-item-desc">${desc}</p>`:""}</div>`;
+  }).filter(Boolean).join("");
+  return html?`<section class="pdf-section"><h2 class="pdf-section-title">${pdfEsc(t("courses"))}</h2>${html}</section>`:"";
+}
+function pdfExportHtml(){
+  const contact=[val("email"),val("phone"),val("location")].map(x=>cleanText(x,"")).filter(Boolean).map(pdfEsc).join(" | ");
+  const name=pdfEsc(val("name","Candidate"));
+  const role=pdfEsc(val("target",""));
+  const education=[val("education"),val("speciality")].map(x=>cleanText(x,"")).filter(Boolean).map(pdfEsc).join("\n");
+  const skills=[val("skills"),val("softSkills")].map(x=>cleanText(x,"")).filter(Boolean).map(pdfEsc).join("\n\n");
+  const langs=val("profileLanguages")?`<b>${pdfEsc(t("languagesField"))}:</b> ${pdfEsc(val("profileLanguages"))}`:"";
+  const hobbies=(showHobbies&&showHobbies.checked&&val("hobbies"))?`<b>${pdfEsc(t("hobbies"))}:</b> ${pdfEsc(val("hobbies"))}`:"";
+  return `<div class="pdf-export-doc">
+    <header class="pdf-export-head">
+      <h1 class="pdf-export-name">${name}</h1>
+      ${role?`<p class="pdf-export-role">${role}</p>`:""}
+      ${contact?`<div class="pdf-export-contact">${contact}</div>`:""}
+    </header>
+    ${pdfSection(t("profile")||"Profile", pdfEsc(summary()))}
+    ${pdfItems(t("workExp")||"Work Experience", exp, "exp")}
+    ${pdfItems(t("volunteer")||"Volunteering", vols, "vol")}
+    ${pdfSection(t("education")||"Education", education)}
+    ${pdfSection(t("skills")||"Skills", skills)}
+    ${(langs||hobbies)?`<section class="pdf-section"><h2 class="pdf-section-title">${pdfEsc(t("languagesField")||"Languages")}</h2><div class="pdf-chips">${[langs,hobbies].filter(Boolean).join("<br>")}</div></section>`:""}
+    ${pdfCourseItems()}
+  </div>`;
+}
+function waitForPrintImages(){
+  const print=$("printArea");
+  if(!print)return Promise.resolve();
+  const imgs=Array.from(print.querySelectorAll("img")).filter(img=>img.src&&!img.complete);
+  if(!imgs.length)return Promise.resolve();
+  return Promise.race([
+    Promise.all(imgs.map(img=>new Promise(resolve=>{img.onload=resolve;img.onerror=resolve;}))),
+    new Promise(resolve=>setTimeout(resolve,900))
+  ]);
+}
 async function savePDF(){
   try{
     renderResume();
     saveResumeHistory();
     const print=$("printArea");
     if(print){
-      print.innerHTML=resumeHtml(currentTpl);
-      const page=print.querySelector(".resume-page");
-      if(page){
-        page.style.width="210mm";
-        page.style.height="297mm";
-        page.style.maxWidth="210mm";
-        page.style.maxHeight="297mm";
-        page.style.boxShadow="none";
-        page.style.margin="0";
-        page.style.overflow="hidden";
-      }
+      print.innerHTML=pdfExportHtml();
     }
     await waitForPrintImages();
-    showToast(appLang==="uk"?"Оберіть «Зберегти як PDF» у вікні друку.":"Choose “Save as PDF” in the print window.");
-    setTimeout(()=>window.print(),220);
+    showToast(appLang==="uk"?"Відкриваю PDF. Оберіть «Зберегти як PDF».":"Opening PDF. Choose Save as PDF.");
+    setTimeout(()=>window.print(),180);
   }catch(e){
-    showToast(appLang==="uk"?"PDF не відкрився. Скопіюйте текст або спробуйте ще раз.":"PDF export did not open. Copy the text or try again.");
+    showToast(appLang==="uk"?"PDF не відкрився. Спробуйте ще раз або скопіюйте текст.":"PDF export did not open. Try again or copy text.");
   }
 }
 function cvLine(parts,sep=" | "){return parts.map(x=>cleanText(x,"")).filter(Boolean).join(sep)}
