@@ -5,14 +5,14 @@
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#ffffff",
+  "background_color": "#0b0b12",
+  "theme_color": "#0b0b12",
   "orientation": "portrait",
   "icons": [
     {
-      "src": "/logo.jpg",
+      "src": "/job-success-ai-icon.png",
       "sizes": "512x512",
-      "type": "image/jpeg",
+      "type": "image/png",
       "purpose": "any maskable"
     }
   ]
